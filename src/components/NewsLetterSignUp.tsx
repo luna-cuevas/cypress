@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TracedLogo } from "./TracedLogo";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -20,6 +21,14 @@ const NewsLetterSignUp = (props: Props) => {
     status: "",
   });
   const [state, setState] = useAtom(globalStateAtom);
+
+  useEffect(() => {
+    if (signUpStatus.status === "error") {
+      setTimeout(() => {
+        setSignUpStatus({ message: "", status: "" });
+      }, 3000);
+    }
+  }, [signUpStatus]);
 
   const splitText = (text: string) => {
     return text.split("").map((char: string, index: number) => ({
@@ -43,22 +52,23 @@ const NewsLetterSignUp = (props: Props) => {
 
       const responseJson = await response.json();
 
-      if (responseJson.error !== "Error subscribing") {
-        console.log("Subscription successful!", responseJson);
+      console.log("Response JSON:", responseJson);
 
+      if (
+        responseJson.error == "" ||
+        responseJson.message == "Subscription successful!"
+      ) {
         setSignUpStatus({
           message: "Subscription successful! Thank you for signing up!",
           status: "success",
         });
+        toast.success("Subscription successful! Thank you for signing up!");
       } else {
-        console.error(
-          "An error occurred. Please check your details and try again:",
-          responseJson.result[0].detail
-        );
         setSignUpStatus({
-          message: "An error occurred. Please try again.",
+          message: responseJson.result[0].detail,
           status: "error",
         });
+        toast.error(responseJson.result[0].detail);
       }
     } catch (error) {
       console.error("An error occurred. Please try again.");
@@ -66,6 +76,7 @@ const NewsLetterSignUp = (props: Props) => {
         message: "An error occurred. Please try again.",
         status: "error",
       });
+      toast.error("An error occurred. Please try again.");
     }
   };
 

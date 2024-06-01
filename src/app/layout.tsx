@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useAtom } from "jotai";
-import { globalStateAtom } from "@/context/atoms";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -29,6 +30,17 @@ export default function RootLayout({
         <LoadingScreen />
         <Navigation />
         {children}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss={true}
+          draggable={true}
+          pauseOnHover={true}
+        />
       </body>
     </html>
   );
