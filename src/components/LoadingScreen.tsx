@@ -29,7 +29,7 @@ const LoadingScreen = (props: Props) => {
         fadeOut ? "opacity-0" : "opacity-100"
       } ${!loading && "hidden"}`}>
       <div className="md:w-1/3  m-auto">
-        <TracedLogo duration={2} strokeWidth={2} />
+        <TracedLogo duration={2} strokeWidth={2} color="white" />
       </div>
     </div>
   );

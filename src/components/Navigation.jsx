@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Collapse,
@@ -12,6 +12,7 @@ import {
   Avatar,
   Card,
   IconButton,
+  Switch,
 } from "@material-tailwind/react";
 import {
   CubeTransparentIcon,
@@ -25,9 +26,14 @@ import {
   PowerIcon,
   RocketLaunchIcon,
   Bars2Icon,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/react/24/solid";
+
 import Image from "next/image";
 import Link from "next/link";
+import { globalStateAtom } from "@/context/atoms";
+import { useAtom } from "jotai";
 
 // profile menu component
 const profileMenuItems = [
@@ -190,6 +196,11 @@ function NavListMenu() {
 // nav list component
 const navListItems = [
   {
+    label: "Home",
+    icon: CubeTransparentIcon,
+    url: "/",
+  },
+  {
     label: "Shop",
     icon: UserCircleIcon,
     url: "/shop",
@@ -211,27 +222,32 @@ const navListItems = [
 ];
 
 function NavList({ isNavOpen }) {
+  const [state, setState] = useAtom(globalStateAtom);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", state.darkMode);
+  }, [state.darkMode]);
+
   return (
     <ul className="mt-2 mb-4 flex w-full justify-evenly flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       {/* <NavListMenu /> */}
-      {navListItems.slice(0, 2).map(({ label, icon, url }, key) => (
+      {navListItems.slice(0, 3).map(({ label, icon, url }, key) => (
         <Typography
-          disabled={label !== "About"}
+          disabled={label == "Shop"}
           key={label}
-          as={label == "About" ? "a" : "button"}
+          as={label == "Shop" ? "li" : "a"}
           href={url}
           variant="h5"
           color="gray"
           className="font-medium text-blue-gray-500 w-fit m-auto lg:m-0">
           <MenuItem
-            disabled={label !== "About"}
+            disabled={label === "Shop"}
             className="flex items-center gap-2 lg:rounded-full">
             {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "} */}
             <li
               className={`${
-                label == "About" ? "text-gray-900" : "text-gray-400"
+                label !== "Shop" ? "text-gray-900" : "text-gray-400"
               }`}>
-              {" "}
               {label}
             </li>
           </MenuItem>
@@ -247,11 +263,11 @@ function NavList({ isNavOpen }) {
         />
       </div>
 
-      {navListItems.slice(2).map(({ label, icon, url }, key) => (
+      {navListItems.slice(3).map(({ label, icon, url }, key) => (
         <Typography
           disabled={label !== "About"}
           key={label}
-          as={label == "About" ? "a" : "button"}
+          as={label == "About" ? "a" : "li"}
           href={url}
           variant="h5"
           color="gray"
@@ -273,6 +289,26 @@ function NavList({ isNavOpen }) {
           </MenuItem>
         </Typography>
       ))}
+      <div className="flex gap-4 items-center lg:mx-0 mx-auto">
+        <SunIcon
+          color="black"
+          opacity={state.darkMode ? "0.5" : "1"}
+          className="h-6 w-6 "
+        />
+        <Switch
+          id="dark-mode"
+          name="dark-mode"
+          checked={state.darkMode}
+          onChange={(event) => {
+            setState({ ...state, darkMode: event.target.checked });
+          }}
+        />
+        <MoonIcon
+          color="black"
+          opacity={state.darkMode ? "1" : "0.5"}
+          className="h-5 w-5"
+        />
+      </div>
     </ul>
   );
 }
@@ -299,7 +335,7 @@ export function Navigation() {
     isLoaded && (
       <Navbar
         shadow={false}
-        className="rounded-none w-full !bg-white py-4 lg:p-0">
+        className="rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0">
         <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
           {/* <Typography
           as="a"

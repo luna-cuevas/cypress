@@ -1,7 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { TracedLogo } from "./TracedLogo";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import { globalStateAtom } from "@/context/atoms";
 
 type Props = {};
 
@@ -13,6 +15,12 @@ export const textData = [
 ];
 
 const NewsLetterSignUp = (props: Props) => {
+  const [signUpStatus, setSignUpStatus] = useState({
+    message: "",
+    status: "",
+  });
+  const [state, setState] = useAtom(globalStateAtom);
+
   const splitText = (text: string) => {
     return text.split("").map((char: string, index: number) => ({
       char,
@@ -20,14 +28,50 @@ const NewsLetterSignUp = (props: Props) => {
     }));
   };
 
-  const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted", e.currentTarget.email.value);
+    const email = (e.currentTarget.email as HTMLInputElement).value;
+
+    try {
+      const response = await fetch("/api/klaviyo/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const responseJson = await response.json();
+
+      if (responseJson.error !== "Error subscribing") {
+        console.log("Subscription successful!", responseJson);
+
+        setSignUpStatus({
+          message: "Subscription successful! Thank you for signing up!",
+          status: "success",
+        });
+      } else {
+        console.error(
+          "An error occurred. Please check your details and try again:",
+          responseJson.result[0].detail
+        );
+        setSignUpStatus({
+          message: "An error occurred. Please try again.",
+          status: "error",
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred. Please try again.");
+      setSignUpStatus({
+        message: "An error occurred. Please try again.",
+        status: "error",
+      });
+    }
   };
 
   return (
-    <div className="flex flex-col bg-black opacity-80 fixed  h-full w-full  justify-center text-center">
-      <div className="flex-col px-[5%] md:px-0 max-w-[450px] h-2/3 gap-6 mx-auto flex text-white">
+    <div className="flex overflow-y-scroll flex-col bg-white dark:bg-black opacity-80 sticky  h-full w-full  justify-center text-center">
+      <div className="flex-col px-[5%] md:px-0 max-w-[450px] h-2/3 gap-6 mx-auto flex dark:text-white">
         {textData.map((textItem, textIndex) => (
           <motion.g key={textIndex}>
             {splitText(textItem.text).map((char, charIndex) => (
@@ -49,7 +93,11 @@ const NewsLetterSignUp = (props: Props) => {
           </motion.g>
         ))}
         <div className="w-full max-w-[200px] mx-auto">
-          <TracedLogo duration={4} delay={4} />
+          <TracedLogo
+            duration={4}
+            delay={4}
+            color={state.darkMode ? "#fff" : "#000"}
+          />
         </div>
         <motion.p
           initial={{ opacity: 0 }}
@@ -72,23 +120,33 @@ const NewsLetterSignUp = (props: Props) => {
             ease: "easeInOut",
           }}
           className="w-full mx-auto">
-          <form
-            onSubmit={(e) => {
-              handleSubscribe(e);
-            }}
-            className="flex flex-col gap-4">
-            <input
-              className="border-2 rounded-md p-2 focus-visible:outline-none w-full border-white bg-transparent border-t-0 border-r-0 border-l-0 text-white"
-              type="email"
-              placeholder="Email"
-              id="email"
-            />
-            <button
-              className="bg-white text-black rounded-md p-2"
-              type="submit">
-              Sign up
-            </button>
-          </form>
+          {signUpStatus.status === "" ? (
+            <form
+              onSubmit={(e) => {
+                handleSubscribe(e);
+              }}
+              className="flex flex-col gap-4">
+              <input
+                className="border-2 rounded-md placeholder:text-gray-600 p-2 focus-visible:outline-none w-full border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 text-white"
+                name="email"
+                type="email"
+                placeholder="Email"
+                id="email"
+              />
+              <button
+                className="dark:bg-white transition-all duration-100 hover:scale-105 dark:hover:bg-gray-300 bg-gray-500 text-black font-bold rounded-md p-2 hover:bg-gray-600 focus-visible:outline-none"
+                type="submit">
+                Sign up
+              </button>
+            </form>
+          ) : (
+            <p
+              className={`text-${
+                signUpStatus.status === "success" ? "green" : "red"
+              }-500 text-xl`}>
+              {signUpStatus.message}
+            </p>
+          )}
         </motion.div>
       </div>
     </div>
