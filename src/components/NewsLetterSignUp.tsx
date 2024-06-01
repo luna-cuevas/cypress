@@ -27,7 +27,7 @@ const NewsLetterSignUp = (props: Props) => {
 
   return (
     <div className="flex flex-col bg-black opacity-80 fixed  h-full w-full  justify-center text-center">
-      <div className="flex-col h-2/3 gap-6 mx-auto flex text-white">
+      <div className="flex-col px-[5%] md:px-0 max-w-[450px] h-2/3 gap-6 mx-auto flex text-white">
         {textData.map((textItem, textIndex) => (
           <motion.g key={textIndex}>
             {splitText(textItem.text).map((char, charIndex) => (
@@ -49,7 +49,7 @@ const NewsLetterSignUp = (props: Props) => {
           </motion.g>
         ))}
         <div className="w-full max-w-[200px] mx-auto">
-          <TracedLogo duration={4} />
+          <TracedLogo duration={4} delay={4} />
         </div>
         <motion.p
           initial={{ opacity: 0 }}
@@ -60,8 +60,8 @@ const NewsLetterSignUp = (props: Props) => {
             ease: "easeInOut",
           }}
           className="text-xl leading-relaxed">
-          Subscribe to our newsletter to keep up to date <br /> with our
-          progress and receive exclusive offers!
+          Subscribe to our newsletter to keep up to date with our progress and
+          receive exclusive offers!
         </motion.p>
         <motion.div
           initial={{ opacity: 0 }}

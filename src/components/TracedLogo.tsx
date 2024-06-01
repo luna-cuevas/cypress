@@ -6,6 +6,7 @@ import { logoPaths } from "../data/LogoPaths";
 type Props = {
   duration?: number;
   strokeWidth?: number;
+  delay?: number;
 };
 
 export const TracedLogo = (props: Props) => {
@@ -36,6 +37,7 @@ export const TracedLogo = (props: Props) => {
           animate={{ pathLength: 1, opacity: 1 }}
           transition={{
             duration: props.duration || 2,
+            delay: props.delay || 0,
             ease: "easeInOut",
             repeat: Infinity,
             repeatType: "reverse",
@@ -53,6 +55,7 @@ export const TracedLogo = (props: Props) => {
         animate={{ pathLength: 1, opacity: 1 }}
         transition={{
           duration: props.duration || 2,
+          delay: props.delay || 0,
           ease: "easeInOut",
           repeat: Infinity,
           repeatType: "reverse",
