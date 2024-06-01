@@ -31,9 +31,9 @@ import {
 } from "@heroicons/react/24/solid";
 
 import Image from "next/image";
-import Link from "next/link";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
+import { sedan } from "@/lib/fonts";
 
 // profile menu component
 const profileMenuItems = [
@@ -239,7 +239,7 @@ function NavList({ isNavOpen }) {
           href={url}
           variant="h5"
           color="gray"
-          className="font-medium text-blue-gray-500 w-fit m-auto lg:m-0">
+          className={`font-medium text-blue-gray-500 w-fit m-auto lg:m-0 ${sedan.className}`}>
           <MenuItem
             disabled={label === "Shop"}
             className="flex items-center gap-2 lg:rounded-full">
@@ -271,7 +271,7 @@ function NavList({ isNavOpen }) {
           href={url}
           variant="h5"
           color="gray"
-          className="font-medium text-blue-gray-500 w-fit m-auto lg:m-0">
+          className={`font-medium text-blue-gray-500 w-fit m-auto lg:m-0 ${sedan.className}`}>
           <MenuItem
             disabled={true}
             className="flex items-center gap-2 lg:rounded-full">
@@ -335,7 +335,7 @@ export function Navigation() {
     isLoaded && (
       <Navbar
         shadow={false}
-        className="rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0">
+        className={`!${sedan.className} rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0`}>
         <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
           {/* <Typography
           as="a"

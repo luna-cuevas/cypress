@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { sedan } from "../lib/fonts";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${sedan.className}`}>
       <body className="bg-gray-200 relative dark:bg-gray-800">
         <LoadingScreen />
         <Navigation />
