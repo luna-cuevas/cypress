@@ -33,7 +33,8 @@ import {
 import Image from "next/image";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
-import { sedan } from "@/lib/fonts";
+import { sedan, arpona, trajan } from "../lib/fonts";
+import Link from "next/link";
 
 // profile menu component
 const profileMenuItems = [
@@ -229,7 +230,7 @@ function NavList({ isNavOpen }) {
   }, [state.darkMode]);
 
   return (
-    <ul className="mt-2 mb-4 flex w-full justify-evenly flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+    <ul className="mt-2 mb-4 z-[1000] flex w-full justify-evenly flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       {/* <NavListMenu /> */}
       {navListItems.slice(0, 3).map(({ label, icon, url }, key) => (
         <Typography
@@ -239,10 +240,10 @@ function NavList({ isNavOpen }) {
           href={url}
           variant="h5"
           color="gray"
-          className={`font-medium text-blue-gray-500 w-fit m-auto lg:m-0 ${sedan.className}`}>
+          className={`font-medium justify-center text-blue-gray-500 w-[100px] m-auto lg:m-0 ${trajan.className}`}>
           <MenuItem
             disabled={label === "Shop"}
-            className="flex items-center gap-2 lg:rounded-full">
+            className="flex justify-center items-center gap-2 lg:rounded-full">
             {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "} */}
             <li
               className={`${
@@ -253,7 +254,7 @@ function NavList({ isNavOpen }) {
           </MenuItem>
         </Typography>
       ))}
-      <div className={`relative hidden lg:block`}>
+      <a href="/" className={`relative hidden lg:block`}>
         <Image
           src="/cypress-logo.svg"
           alt="tania andrew"
@@ -261,7 +262,7 @@ function NavList({ isNavOpen }) {
           height={80}
           className="rounded-full"
         />
-      </div>
+      </a>
 
       {navListItems.slice(3).map(({ label, icon, url }, key) => (
         <Typography
@@ -271,10 +272,10 @@ function NavList({ isNavOpen }) {
           href={url}
           variant="h5"
           color="gray"
-          className={`font-medium text-blue-gray-500 w-fit m-auto lg:m-0 ${sedan.className}`}>
+          className={`font-medium justify-center text-blue-gray-500 w-[100px] m-auto lg:m-0 ${trajan.className}`}>
           <MenuItem
             disabled={true}
-            className="flex items-center gap-2 lg:rounded-full">
+            className="flex justify-center items-center gap-2 lg:rounded-full">
             {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "} */}
             <li
               className={`flex gap-2 ${
@@ -335,7 +336,7 @@ export function Navigation() {
     isLoaded && (
       <Navbar
         shadow={false}
-        className={`!${sedan.className} rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0`}>
+        className={`!${trajan.className} rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0`}>
         <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
           {/* <Typography
           as="a"

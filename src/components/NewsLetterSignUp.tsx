@@ -105,8 +105,9 @@ const NewsLetterSignUp = (props: Props) => {
         ))}
         <div className="w-full max-w-[200px] mx-auto">
           <TracedLogo
-            duration={4}
-            delay={4}
+            duration={2}
+            delay={3.5}
+            noLineLeadIn={true}
             color={state.darkMode ? "#fff" : "#000"}
           />
         </div>
@@ -138,7 +139,7 @@ const NewsLetterSignUp = (props: Props) => {
               }}
               className="flex flex-col gap-4">
               <input
-                className="border-2 rounded-md placeholder:text-gray-600 p-2 focus-visible:outline-none w-full border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 text-white"
+                className="border-2 font-bold text-black rounded-md placeholder:text-gray-600 p-2 focus-visible:outline-none w-full border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 dark:text-white"
                 name="email"
                 type="email"
                 placeholder="Email"
