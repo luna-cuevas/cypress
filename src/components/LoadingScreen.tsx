@@ -25,10 +25,10 @@ const LoadingScreen = (props: Props) => {
 
   return (
     <div
-      className={`w-full flex bg-white h-full fixed z-50 mx-auto transition-opacity duration-1000 ${
+      className={`w-screen flex bg-white h-screen fixed z-50 mx-auto transition-opacity duration-1000 ${
         fadeOut ? "opacity-0" : "opacity-100"
       } ${!loading && "hidden"}`}>
-      <div className="md:w-full h-screen  m-auto">
+      <div className="h-screen w-screen  my-auto">
         <TracedLogo duration={2} strokeWidth={1} color="#535353" />
       </div>
     </div>
