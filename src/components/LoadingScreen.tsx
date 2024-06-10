@@ -11,11 +11,11 @@ const LoadingScreen = (props: Props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true);
-    }, 2000); // Start fade out after 3.5 seconds
+    }, 3000); // Start fade out after 3.5 seconds
 
     const hideTimer = setTimeout(() => {
       setLoading(false);
-    }, 3000); // Hide after 4 seconds
+    }, 3500); // Hide after 4 seconds
 
     return () => {
       clearTimeout(timer);
