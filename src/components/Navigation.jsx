@@ -196,11 +196,11 @@ function NavListMenu() {
 
 // nav list component
 const navListItems = [
-  {
-    label: "Home",
-    icon: CubeTransparentIcon,
-    url: "/",
-  },
+  // {
+  //   label: "Home",
+  //   icon: CubeTransparentIcon,
+  //   url: "/",
+  // },
   {
     label: "Shop",
     icon: UserCircleIcon,
@@ -211,11 +211,11 @@ const navListItems = [
     icon: CubeTransparentIcon,
     url: "/about",
   },
-  {
-    label: "Account",
-    icon: CodeBracketSquareIcon,
-    url: "/account",
-  },
+  // {
+  //   label: "Account",
+  //   icon: CodeBracketSquareIcon,
+  //   url: "/account",
+  // },
   {
     label: "Cart",
     icon: Square3Stack3DIcon,
@@ -232,7 +232,7 @@ function NavList({ isNavOpen }) {
   return (
     <ul className="mt-2 mb-4 z-[1000] flex w-full justify-evenly flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       {/* <NavListMenu /> */}
-      {navListItems.slice(0, 3).map(({ label, icon, url }, key) => (
+      {navListItems.slice(0, 2).map(({ label, icon, url }, key) => (
         <Typography
           disabled={label == "Shop"}
           key={label}
@@ -264,7 +264,7 @@ function NavList({ isNavOpen }) {
         />
       </a>
 
-      {navListItems.slice(3).map(({ label, icon, url }, key) => (
+      {navListItems.slice(2).map(({ label, icon, url }, key) => (
         <Typography
           disabled={label !== "About"}
           key={label}
