@@ -7,13 +7,13 @@ const page = (props: Props) => {
   return (
     <div className="flex w-full  h-[calc(100vh-80px)] mt-12 lg:mt-0 px-[5%] lg:px-0">
       <div className="m-auto flex h-full justify-between w-full  gap-10 lg:flex-row flex-col">
-        <div className="relative z-0 lg:w-1/2 m-auto order-2 w-full h-[80%] ">
+        <div className="relative z-0 lg:w-1/2 m-auto order-2 w-full h-[90%] ">
           <Image
             src="/about-image.jpg"
             alt="Picture of the author"
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 100vw, 100vw"
-            className="h-full w-full object-cover object-center scale-x-[-1]"
+            className="h-full w-full object-contain object-center"
           />
           <div
             className="absolute inset-0 z-0  "
