@@ -58,12 +58,12 @@ export const TracedLogo = (props: Props) => {
                 strokeOpacity: 1,
               }}
               transition={{
-                duration: 1,
+                duration: 2,
                 delay: props.delay
                   ? props.delay + path.id * 0.6
                   : path.id < 2
-                  ? path.id * 0.5
-                  : 1,
+                  ? path.id
+                  : 1.5,
                 ease: "linear",
                 // repeat: Infinity,
                 // repeatType: "reverse",

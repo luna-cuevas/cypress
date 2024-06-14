@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${arpona.className}`}>
+    <html lang="en" className={`dark ${trajan.className}`}>
       <body className="bg-gray-200 relative dark:bg-gray-800">
         <LoadingScreen />
         <Navigation />
