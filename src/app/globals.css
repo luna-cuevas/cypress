@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* add trajan-regular font */
+@font-face {
+  font-family: "trajan-regular";
+  src: url("../../public/fonts/trajan-regular.otf") format("opentype");
+}
+
+.main-container * {
+  font-family: "trajan-regular", sans-serif !important;
+}
+
 .glow-circle {
   filter: drop-shadow(10 20 10px rgb(255, 255, 255));
   transition: filter 3s ease-in-out;
@@ -9,4 +19,21 @@
 
 .glow-circle:hover {
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1));
+}
+
+/* Add or adjust this in your global stylesheet */
+.underline-animation::after {
+  content: "";
+  display: flex;
+  width: 0;
+  height: 2px; /* Adjust the thickness of the underline */
+  background: currentColor; /* Use the text color for the underline */
+  transition: width 0.3s ease-in-out;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.underline-animation:hover::after {
+  width: 100%;
 }

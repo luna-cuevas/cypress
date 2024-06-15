@@ -25,7 +25,7 @@ const LoadingScreen = (props: Props) => {
 
   return (
     <div
-      className={`w-screen flex bg-white h-screen fixed z-50 mx-auto transition-opacity duration-1000 ${
+      className={`w-screen z-[20000] flex bg-white h-screen fixed  mx-auto transition-opacity duration-1000 ${
         fadeOut ? "opacity-0" : "opacity-100"
       } ${!loading && "hidden"}`}>
       <div className="h-screen w-screen  my-auto">

@@ -33,7 +33,7 @@ import {
 import Image from "next/image";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
-import { sedan, arpona, trajan } from "../lib/fonts";
+import { sedan, arpona, trajan, trajanRegular } from "../lib/fonts";
 import Link from "next/link";
 
 // profile menu component
@@ -211,18 +211,18 @@ const navListItems = [
     icon: CubeTransparentIcon,
     url: "/about",
   },
-  // {
-  //   label: "Account",
-  //   icon: CodeBracketSquareIcon,
-  //   url: "/account",
-  // },
+  {
+    label: "Contact",
+    icon: CodeBracketSquareIcon,
+    url: "/contact",
+  },
   {
     label: "Cart",
     icon: Square3Stack3DIcon,
   },
 ];
 
-function NavList({ isNavOpen }) {
+function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
   const [state, setState] = useAtom(globalStateAtom);
 
   useEffect(() => {
@@ -230,85 +230,72 @@ function NavList({ isNavOpen }) {
   }, [state.darkMode]);
 
   return (
-    <ul className="mt-2 mb-4 z-[1000] flex w-full justify-evenly flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+    <ul className="z-[10000] border-t border-gray-200 lg:border-t-0  flex max-w-screen lg:w-screen lg:h-[90px] bg-none justify-between flex-col gap-2  lg:flex-row lg:items-center">
       {/* <NavListMenu /> */}
-      {navListItems.slice(0, 2).map(({ label, icon, url }, key) => (
-        <Typography
-          disabled={label == "Shop"}
-          key={label}
-          as={label == "Shop" ? "li" : "a"}
-          href={url}
-          variant="h5"
-          color="gray"
-          className={`font-medium justify-center text-blue-gray-500 w-[100px] m-auto lg:m-0 ${trajan.className}`}>
-          <MenuItem
-            disabled={label === "Shop"}
-            className="flex justify-center items-center gap-2 lg:rounded-full">
-            {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "} */}
-            <li
-              className={`${
-                label !== "Shop" ? "text-gray-900" : "text-gray-400"
-              }`}>
-              {label}
-            </li>
-          </MenuItem>
-        </Typography>
-      ))}
-      <a href="/" className={`relative hidden lg:block`}>
-        <Image
-          src="/cypress-logo.svg"
-          alt="tania andrew"
-          width={80}
-          height={80}
-          className="rounded-full"
-        />
-      </a>
 
-      {navListItems.slice(2).map(({ label, icon, url }, key) => (
-        <Typography
-          disabled={label !== "About"}
-          key={label}
-          as={label == "About" ? "a" : "li"}
-          href={url}
-          variant="h5"
-          color="gray"
-          className={`font-medium justify-center text-blue-gray-500 w-[100px] m-auto lg:m-0 ${trajan.className}`}>
-          <MenuItem
-            disabled={true}
-            className="flex justify-center items-center gap-2 lg:rounded-full">
-            {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "} */}
-            <li
-              className={`flex gap-2 ${
-                label == "About" ? "text-gray-900" : "text-gray-400"
-              }`}>
-              {" "}
-              {label}
-              {label == "Cart" && (
-                <p className=" rounded-full border border-gray-400 px-1"> 0</p>
-              )}
-            </li>
-          </MenuItem>
-        </Typography>
-      ))}
-      <div className="flex gap-4 items-center lg:mx-0 mx-auto">
-        <SunIcon
-          color="black"
-          opacity={state.darkMode ? "0.5" : "1"}
-          className="h-6 w-6 "
-        />
-        <Switch
-          id="dark-mode"
-          name="dark-mode"
-          checked={state.darkMode}
-          onChange={(event) => {
-            setState({ ...state, darkMode: event.target.checked });
-          }}
-        />
-        <MoonIcon
-          color="black"
-          opacity={state.darkMode ? "1" : "0.5"}
-          className="h-5 w-5"
-        />
+      <div className="lg:w-[80%] w-full    m-auto h-full flex justify-between">
+        <a href="/" className={`relative hidden lg:block h-full w-[200px]`}>
+          <Image
+            src="/cypress-logo-with-text.png"
+            alt="Cypress Logo"
+            fill
+            loading="eager"
+            className="w-full h-full !object-contain dark:invert"
+          />
+        </a>
+        <div className="lg:w-fit py-3 items-center bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
+          {navListItems.map(({ label, icon, url }, key) => (
+            <Link
+              key={label}
+              href={
+                label === "About" || label === "Contact" ? (url as string) : "/"
+              }
+              onClick={(e) => {
+                if (label !== "About" && label !== "Contact") {
+                  e.preventDefault();
+                }
+              }}
+              className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 ${trajanRegular.className}`}>
+              <MenuItem
+                disabled={label !== "About" && label !== "Contact"}
+                className="flex justify-center items-center gap-2 lg:rounded-full dark:hover:bg-gray-900">
+                {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
+                <li
+                  className={`${
+                    label === "Contact" || label === "About"
+                      ? "text-gray-900 dark:text-gray-200"
+                      : "text-gray-500 dark:text-gray-400"
+                  } flex gap-2 font-bold uppercase text-sm`}>
+                  {label}
+                  {label === "Cart" && (
+                    <p className="rounded-full border border-gray-400 px-1">
+                      0
+                    </p>
+                  )}
+                </li>
+              </MenuItem>
+            </Link>
+          ))}
+          <div className="flex gap-3 items-center lg:mx-0 mx-auto">
+            <SunIcon
+              opacity={state.darkMode ? "0.5" : "1"}
+              className="h-5 w-5 text-black dark:text-white"
+            />
+            <Switch
+              id="dark-mode"
+              name="dark-mode"
+              checked={state.darkMode}
+              onChange={(event) => {
+                setState({ ...state, darkMode: event.target.checked });
+              }}
+              crossOrigin={undefined}
+            />
+            <MoonIcon
+              opacity={state.darkMode ? "1" : "0.3"}
+              className="h-5 w-5 text-black dark:text-white"
+            />
+          </div>
+        </div>
       </div>
     </ul>
   );
@@ -336,33 +323,39 @@ export function Navigation() {
     isLoaded && (
       <Navbar
         shadow={false}
-        className={`!${trajan.className} rounded-none border-b-2 dark:border-b-0 border-gray-200 drop-shadow-md dark:drop-shadow-none max-w-none w-full !bg-white py-4 lg:p-0`}>
-        <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-          {/* <Typography
-          as="a"
-          href="#"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium">
-          Material Tailwind
-        </Typography> */}
+        fullWidth={true}
+        className={`!${trajan.className}  h-[90px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
+        <a
+          href="/"
+          className={`z-[1000]  lg:hidden h-full max-w-[200px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
+          <Image
+            src="/cypress-logo-with-text.png"
+            alt="Cypress Logo"
+            fill
+            className="w-full h-full object-contain dark:invert"
+          />
+        </a>
+        <div className="relative my-auto w-full mx-auto  h-full max-w-none flex items-center justify-between text-blue-gray-900">
           <div className="hidden  w-full lg:flex">
             <NavList isNavOpen={isNavOpen} />
           </div>
-          <IconButton
-            size="sm"
-            color="blue-gray"
-            variant="text"
-            onClick={toggleIsNavOpen}
-            className="ml-auto mr-2 lg:hidden">
-            <Bars2Icon className="h-6 w-6" />
-          </IconButton>
+          <div className="w-full max-w-full  flex justify-end">
+            <IconButton
+              size="sm"
+              variant="text"
+              onClick={toggleIsNavOpen}
+              className="ml-auto mr-4 lg:hidden max-w-none">
+              <Bars2Icon className="h-6 w-6 text-black dark:text-white" />
+            </IconButton>
+          </div>
 
           {/* <Button size="sm" variant="text">
           <span>Log In</span>
         </Button>
         <ProfileMenu /> */}
         </div>
-        <Collapse open={isNavOpen} className="overflow-scroll">
-          <NavList />
+        <Collapse open={isNavOpen} className="h-fit  z-[10000]">
+          <NavList isNavOpen={isNavOpen} />
         </Collapse>
       </Navbar>
     )

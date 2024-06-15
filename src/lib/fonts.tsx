@@ -16,3 +16,8 @@ export const trajan = localFont({
   src: "../../public/fonts/trajan-extralight.ttf",
   display: "swap",
 });
+
+export const trajanRegular = localFont({
+  src: "../../public/fonts/trajan-regular.otf",
+  display: "swap",
+});

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import { toast } from "react-toastify";
+import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
 
 type Props = {};
 
@@ -37,52 +38,28 @@ const NewsLetterSignUp = (props: Props) => {
     }));
   };
 
-  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = (e.currentTarget.email as HTMLInputElement).value;
+    const response = await handleSubscribe(e);
 
-    try {
-      const response = await fetch("/api/klaviyo/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const responseJson = await response.json();
-
-      console.log("Response JSON:", responseJson);
-
-      if (
-        responseJson.error == "" ||
-        responseJson.message == "Subscription successful!"
-      ) {
-        setSignUpStatus({
-          message: "Subscription successful! Thank you for signing up!",
-          status: "success",
-        });
-        toast.success("Subscription successful! Thank you for signing up!");
-      } else {
-        setSignUpStatus({
-          message: responseJson.result[0].detail,
-          status: "error",
-        });
-        toast.error(responseJson.result[0].detail);
-      }
-    } catch (error) {
-      console.error("An error occurred. Please try again.");
+    if (response.status === "error") {
       setSignUpStatus({
-        message: "An error occurred. Please try again.",
+        message: response.message,
         status: "error",
       });
-      toast.error("An error occurred. Please try again.");
+      toast.error(response.message);
+    } else {
+      setSignUpStatus({
+        message: response.message,
+        status: "success",
+      });
+      toast.success(response.message);
     }
   };
 
   return (
-    <div className="flex overflow-y-scroll flex-col bg-white dark:bg-black opacity-80 sticky  h-full w-full  justify-center text-center">
-      <div className="flex-col px-[5%] md:px-0 max-w-[450px] h-2/3 gap-6 mx-auto flex dark:text-white">
+    <div className="flex py-8 lg:p-0 box-content  flex-col dark:bg-gray-900 opacity-80 sticky h-fit  lg:h-[calc(100vh-90px)] w-full  justify-center text-center">
+      <div className="flex-col px-[5%] md:px-0 max-w-[450px] h-2/3 gap-3 mx-auto flex dark:text-white">
         {textData.map((textItem, textIndex) => (
           <motion.g key={textIndex}>
             {splitText(textItem.text).map((char, charIndex) => (
@@ -103,7 +80,7 @@ const NewsLetterSignUp = (props: Props) => {
             ))}
           </motion.g>
         ))}
-        <div className="w-full max-w-[200px] mx-auto">
+        <div className="w-full max-w-[300px] mx-auto">
           <TracedLogo
             duration={2}
             delay={3.5}
@@ -135,7 +112,7 @@ const NewsLetterSignUp = (props: Props) => {
           {signUpStatus.status === "" ? (
             <form
               onSubmit={(e) => {
-                handleSubscribe(e);
+                onSubmit(e);
               }}
               className="flex flex-col gap-4">
               <input
