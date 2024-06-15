@@ -65,6 +65,12 @@ const ContactForm = (props: Props) => {
         message: "Message sent successfully",
         loading: false,
       });
+    } else {
+      setMessageSent({
+        message: "An error occurred. Please try again.",
+        loading: false,
+      });
+      toast.error("An error occurred. Please try again.");
     }
   };
   return (
