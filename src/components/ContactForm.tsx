@@ -76,7 +76,9 @@ const ContactForm = (props: Props) => {
   return (
     <div
       className={`flex flex-col min-h-max mx-auto text-center !${trajanRegular.className} dark:text-white`}>
-      <Typography variant="h1" className="mb-4 !text-3xl lg:!text-5xl">
+      <Typography
+        variant="h1"
+        className="mb-4 !text-2xl md:!text-4xl lg:!text-5xl">
         We&apos;re Here to Help
       </Typography>
       <Typography className="mb-10 font-normal text-sm lg:text-lg lg:mb-20 mx-auto max-w-3xl ">
