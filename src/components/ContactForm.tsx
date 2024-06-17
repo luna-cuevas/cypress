@@ -1,7 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { sedan, arpona, trajan, trajanRegular } from "../lib/fonts";
+import {
+  sedan,
+  arpona,
+  trajan,
+  trajanRegular,
+  trajanLight,
+} from "../lib/fonts";
 import { toast } from "react-toastify";
 
 type Props = {};
@@ -75,7 +81,7 @@ const ContactForm = (props: Props) => {
   };
   return (
     <div
-      className={`flex flex-col min-h-max mx-auto text-center !${trajanRegular.className} dark:text-white`}>
+      className={`flex flex-col min-h-max mx-auto text-center  dark:text-white`}>
       <Typography
         variant="h1"
         className="mb-4 !text-2xl md:!text-4xl lg:!text-5xl">

@@ -33,166 +33,172 @@ import {
 import Image from "next/image";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
-import { sedan, arpona, trajan, trajanRegular } from "../lib/fonts";
+import {
+  sedan,
+  arpona,
+  trajan,
+  trajanRegular,
+  trajanLight,
+} from "../lib/fonts";
 import Link from "next/link";
 
-// profile menu component
-const profileMenuItems = [
-  {
-    label: "My Profile",
-    icon: UserCircleIcon,
-  },
-  {
-    label: "Edit Profile",
-    icon: Cog6ToothIcon,
-  },
-  {
-    label: "Inbox",
-    icon: InboxArrowDownIcon,
-  },
-  {
-    label: "Help",
-    icon: LifebuoyIcon,
-  },
-  {
-    label: "Sign Out",
-    icon: PowerIcon,
-  },
-];
+// // profile menu component
+// const profileMenuItems = [
+//   {
+//     label: "My Profile",
+//     icon: UserCircleIcon,
+//   },
+//   {
+//     label: "Edit Profile",
+//     icon: Cog6ToothIcon,
+//   },
+//   {
+//     label: "Inbox",
+//     icon: InboxArrowDownIcon,
+//   },
+//   {
+//     label: "Help",
+//     icon: LifebuoyIcon,
+//   },
+//   {
+//     label: "Sign Out",
+//     icon: PowerIcon,
+//   },
+// ];
 
-function ProfileMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+// function ProfileMenu() {
+//   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const closeMenu = () => setIsMenuOpen(false);
+//   const closeMenu = () => setIsMenuOpen(false);
 
-  return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler>
-        <Button
-          variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto">
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="tania andrew"
-            className="border border-gray-900 p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-          />
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
-          />
-        </Button>
-      </MenuHandler>
-      <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
-          return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}>
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}>
-                {label}
-              </Typography>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
-  );
-}
+//   return (
+//     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
+//       <MenuHandler>
+//         <Button
+//           variant="text"
+//           color="blue-gray"
+//           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto">
+//           <Avatar
+//             variant="circular"
+//             size="sm"
+//             alt="tania andrew"
+//             className="border border-gray-900 p-0.5"
+//             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+//           />
+//           <ChevronDownIcon
+//             strokeWidth={2.5}
+//             className={`h-3 w-3 transition-transform ${
+//               isMenuOpen ? "rotate-180" : ""
+//             }`}
+//           />
+//         </Button>
+//       </MenuHandler>
+//       <MenuList className="p-1">
+//         {profileMenuItems.map(({ label, icon }, key) => {
+//           const isLastItem = key === profileMenuItems.length - 1;
+//           return (
+//             <MenuItem
+//               key={label}
+//               onClick={closeMenu}
+//               className={`flex items-center gap-2 rounded ${
+//                 isLastItem
+//                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+//                   : ""
+//               }`}>
+//               {React.createElement(icon, {
+//                 className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+//                 strokeWidth: 2,
+//               })}
+//               <Typography
+//                 as="span"
+//                 variant="small"
+//                 className="font-normal"
+//                 color={isLastItem ? "red" : "inherit"}>
+//                 {label}
+//               </Typography>
+//             </MenuItem>
+//           );
+//         })}
+//       </MenuList>
+//     </Menu>
+//   );
+// }
 
-// nav list menu
-const navListMenuItems = [
-  {
-    title: "@material-tailwind/html",
-    description:
-      "Learn how to use @material-tailwind/html, packed with rich components and widgets.",
-  },
-  {
-    title: "@material-tailwind/react",
-    description:
-      "Learn how to use @material-tailwind/react, packed with rich components for React.",
-  },
-  {
-    title: "Material Tailwind PRO",
-    description:
-      "A complete set of UI Elements for building faster websites in less time.",
-  },
-];
+// // nav list menu
+// const navListMenuItems = [
+//   {
+//     title: "@material-tailwind/html",
+//     description:
+//       "Learn how to use @material-tailwind/html, packed with rich components and widgets.",
+//   },
+//   {
+//     title: "@material-tailwind/react",
+//     description:
+//       "Learn how to use @material-tailwind/react, packed with rich components for React.",
+//   },
+//   {
+//     title: "Material Tailwind PRO",
+//     description:
+//       "A complete set of UI Elements for building faster websites in less time.",
+//   },
+// ];
 
-function NavListMenu() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+// function NavListMenu() {
+//   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const renderItems = navListMenuItems.map(({ title, description }) => (
-    <a href="#" key={title}>
-      <MenuItem>
-        <Typography variant="h6" color="blue-gray" className="mb-1">
-          {title}
-        </Typography>
-        <Typography variant="small" color="gray" className="font-normal">
-          {description}
-        </Typography>
-      </MenuItem>
-    </a>
-  ));
+//   const renderItems = navListMenuItems.map(({ title, description }) => (
+//     <a href="#" key={title}>
+//       <MenuItem>
+//         <Typography variant="h6" color="blue-gray" className="mb-1">
+//           {title}
+//         </Typography>
+//         <Typography variant="small" color="gray" className="font-normal">
+//           {description}
+//         </Typography>
+//       </MenuItem>
+//     </a>
+//   ));
 
-  return (
-    <React.Fragment>
-      <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
-        <MenuHandler>
-          <Typography as="a" href="#" variant="small" className="font-normal">
-            <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
-              <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
-              Pages{" "}
-              <ChevronDownIcon
-                strokeWidth={2}
-                className={`h-3 w-3 transition-transform ${
-                  isMenuOpen ? "rotate-180" : ""
-                }`}
-              />
-            </MenuItem>
-          </Typography>
-        </MenuHandler>
-        <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
-          <Card
-            color="blue"
-            shadow={false}
-            variant="gradient"
-            className="col-span-3 grid h-full w-full place-items-center rounded-md">
-            <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
-          </Card>
-          <ul className="col-span-4 flex w-full flex-col gap-1">
-            {renderItems}
-          </ul>
-        </MenuList>
-      </Menu>
-      <MenuItem className="flex items-center gap-2 font-medium text-blue-gray-900 lg:hidden">
-        <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
-        Pages{" "}
-      </MenuItem>
-      <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
-        {renderItems}
-      </ul>
-    </React.Fragment>
-  );
-}
+//   return (
+//     <React.Fragment>
+//       <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
+//         <MenuHandler>
+//           <Typography as="a" href="#" variant="small" className="font-normal">
+//             <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
+//               <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
+//               Pages{" "}
+//               <ChevronDownIcon
+//                 strokeWidth={2}
+//                 className={`h-3 w-3 transition-transform ${
+//                   isMenuOpen ? "rotate-180" : ""
+//                 }`}
+//               />
+//             </MenuItem>
+//           </Typography>
+//         </MenuHandler>
+//         <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
+//           <Card
+//             color="blue"
+//             shadow={false}
+//             variant="gradient"
+//             className="col-span-3 grid h-full w-full place-items-center rounded-md">
+//             <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
+//           </Card>
+//           <ul className="col-span-4 flex w-full flex-col gap-1">
+//             {renderItems}
+//           </ul>
+//         </MenuList>
+//       </Menu>
+//       <MenuItem className="flex items-center gap-2 font-medium text-blue-gray-900 lg:hidden">
+//         <Square3Stack3DIcon className="h-[18px] w-[18px] text-blue-gray-500" />{" "}
+//         Pages{" "}
+//       </MenuItem>
+//       <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
+//         {renderItems}
+//       </ul>
+//     </React.Fragment>
+//   );
+// }
 
 // nav list component
 const navListItems = [
@@ -234,16 +240,16 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
       {/* <NavListMenu /> */}
 
       <div className="lg:w-[80%] w-full    m-auto h-full flex justify-between">
-        <a href="/" className={`relative hidden lg:block h-full w-[200px]`}>
+        <Link href="/" className={`relative hidden lg:block h-full w-[225px]`}>
           <Image
-            src="/cypress-logo-with-text.png"
+            src="/cypress-logo-with-text.svg"
             alt="Cypress Logo"
             fill
             loading="eager"
             className="w-full h-full !object-contain dark:invert"
           />
-        </a>
-        <div className="lg:w-fit py-3 items-center bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
+        </Link>
+        <div className="lg:w-fit py-3 items-end  bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
           {navListItems.map(({ label, icon, url }, key) => (
             <Link
               key={label}
@@ -255,28 +261,28 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
                   e.preventDefault();
                 }
               }}
-              className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 ${trajanRegular.className}`}>
+              className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 `}>
               <MenuItem
                 disabled={label !== "About" && label !== "Contact"}
-                className="flex justify-center items-center gap-2 lg:rounded-full dark:hover:bg-gray-900">
+                className="flex lg:py-[0.30rem]  justify-center items-center gap-2 lg:rounded-full dark:hover:bg-gray-900">
                 {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
                 <li
                   className={`${
                     label === "Contact" || label === "About"
                       ? "text-gray-900 dark:text-gray-200"
                       : "text-gray-500 dark:text-gray-400"
-                  } flex gap-2 font-bold uppercase text-sm`}>
+                  } flex gap-2 font-bold uppercase text-sm box-content`}>
                   {label}
-                  {label === "Cart" && (
-                    <p className="rounded-full border border-gray-400 px-1">
+                  {/* {label === "Cart" && (
+                    <span className="rounded-full m-0 py-0 leading-tight h-fit border border-gray-400 px-1">
                       0
-                    </p>
-                  )}
+                    </span>
+                  )} */}
                 </li>
               </MenuItem>
             </Link>
           ))}
-          <div className="flex gap-3 items-center lg:mx-0 mx-auto">
+          <div className="flex gap-3 lg:py-[0.45rem]  items-center lg:mx-0 mx-auto">
             <SunIcon
               opacity={state.darkMode ? "0.5" : "1"}
               className="h-5 w-5 text-black dark:text-white"
@@ -324,12 +330,12 @@ export function Navigation() {
       <Navbar
         shadow={false}
         fullWidth={true}
-        className={`!${trajan.className}  h-[90px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
+        className={`  h-[90px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
         <a
           href="/"
           className={`z-[1000]  lg:hidden h-full max-w-[200px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
           <Image
-            src="/cypress-logo-with-text.png"
+            src="/cypress-logo-with-text.svg"
             alt="Cypress Logo"
             fill
             className="w-full h-full object-contain dark:invert"

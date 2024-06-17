@@ -4,12 +4,21 @@
 
 /* add trajan-regular font */
 @font-face {
+  font-family: "trajan-extralight";
+  src: url("../../public/fonts/trajan-extralight.ttf") format("truetype");
+}
+@font-face {
   font-family: "trajan-regular";
   src: url("../../public/fonts/trajan-regular.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "trajan-light";
+  src: url("../../public/fonts/trajan-light.ttf") format("truetype");
+}
+
 .main-container * {
-  font-family: "trajan-regular", sans-serif !important;
+  font-family: "trajan-extralight", sans-serif !important;
 }
 
 .glow-circle {

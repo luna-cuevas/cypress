@@ -31,6 +31,12 @@ const NewsLetterSignUp = (props: Props) => {
     }
   }, [signUpStatus]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setState({ ...state, firstVisit: false });
+    }, 4500);
+  }, []);
+
   const splitText = (text: string) => {
     return text.split("").map((char: string, index: number) => ({
       char,
@@ -71,7 +77,7 @@ const NewsLetterSignUp = (props: Props) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                  delay: charIndex * 0.15 + 4,
+                  delay: charIndex * 0.15 + (state.firstVisit ? 4 : 0),
                   duration: 0.15,
                   ease: "easeInOut",
                 }}>
@@ -82,8 +88,9 @@ const NewsLetterSignUp = (props: Props) => {
         ))}
         <div className="w-full max-w-[300px] mx-auto">
           <TracedLogo
+            strokeWidth={0.5}
             duration={2}
-            delay={3.5}
+            delay={state.firstVisit ? 3.5 : 0}
             noLineLeadIn={true}
             color={state.darkMode ? "#fff" : "#000"}
           />
@@ -92,7 +99,7 @@ const NewsLetterSignUp = (props: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: 0.15 + 4,
+            delay: 0.15 + (state.firstVisit ? 5 : 0.5),
             duration: 1,
             ease: "easeInOut",
           }}
@@ -104,7 +111,7 @@ const NewsLetterSignUp = (props: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            delay: 0.15 + 5,
+            delay: 0.15 + (state.firstVisit ? 5 : 1),
             duration: 1,
             ease: "easeInOut",
           }}

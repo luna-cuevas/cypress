@@ -5,6 +5,7 @@ type State = {
   user: { email: string };
   showMobileMenu: boolean;
   darkMode: boolean;
+  firstVisit: boolean;
 };
 
 // A helper function to work with localStorage and JSON serialization for the entire application state
@@ -43,6 +44,7 @@ const initialState: State = {
   user: { email: "" },
   showMobileMenu: false,
   darkMode: false,
+  firstVisit: true,
 };
 
 // Create an atom with local storage persistence for the entire application state
