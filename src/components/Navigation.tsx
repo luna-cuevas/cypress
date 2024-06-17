@@ -236,20 +236,20 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
   }, [state.darkMode]);
 
   return (
-    <ul className="z-[10000] border-t border-gray-200 lg:border-t-0  flex max-w-screen lg:w-screen lg:h-[90px] bg-none justify-between flex-col gap-2  lg:flex-row lg:items-center">
+    <ul className="z-[10000] border-t  border-gray-200 lg:border-t-0  flex max-w-screen lg:w-screen lg:h-[70px] bg-none justify-between flex-col gap-2  lg:flex-row lg:items-center">
       {/* <NavListMenu /> */}
 
-      <div className="lg:w-[80%] w-full    m-auto h-full flex justify-between">
-        <Link href="/" className={`relative hidden lg:block h-full w-[225px]`}>
+      <div className="lg:w-[80%] w-full mx-auto    mt-auto h-full flex justify-between">
+        <Link href="/" className={`relative hidden lg:block  w-[250px] `}>
           <Image
             src="/cypress-logo-with-text.svg"
             alt="Cypress Logo"
             fill
             loading="eager"
-            className="w-full h-full !object-contain dark:invert"
+            className="w-full h-full !object-contain dark:invert pt-2"
           />
         </Link>
-        <div className="lg:w-fit py-3 items-end  bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
+        <div className="lg:w-fit  items-end py-6 lg:py-0  bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
           {navListItems.map(({ label, icon, url }, key) => (
             <Link
               key={label}
@@ -264,7 +264,7 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
               className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 `}>
               <MenuItem
                 disabled={label !== "About" && label !== "Contact"}
-                className="flex lg:py-[0.30rem]  justify-center items-center gap-2 lg:rounded-full dark:hover:bg-gray-900">
+                className="flex lg:py-[0.35rem] hover:text-black hover:bg-gray-300  justify-center items-center gap-2  dark:hover:bg-gray-900">
                 {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
                 <li
                   className={`${
@@ -330,8 +330,8 @@ export function Navigation() {
       <Navbar
         shadow={false}
         fullWidth={true}
-        className={`  h-[90px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
-        <a
+        className={`  h-[70px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
+        <Link
           href="/"
           className={`z-[1000]  lg:hidden h-full max-w-[200px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
           <Image
@@ -340,7 +340,7 @@ export function Navigation() {
             fill
             className="w-full h-full object-contain dark:invert"
           />
-        </a>
+        </Link>
         <div className="relative my-auto w-full mx-auto  h-full max-w-none flex items-center justify-between text-blue-gray-900">
           <div className="hidden  w-full lg:flex">
             <NavList isNavOpen={isNavOpen} />
@@ -360,7 +360,7 @@ export function Navigation() {
         </Button>
         <ProfileMenu /> */}
         </div>
-        <Collapse open={isNavOpen} className="h-fit  z-[10000]">
+        <Collapse open={isNavOpen} className="h-fit   z-[10000]">
           <NavList isNavOpen={isNavOpen} />
         </Collapse>
       </Navbar>
