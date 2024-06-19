@@ -225,6 +225,7 @@ const navListItems = [
   {
     label: "Cart",
     icon: Square3Stack3DIcon,
+    url: "/cart",
   },
 ];
 
@@ -250,38 +251,57 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
           />
         </Link>
         <div className="lg:w-fit  items-end py-6 lg:py-0  bg-white dark:bg-gray-800 dark:lg:bg-transparent lg:bg-transparent w-full  flex gap-3 lg:flex-row flex-col">
-          {navListItems.map(({ label, icon, url }, key) => (
-            <Link
-              key={label}
-              href={
-                label === "About" || label === "Contact" ? (url as string) : "/"
-              }
-              onClick={(e) => {
-                if (label !== "About" && label !== "Contact") {
-                  e.preventDefault();
-                }
-              }}
-              className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 `}>
-              <MenuItem
-                disabled={label !== "About" && label !== "Contact"}
-                className="flex lg:py-[0.35rem] hover:text-black hover:bg-gray-300  justify-center items-center gap-2  dark:hover:bg-gray-900">
-                {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
-                <li
-                  className={`${
-                    label === "Contact" || label === "About"
-                      ? "text-gray-900 dark:text-gray-200"
-                      : "text-gray-500 dark:text-gray-400"
-                  } flex gap-2 font-bold uppercase text-sm box-content`}>
-                  {label}
-                  {/* {label === "Cart" && (
+          {navListItems.map(({ label, icon, url }, key) => {
+            return label !== "Cart" ? (
+              <Link
+                key={label}
+                href={label !== "Shop" ? (url as string) : "/"}
+                onClick={(e) => {
+                  if (label == "Shop") {
+                    e.preventDefault();
+                  }
+                }}
+                className={` justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0 `}>
+                <MenuItem
+                  disabled={label == "Shop"}
+                  className="flex lg:py-[0.35rem] hover:text-black hover:bg-gray-300  justify-center items-center gap-2  dark:hover:bg-gray-900">
+                  {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
+                  <li
+                    className={`${
+                      label != "Shop"
+                        ? "text-gray-900 dark:text-gray-200"
+                        : "text-gray-500 dark:text-gray-400"
+                    } flex gap-2 font-bold uppercase text-sm box-content`}>
+                    {label}
+                    {/* {label === "Cart" && (
                     <span className="rounded-full m-0 py-0 leading-tight h-fit border border-gray-400 px-1">
                       0
                     </span>
                   )} */}
-                </li>
-              </MenuItem>
-            </Link>
-          ))}
+                  </li>
+                </MenuItem>
+              </Link>
+            ) : (
+              <div className="justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0">
+                <MenuItem
+                  onClick={() => {
+                    setState({ ...state, cartOpen: true });
+                  }}
+                  className="flex lg:py-[0.35rem]  hover:bg-gray-300  justify-center items-center gap-2  dark:hover:bg-gray-900">
+                  {/* {React.createElement(icon, { className: "h-[18px] w-[18px]" })} */}
+                  <li
+                    className={` flex gap-2 font-bold uppercase text-sm box-content text-gray-900 dark:text-gray-200`}>
+                    {label}
+                    {label === "Cart" && (
+                      <span className="rounded-full m-0 py-0 leading-tight h-fit border border-gray-400 px-1">
+                        0
+                      </span>
+                    )}
+                  </li>
+                </MenuItem>
+              </div>
+            );
+          })}
           <div className="flex gap-3 lg:py-[0.45rem]  items-center lg:mx-0 mx-auto">
             <SunIcon
               opacity={state.darkMode ? "0.5" : "1"}

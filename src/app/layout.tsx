@@ -13,6 +13,7 @@ import {
 } from "../lib/fonts";
 import Footer from "@/components/Footer";
 import HotjarInit from "@/components/HotJarInit";
+import Cart from "@/components/Cart";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -39,7 +40,11 @@ export default function RootLayout({
           <HotjarInit />
           <LoadingScreen />
           <Navigation />
-          {children}
+          <div className="!relative">
+            <Cart />
+
+            {children}
+          </div>
           <Footer />
         </div>
         <ToastContainer

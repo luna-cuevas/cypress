@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import {
   Dialog,
@@ -7,6 +8,8 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useAtom } from "jotai";
+import { globalStateAtom } from "@/context/atoms";
 
 const products = [
   {
@@ -37,11 +40,18 @@ const products = [
 ];
 
 export default function Cart() {
-  const [open, setOpen] = useState(true);
+  const [state, setState] = useAtom(globalStateAtom);
 
   return (
-    <Transition show={open}>
-      <Dialog className="relative z-10" onClose={setOpen}>
+    <Transition show={state.cartOpen}>
+      <Dialog
+        className="relative z-[200000]"
+        onClose={() =>
+          setState({
+            ...state,
+            cartOpen: false,
+          })
+        }>
         <TransitionChild
           enter="ease-in-out duration-500"
           enterFrom="opacity-0"
@@ -49,10 +59,10 @@ export default function Cart() {
           leave="ease-in-out duration-500"
           leaveFrom="opacity-100"
           leaveTo="opacity-0">
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-gray-500 dark:bg-gray-800 !bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
-        <div className="fixed inset-0 overflow-hidden">
+        <div className="fixed inset-0 overflow-hidden ">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <TransitionChild
@@ -63,17 +73,22 @@ export default function Cart() {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full">
                 <DialogPanel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll dark:bg-gray-900 bg-white shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <DialogTitle className="text-lg font-medium text-gray-900">
+                        <DialogTitle className="text-lg font-medium text-gray-900 dark:text-white">
                           Shopping cart
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}>
+                            className="relative -m-2 p-2 text-gray-400 dark:text-white hover:text-gray-500"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                cartOpen: false,
+                              })
+                            }>
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -98,7 +113,7 @@ export default function Cart() {
 
                                 <div className="ml-4 flex flex-1 flex-col">
                                   <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
+                                    <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
                                       <h3>
                                         <a href={product.href}>
                                           {product.name}
@@ -106,7 +121,7 @@ export default function Cart() {
                                       </h3>
                                       <p className="ml-4">{product.price}</p>
                                     </div>
-                                    <p className="mt-1 text-sm text-gray-500">
+                                    <p className="mt-1 text-sm text-gray-500 dark:text-white">
                                       {product.color}
                                     </p>
                                   </div>
@@ -118,7 +133,7 @@ export default function Cart() {
                                     <div className="flex">
                                       <button
                                         type="button"
-                                        className="font-medium text-indigo-600 hover:text-indigo-500">
+                                        className="font-bold  text-cypress-green hover:text-cypress-green-light">
                                         Remove
                                       </button>
                                     </div>
@@ -136,23 +151,28 @@ export default function Cart() {
                         <p>Subtotal</p>
                         <p>$262.00</p>
                       </div>
-                      <p className="mt-0.5 text-sm text-gray-500">
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-white">
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
                         <a
                           href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+                          className="flex items-center justify-center rounded-md border border-transparent bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light">
                           Checkout
                         </a>
                       </div>
-                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                      <div className="mt-6 flex justify-center text-center text-sm text-gray-500 dark:text-white">
                         <p>
                           or{" "}
                           <button
                             type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}>
+                            className="font-bold text-cypress-green hover:cypress-green-light"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                cartOpen: false,
+                              })
+                            }>
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
                           </button>

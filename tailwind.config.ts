@@ -10,7 +10,12 @@ const config: Config = withMT({
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "cypress-green": "#567256",
+        "cypress-green-light": "#6f936f",
+      },
+    },
   },
   plugins: [],
 });
