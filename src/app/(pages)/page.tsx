@@ -5,9 +5,9 @@ import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 
 export default function Home() {
   return (
-    <main className="flex  justify-center relative">
+    <main className="flex  justify-center relative min-h-[calc(100vh-70px)]">
       {/* <LoadingSkeleton /> */}
-      <NewsLetterSignUp />
+      {/* <NewsLetterSignUp /> */}
     </main>
   );
 }
