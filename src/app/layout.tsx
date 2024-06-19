@@ -18,7 +18,6 @@ import Cart from "@/components/Cart";
 export const metadata: Metadata = {
   title: "Cypress",
   description: "Cypress Fashion",
-  viewport: "width=device-width, initial-scale=1",
   icons: [
     {
       rel: "icon",
