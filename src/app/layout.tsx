@@ -12,6 +12,7 @@ import {
   trajanLight,
 } from "../lib/fonts";
 import Footer from "@/components/Footer";
+import HotjarInit from "@/components/HotJarInit";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -35,6 +36,7 @@ export default function RootLayout({
     <html lang="en" className={`dark !${trajan.className}`}>
       <body className="bg-gray-200 relative dark:bg-gray-900 ">
         <div className="main-container">
+          <HotjarInit />
           <LoadingScreen />
           <Navigation />
           {children}
