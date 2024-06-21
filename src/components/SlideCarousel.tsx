@@ -4,9 +4,16 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
+import Link from "next/link";
 
 type Props = {
-  products?: any[];
+  products?: {
+    id: string;
+    handle: string;
+    images: { src: string; altText: string }[];
+    title: string;
+    variants: any[];
+  }[];
 };
 
 const SlideCarousel: React.FC<Props> = ({ products }) => {
@@ -123,6 +130,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
           ...state.cartItems,
           {
             quantity: 1,
+            handle: selectedProduct.handle,
             product: selectedProduct,
             variant: selectedVariant,
           },
@@ -133,38 +141,42 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
 
   return (
     <div className="w-full relative px-2 overflow-hidden">
-      <div ref={carouselRef} className="flex space-x-1 overflow-x-auto">
+      <div
+        ref={carouselRef}
+        className="flex space-x-1 overflow-x-auto overflow-y-hidden">
         {products &&
           products.map((product) => (
             <div
               key={product.id}
               className="w-[200px] relative h-[300px] bg-gray-300 flex-shrink-0">
-              <Image
-                priority
-                fill
-                sizes="
-                (max-width: 640px) 100vw,
-                (max-width: 1024px) 50vw,
+              <Link href={`/shop/${product.handle}`}>
+                <Image
+                  priority
+                  fill
+                  sizes="
+                (max-width: 640px) 33vw,
+                (min-width: 1024px) 50vw,
                 33vw
                 "
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
-                placeholder="blur"
-                quality={50}
-                src={product.images[0].src}
-                alt={product.images[0].altText}
-                draggable={false}
-                className="w-full h-full object-cover cursor-pointer"
-              />
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                  placeholder="blur"
+                  quality={50}
+                  src={product.images[0].src}
+                  alt={product.images[0].altText}
+                  draggable={false}
+                  className="w-full h-full object-cover cursor-pointer"
+                />
+              </Link>
               <button
                 type="button"
-                className="absolute bottom-0 text-2xl right-0 px-2 py-0 hover:bg-gray-600 bg-black text-white"
+                className="absolute bottom-0 text-2xl right-0 px-2 py-0 hover:bg-cypress-green bg-cypress-green-light text-white"
                 onClick={() => openBox(product)}>
                 +
               </button>
               <AnimatePresence>
                 {selectedProduct?.id === product.id && (
                   <motion.div
-                    className="absolute bottom-0 left-0 w-full bg-black bg-opacity-75 p-4 text-white z-50"
+                    className="absolute bottom-0 left-0 w-full bg-cypress-green bg-opacity-85 p-4 text-white z-50"
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "100%" }}>

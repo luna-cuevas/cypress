@@ -11,14 +11,15 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import Image from "next/image";
+import Link from "next/link";
 
 type Product = {
   quantity: number;
   product: {
     id: string;
+    handle: string;
     title: string;
     description: string;
-    handle: string;
     images: Array<{
       altText: string;
       src: string;
@@ -112,27 +113,29 @@ export default function Cart() {
                                     <li
                                       key={variant.variantId}
                                       className="flex py-6">
-                                      <div className="h-24 w-24 relative flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                        <Image
-                                          priority
-                                          fill
-                                          sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw,33vw"
-                                          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
-                                          placeholder="blur"
-                                          src={product.images[0].src}
-                                          alt={product.images[0].altText}
-                                          className="h-full w-full object-cover object-center"
-                                        />
-                                      </div>
+                                      <Link href={`/shop/${product.handle}`}>
+                                        <div className="h-24 w-24 relative flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                          <Image
+                                            priority
+                                            fill
+                                            sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw,33vw"
+                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                                            placeholder="blur"
+                                            src={product.images[0].src}
+                                            alt={product.images[0].altText}
+                                            className="h-full w-full object-cover object-center"
+                                          />
+                                        </div>
+                                      </Link>
 
                                       <div className="ml-4 flex flex-1 flex-col">
                                         <div>
                                           <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
                                             <h3>
-                                              <a
-                                                href={`/products/${product.id}`}>
+                                              <Link
+                                                href={`/shop/${product.handle}`}>
                                                 {product.title}
-                                              </a>
+                                              </Link>
                                             </h3>
                                             <p className="ml-4">
                                               {variant.variantPrice}

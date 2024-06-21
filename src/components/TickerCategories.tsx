@@ -2,6 +2,7 @@
 import React from "react";
 import Ticker from "framer-motion-ticker";
 import Link from "next/link";
+import { trajanRegular } from "@/lib/fonts";
 
 const categories = [
   "Pants",
@@ -25,7 +26,7 @@ const TickerCategories: React.FC<Props> = ({}) => {
           className="flex justify-center text-center px-2 w-fit mx-16">
           <Link
             href={`/shop/${item.toLowerCase()}`}
-            className="text-black text-lg w-full tex-center uppercase underline">
+            className={`${trajanRegular.className} text-black dark:text-white text-lg w-full font-bold tex-center uppercase underline`}>
             {item}
           </Link>
         </div>
