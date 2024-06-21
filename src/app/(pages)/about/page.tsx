@@ -1,4 +1,5 @@
 import ImgWithSkeleton from "@/components/ImgWithSkeleton";
+import { arpona } from "@/lib/fonts";
 import Image from "next/image";
 import React from "react";
 
@@ -35,7 +36,9 @@ const page = (props: Props) => {
             <h1 className="text-4xl lg:text-left text-center uppercase">
               Who we are
             </h1>
-            <p className="lg:text-lg leading-relaxed text-center lg:text-left text-base">
+            <p
+              id="about-paragraph"
+              className={`lg:text-xl !leading-relaxed text-center lg:text-left text-lg`}>
               Cypress is a multi-brand space championing thoughtful elegance in
               the Dallas menswear scene. Inspired by the beauty of the natural
               world, we aim to curate a moment in time defined by calm and

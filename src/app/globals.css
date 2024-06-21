@@ -17,8 +17,17 @@
   src: url("../../public/fonts/trajan-light.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-thin.otf") format("opentype");
+}
+
 .main-container * {
   font-family: "trajan-light", sans-serif !important;
+}
+
+#about-paragraph {
+  font-family: "arpona", sans-serif !important;
 }
 
 .glow-circle {
