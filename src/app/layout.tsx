@@ -15,6 +15,9 @@ import Footer from "@/components/Footer";
 import HotjarInit from "@/components/HotJarInit";
 import Cart from "@/components/Cart";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 export const metadata: Metadata = {
   title: "Cypress",
   description: "Cypress Fashion",
@@ -34,16 +37,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark !${trajan.className}`}>
-      <body className="bg-gray-200 relative dark:bg-gray-900 ">
+      <body className="bg-white relative dark:bg-gray-900 ">
         <div className="main-container">
           <HotjarInit />
           <LoadingScreen />
           <Navigation />
-          <div className="!relative">
-            <Cart />
+          <Cart />
 
-            {children}
-          </div>
+          {children}
           <Footer />
         </div>
         <ToastContainer

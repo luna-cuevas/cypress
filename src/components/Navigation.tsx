@@ -41,6 +41,7 @@ import {
   trajanLight,
 } from "../lib/fonts";
 import Link from "next/link";
+import { useSupabase } from "@/lib/supabase";
 
 // // profile menu component
 // const profileMenuItems = [
@@ -282,7 +283,9 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
                 </MenuItem>
               </Link>
             ) : (
-              <div className="justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0">
+              <div
+                key={label}
+                className="justify-center h-fit  text-blue-gray-500 w-fit m-auto lg:m-0">
                 <MenuItem
                   onClick={() => {
                     setState({ ...state, cartOpen: true });
@@ -294,7 +297,7 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
                     {label}
                     {label === "Cart" && (
                       <span className="rounded-full m-0 py-0 leading-tight h-fit border border-gray-400 px-1">
-                        0
+                        {state.cartItems.length}
                       </span>
                     )}
                   </li>
@@ -330,14 +333,37 @@ function NavList({ isNavOpen }: { isNavOpen?: boolean }) {
 export function Navigation() {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [isNavOpen, setIsNavOpen] = React.useState(false);
+  const [state, setState] = useAtom(globalStateAtom);
+
+  const supabase = useSupabase();
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
+  useEffect(() => {
+    const { data: authListener } =
+      supabase.auth.onAuthStateChange(handleAuthChange);
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+  const handleAuthChange = async (event: any, session: any) => {
+    console.log("session", session);
+    if (event === "SIGNED_IN" && session !== null) {
+      console.log("session", session);
+    } else if (event === "SIGNED_OUT") {
+      console.log("session", event);
+      console.log("SignIn Failed");
+    } else {
+      setState({ ...state, user: null });
+    }
+  };
+
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 960) setIsNavOpen(false);
     };
@@ -348,9 +374,10 @@ export function Navigation() {
   return (
     isLoaded && (
       <Navbar
-        shadow={false}
+        blurred={false}
+        variant="filled"
         fullWidth={true}
-        className={`  h-[70px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800 !bg-white py-4 p-0`}>
+        className={` h-[70px] z-[10000] relative items-center lg:flex w-full rounded-none border-b border-t-0 border-l-0 border-r-0 border-white  drop-shadow-md  max-w-none dark:!bg-gray-800  py-4 p-0`}>
         <Link
           href="/"
           className={`z-[1000]  lg:hidden h-full max-w-[200px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>

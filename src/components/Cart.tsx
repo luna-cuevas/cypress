@@ -10,34 +10,28 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
+import Image from "next/image";
 
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+type Product = {
+  quantity: number;
+  product: {
+    id: string;
+    title: string;
+    description: string;
+    handle: string;
+    images: Array<{
+      altText: string;
+      src: string;
+    }>;
+  };
+  variant: {
+    variantId: string;
+    variantTitle: string;
+    variantPrice: string;
+    variantQuantityAvailable: number;
+    variantCurrencyCode: string;
+  };
+};
 
 export default function Cart() {
   const [state, setState] = useAtom(globalStateAtom);
@@ -107,55 +101,97 @@ export default function Cart() {
 
                         <div className="mt-8">
                           <div className="flow-root">
-                            <ul
-                              role="list"
-                              className="-my-6 divide-y divide-gray-200">
-                              {products.map((product) => (
-                                <li key={product.id} className="flex py-6">
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img
-                                      src={product.imageSrc}
-                                      alt={product.imageAlt}
-                                      className="h-full w-full object-cover object-center"
-                                    />
-                                  </div>
-
-                                  <div className="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                      <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
-                                        <h3>
-                                          <a href={product.href}>
-                                            {product.name}
-                                          </a>
-                                        </h3>
-                                        <p className="ml-4">{product.price}</p>
+                            {state.cartItems.length > 0 ? (
+                              <ul
+                                role="list"
+                                className="-my-6 divide-y divide-gray-200">
+                                {state.cartItems.map((productObj: Product) => {
+                                  const { product, variant, quantity } =
+                                    productObj;
+                                  return (
+                                    <li
+                                      key={variant.variantId}
+                                      className="flex py-6">
+                                      <div className="h-24 w-24 relative flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                        <Image
+                                          priority
+                                          fill
+                                          sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw,33vw"
+                                          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                                          placeholder="blur"
+                                          src={product.images[0].src}
+                                          alt={product.images[0].altText}
+                                          className="h-full w-full object-cover object-center"
+                                        />
                                       </div>
-                                      <p className="mt-1 text-sm text-gray-500 dark:text-white">
-                                        {product.color}
-                                      </p>
-                                    </div>
-                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                      <p className="text-gray-500">
-                                        Qty {product.quantity}
-                                      </p>
 
-                                      <div className="flex">
-                                        <button
-                                          type="button"
-                                          className="font-bold  text-cypress-green hover:text-cypress-green-light">
-                                          Remove
-                                        </button>
+                                      <div className="ml-4 flex flex-1 flex-col">
+                                        <div>
+                                          <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
+                                            <h3>
+                                              <a
+                                                href={`/products/${product.id}`}>
+                                                {product.title}
+                                              </a>
+                                            </h3>
+                                            <p className="ml-4">
+                                              {variant.variantPrice}
+                                            </p>
+                                          </div>
+                                          <p className="mt-1 text-sm text-gray-500 dark:text-white">
+                                            {variant.variantTitle}
+                                          </p>
+                                        </div>
+                                        <div className="flex flex-1 items-end justify-between text-sm">
+                                          <p className="text-gray-500">
+                                            Qty {quantity}
+                                          </p>
+
+                                          <div className="flex">
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                // i want to remove the product from the cart
+                                                const newCartItems =
+                                                  state.cartItems.filter(
+                                                    (item: Product) =>
+                                                      item.variant.variantId !==
+                                                      variant.variantId
+                                                  );
+                                                setState({
+                                                  ...state,
+                                                  cartItems: newCartItems,
+                                                });
+                                              }}
+                                              className="font-bold  text-cypress-green hover:text-cypress-green-light">
+                                              Remove
+                                            </button>
+                                          </div>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            ) : (
+                              <div className="flex-1 my-auto flex flex-col items-center justify-center">
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                  Your cart is empty
+                                </h2>
+                                <p className="text-gray-500 dark:text-white">
+                                  Looks like you haven't added any items to your
+                                  cart yet.
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
 
-                      <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                      <div
+                        className={`border-t ${
+                          state.cartItems.length > 0 ? "block" : "hidden"
+                        } border-gray-200 px-4 py-6 sm:px-6`}>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <p>Subtotal</p>
                           <p>$262.00</p>
