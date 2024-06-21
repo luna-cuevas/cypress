@@ -80,7 +80,7 @@ export default async function Home() {
       <section className="w-full h-[calc(100vh-70px)]   bg-black bg-opacity-50 z-50 flex items-center justify-start">
         <div className="text-center    w-full">
           <h1 className="text-4xl text-white sm:text-4xl font-bold">
-            Shop the latest in men's fashion
+            Shop the latest in men&apos;s fashion
           </h1>
           <button className="bg-black text-white px-4 py-2 mt-4 rounded-lg">
             Shop Now

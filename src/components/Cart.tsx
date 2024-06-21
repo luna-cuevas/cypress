@@ -182,8 +182,8 @@ export default function Cart() {
                                   Your cart is empty
                                 </h2>
                                 <p className="text-gray-500 dark:text-white">
-                                  Looks like you haven't added any items to your
-                                  cart yet.
+                                  Looks like you haven&apos;t added any items to
+                                  your cart yet.
                                 </p>
                               </div>
                             )}
