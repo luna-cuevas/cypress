@@ -20,10 +20,7 @@ const optimizeImage = (
 
 // Main function to fetch and optimize products
 const fetchProducts = async () => {
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://cypressclothiers.com";
+  const baseURL = process.env.BASE_URL;
   const response = await fetch(`${baseURL}/api/fetchProducts`, {
     method: "POST",
     headers: {
