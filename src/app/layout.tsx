@@ -17,7 +17,7 @@ import Cart from "@/components/Cart";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import fetchProducts from "@/utils/fetchProducts";
+import fetchProducts from "@/app/utils/fetchProducts";
 
 export const metadata: Metadata = {
   title: "Cypress",

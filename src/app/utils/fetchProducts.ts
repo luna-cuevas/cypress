@@ -1,4 +1,3 @@
-"use server";
 // Define the type for a product to improve code readability and maintenance
 type Product = {
   id: string;
@@ -69,6 +68,10 @@ const fetchProducts = async () => {
       `,
     }),
   });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
 
   const data = await response.json();
   const products: Product[] = data.products;

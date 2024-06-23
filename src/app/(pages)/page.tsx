@@ -10,7 +10,7 @@ import FadeCarousel from "@/components/FadeCarousel";
 import { TracedHalfLogo } from "@/components/TracedHalfLogo";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
-import fetchProducts from "@/utils/fetchProducts";
+import fetchProducts from "@/app/utils/fetchProducts";
 import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 

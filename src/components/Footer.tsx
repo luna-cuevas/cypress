@@ -1,6 +1,6 @@
 "use client";
 import { globalStateAtom } from "@/context/atoms";
-import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
+import { handleSubscribe } from "@/app/utils/handleNewsLetterSignUp";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
