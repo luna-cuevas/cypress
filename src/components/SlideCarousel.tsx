@@ -88,6 +88,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   const openBox = (product: object) => {
     console.log("product", product);
     setSelectedProduct(product);
+    setSelectedVariant(null); // Reset selected variant when a new product is opened
   };
 
   const closeBox = () => {
@@ -100,6 +101,8 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   };
 
   const handleAddToCart = () => {
+    if (!selectedVariant) return; // Prevent adding to cart if no variant is selected
+
     console.log("selectedProduct", selectedProduct);
     console.log("selectedVariant", selectedVariant);
 
@@ -154,13 +157,13 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                   priority
                   fill
                   sizes="
-                (max-width: 640px) 33vw,
-                (min-width: 1024px) 50vw,
+                (max-width: 1024px) 75vw,
+                (min-width: 1024px) 100vw,
                 33vw
                 "
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
                   placeholder="blur"
-                  quality={50}
+                  quality={100}
                   src={product.images[0].src}
                   alt={product.images[0].altText}
                   draggable={false}
@@ -189,14 +192,18 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                       <h2 className="text-lg font-bold mb-4">
                         {product.title}
                       </h2>
-                      <ul className="flex space-x-2 mx-auto justify-around w-2/3">
+                      <ul className="flex space-x-2 mx-auto flex-wrap justify-around w-2/3">
                         {product.variants.length === 1 ? (
                           <button
                             type="button"
                             onClick={() => {
                               selectVariant(product.variants[0]);
                             }}
-                            className="w-fit  items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ">
+                            className={`w-fit items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
+                              selectedVariant === product.variants[0]
+                                ? "bg-cypress-green-light text-white"
+                                : ""
+                            }`}>
                             <span>One Size</span>
                           </button>
                         ) : (
@@ -207,17 +214,28 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                                 selectVariant(variant);
                               }}
                               key={variant.variantId}
-                              className="w-full  items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ">
-                              <span>{variant.variantTitle}</span>
+                              className={`w-fit items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
+                                selectedVariant === variant
+                                  ? "bg-cypress-green-light text-white"
+                                  : ""
+                              }`}>
+                              <span className="word-break-all">
+                                {variant.variantTitle.slice(0, 10)}
+                              </span>
                             </button>
                           ))
                         )}
                       </ul>
                       <button
-                        className="mt-4 w-full px-4 py-2 bg-white text-black rounded"
+                        className={`mt-4 w-full px-4 py-2 bg-white text-black rounded ${
+                          !selectedVariant
+                            ? "opacity-50 cursor-not-allowed"
+                            : "opacity-100 cursor-pointer"
+                        }`}
                         onClick={() => {
                           handleAddToCart();
-                        }}>
+                        }}
+                        disabled={!selectedVariant}>
                         Add to Cart
                       </button>
                     </div>

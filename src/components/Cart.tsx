@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import Image from "next/image";
 import Link from "next/link";
+import { trajanLight, trajanRegular } from "@/lib/fonts";
 
 type Product = {
   quantity: number;
@@ -46,7 +47,7 @@ export default function Cart() {
     isLoaded && (
       <Transition show={state.cartOpen}>
         <Dialog
-          className="relative z-[200000]"
+          className="relative !z-[200000000] cart"
           onClose={() =>
             setState({
               ...state,
@@ -65,7 +66,7 @@ export default function Cart() {
 
           <div className="fixed inset-0 overflow-hidden ">
             <div className="absolute inset-0 overflow-hidden">
-              <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              <div className="pointer-events-none z-[10000000] fixed inset-y-0 right-0 flex max-w-full pl-10">
                 <TransitionChild
                   enter="transform transition ease-in-out duration-500 sm:duration-700"
                   enterFrom="translate-x-full"
@@ -77,7 +78,8 @@ export default function Cart() {
                     <div className="flex h-full flex-col overflow-y-scroll dark:bg-gray-900 bg-white shadow-xl">
                       <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                         <div className="flex items-start justify-between">
-                          <DialogTitle className="text-lg font-medium text-gray-900 dark:text-white">
+                          <DialogTitle
+                            className={`${trajanRegular.className} text-lg font-medium text-gray-900 dark:text-white`}>
                             Shopping cart
                           </DialogTitle>
                           <div className="ml-3 flex h-7 items-center">
@@ -177,11 +179,13 @@ export default function Cart() {
                                 })}
                               </ul>
                             ) : (
-                              <div className="flex-1 my-auto flex flex-col items-center justify-center">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                              <div className="flex-1 mt-10 my-auto flex flex-col items-center justify-center">
+                                <h2
+                                  className={`${trajanRegular.className} text-2xl font-bold text-gray-900 dark:text-white`}>
                                   Your cart is empty
                                 </h2>
-                                <p className="text-gray-500 dark:text-white">
+                                <p
+                                  className={`${trajanLight.className} text-center text-lg text-gray-600 dark:text-white`}>
                                   Looks like you haven&apos;t added any items to
                                   your cart yet.
                                 </p>

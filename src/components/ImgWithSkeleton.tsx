@@ -29,19 +29,21 @@ const ImgWithSkeleton = (props: Props) => {
           </svg>
         </div>
       ) : (
-        <Image
-          src={props.src}
-          alt={props.alt}
-          fill
-          priority
-          // blurDataURL="data:image/jpeg;base64,/* your base64 encoded image */"
-          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 50vw"
-          className={`h-full w-full object-cover ${
-            props.styles && props.styles
-          }`}
-          onLoadingComplete={() => setImageLoaded(true)}
-          style={{ display: isImageLoaded ? "block" : "none" }}
-        />
+        <div className="relative w-full h-full -z-10">
+          <Image
+            src={props.src}
+            alt={props.alt}
+            fill
+            priority
+            // blurDataURL="data:image/jpeg;base64,/* your base64 encoded image */"
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 50vw"
+            className={`h-full w-full object-cover  ${
+              props.styles && props.styles
+            }`}
+            onLoadingComplete={() => setImageLoaded(true)}
+            style={{ display: isImageLoaded ? "block" : "none" }}
+          />
+        </div>
       )}
     </>
   );

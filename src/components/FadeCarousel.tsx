@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { TracedHalfLogo } from "./TracedHalfLogo";
+import { useAtom } from "jotai";
+import { globalStateAtom } from "@/context/atoms";
 
 type Props = {
   images: string[];
@@ -8,15 +11,11 @@ type Props = {
 
 const FadeCarousel: React.FC<Props> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const baseUrl =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://cypressclothiers.com";
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 8000); // Change image every 3 seconds
+    }, 12000); // Change image every 3 seconds
 
     return () => clearInterval(interval);
   }, [images.length]);
@@ -33,9 +32,9 @@ const FadeCarousel: React.FC<Props> = ({ images }) => {
             src={image}
             fill
             priority
-            quality={50}
-            sizes="(max-width: 640px) 50vw,(min-width: 1024px) 100vw, 33vw"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+            quality={25}
+            sizes="(max-width: 640px) 100vw,(min-width: 1024px) 75vw, 33vw"
+            blurDataURL="data:image/png;base64,L57-1h},?HxVETNdR.R*9vJC9tI="
             placeholder="blur"
             alt={`Slide ${index}`}
             className="w-full h-full object-cover"

@@ -81,7 +81,7 @@ const ContactForm = (props: Props) => {
   };
   return (
     <div
-      className={`flex flex-col min-h-max mx-auto text-center  dark:text-white`}>
+      className={`flex flex-col -z-10 min-h-max mx-auto text-center  dark:text-white`}>
       <Typography
         variant="h1"
         className="mb-4 !text-2xl md:!text-4xl lg:!text-5xl">
@@ -118,7 +118,7 @@ const ContactForm = (props: Props) => {
             <Typography variant="small" className="text-left !font-semibold  ">
               Select Options for Business Engagement
             </Typography>
-            <div className="flex gap-4 relative">
+            <div className="flex gap-4 relative -z-10">
               <Button
                 onClick={() => setSelectedSupport("General Inquiry")}
                 variant="outlined"
@@ -154,7 +154,7 @@ const ContactForm = (props: Props) => {
                 Product Support
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 -z-10">
               <div>
                 <Typography
                   variant="small"
@@ -196,7 +196,7 @@ const ContactForm = (props: Props) => {
                 />
               </div>
             </div>
-            <div>
+            <div className="-z-10">
               <Typography
                 variant="small"
                 className="mb-2 text-left font-medium ">
@@ -216,7 +216,7 @@ const ContactForm = (props: Props) => {
                 crossOrigin={undefined}
               />
             </div>
-            <div>
+            <div className="-z-10">
               <Typography
                 variant="small"
                 className="mb-2 text-left font-medium ">
@@ -238,7 +238,7 @@ const ContactForm = (props: Props) => {
             <Button
               type="submit"
               disabled={messageSent.loading}
-              className="lg:w-1/4 w-full m-auto dark:bg-white bg-gray-500 dark:text-black">
+              className="lg:w-1/4 w-full -z-10 m-auto dark:bg-white bg-gray-500 dark:text-black">
               {messageSent.loading ? (
                 <div
                   role="status"

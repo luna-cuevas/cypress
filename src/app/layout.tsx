@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/Navigation/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +17,7 @@ import Cart from "@/components/Cart";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import fetchProducts from "@/utils/fetchProducts";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -30,18 +31,20 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const products = await fetchProducts();
+  console.log("layout products", products);
   return (
-    <html lang="en" className={`dark !${trajan.className}`}>
+    <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
       <body className="bg-white relative dark:bg-gray-900 ">
-        <div className="main-container">
+        <div className="main-container ">
           <HotjarInit />
           <LoadingScreen />
-          <Navigation />
+          <Navigation products={products} />
           <Cart />
 
           {children}
