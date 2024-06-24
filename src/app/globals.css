@@ -48,7 +48,7 @@
   content: "";
   display: flex;
   width: 0;
-  height: 2px; /* Adjust the thickness of the underline */
+  height: 7px; /* Adjust the thickness of the underline */
   background: currentColor; /* Use the text color for the underline */
   transition: width 0.3s ease-in-out;
   position: absolute;
@@ -61,8 +61,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -72,7 +72,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.663);
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.721);
 }
 
 @keyframes ticker {

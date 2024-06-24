@@ -26,7 +26,6 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
 
   useEffect(() => {
-    console.log("products", products);
     const carousel = carouselRef.current;
 
     if (!carousel) return;
@@ -146,21 +145,20 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
     <div className="w-full relative px-2 overflow-hidden">
       <div
         ref={carouselRef}
-        className="flex space-x-1 overflow-x-auto overflow-y-hidden">
+        className="flex space-x-1 overflow-x-scroll overflow-y-hidden">
         {products &&
           products.map((product) => (
             <div
               key={product.id}
               className="w-[200px] relative h-[300px] bg-gray-300 flex-shrink-0">
-              <Link href={`/shop/${product.handle}`}>
+              <Link
+                // Need to fix issue with dragging on desktop causes the link to be clicked
+                onDragStartCapture={(e) => e.preventDefault()}
+                href={`/shop/${product.handle}`}>
                 <Image
                   priority
                   fill
-                  sizes="
-                (max-width: 1024px) 75vw,
-                (min-width: 1024px) 100vw,
-                33vw
-                "
+                  sizes="(max-width: 1024px) 75vw, (min-width: 1024px) 100vw, 33vw"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
                   placeholder="blur"
                   quality={100}

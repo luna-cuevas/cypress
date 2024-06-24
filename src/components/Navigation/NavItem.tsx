@@ -36,7 +36,6 @@ const NavItem = ({
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  console.log("isMobile", isMobile);
 
   useEffect(() => {
     const handleResize = () => {
