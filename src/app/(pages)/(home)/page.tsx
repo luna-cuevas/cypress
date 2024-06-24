@@ -1,5 +1,5 @@
 import NewsLetterSignUp from "@/components/NewsLetterSignUp";
-import { shopifyClient } from "../../lib/shopify";
+import { shopifyClient } from "../../../lib/shopify";
 import { useEffect } from "react";
 import { LoadingSkeleton } from "@/components/LoadingSkeleton";
 import Image from "next/image";
