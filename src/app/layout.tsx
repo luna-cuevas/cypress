@@ -36,15 +36,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const products = await fetchProducts();
-  console.log("layout products", products);
+  // const products = await fetchProducts();
+  // console.log("layout products", products);
   return (
     <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
       <body className="bg-white relative dark:bg-gray-900 ">
         <div className="main-container ">
           <HotjarInit />
           <LoadingScreen />
-          <Navigation products={products} />
+          {/* <Navigation products={products} /> */}
           <Cart />
 
           {children}
