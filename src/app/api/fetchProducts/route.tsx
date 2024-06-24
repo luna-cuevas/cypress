@@ -10,12 +10,18 @@ export interface Variant {
   variantQuantityAvailable: number;
 }
 
+export interface Image {
+  src: string;
+  altText: string;
+}
+
 export interface Product {
   id: string;
   title: string;
   description: string;
   handle: string;
   variants: Variant[];
+  images: Image[]; // Add this line
 }
 
 interface ShopifyResponse {
@@ -36,6 +42,15 @@ interface ShopifyResponse {
                 amount: string;
                 currencyCode: string;
               };
+            };
+          }[];
+        };
+        images: {
+          // Add this block
+          edges: {
+            node: {
+              src: string;
+              altText: string | null;
             };
           }[];
         };
@@ -60,7 +75,7 @@ export async function POST(req: Request) {
     }
 
     const products: Product[] = response.data.products.edges.map(({ node }) => {
-      const { id, title, description, handle, variants } = node;
+      const { id, title, description, handle, variants, images } = node;
       const flattenedVariants: Variant[] = variants.edges.map(
         ({ node: variant }) => ({
           variantId: variant.id,
@@ -70,12 +85,17 @@ export async function POST(req: Request) {
           variantQuantityAvailable: variant.quantityAvailable,
         })
       );
+      const flattenedImages: Image[] = images.edges.map(({ node: image }) => ({
+        src: image.src,
+        altText: image.altText || "", // Handle null altText
+      }));
       return {
         id,
         title,
         description,
         handle,
         variants: flattenedVariants,
+        images: flattenedImages, // Add this line
       };
     });
 
