@@ -18,7 +18,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/api/*": ["./src/app/api/*"]
     }
   },
   "include": [
@@ -26,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/Navigation.tsx"
+    "src/components/Navigation/Navigation.tsx"
   ],
   "exclude": ["node_modules"]
 }

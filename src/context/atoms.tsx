@@ -7,6 +7,7 @@ type State = {
   darkMode: boolean;
   firstVisit: boolean;
   cartOpen: boolean;
+  cartItems: any[];
 };
 
 // A helper function to work with localStorage and JSON serialization for the entire application state
@@ -47,6 +48,7 @@ const initialState: State = {
   darkMode: false,
   firstVisit: true,
   cartOpen: false,
+  cartItems: [],
 };
 
 // Create an atom with local storage persistence for the entire application state

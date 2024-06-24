@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Navigation } from "@/components/Navigation";
+import { Navigation } from "@/components/Navigation/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +15,10 @@ import Footer from "@/components/Footer";
 import HotjarInit from "@/components/HotJarInit";
 import Cart from "@/components/Cart";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import fetchProducts from "@/app/utils/fetchProducts";
+
 export const metadata: Metadata = {
   title: "Cypress",
   description: "Cypress Fashion",
@@ -27,23 +31,23 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const products = await fetchProducts();
+  // console.log("layout products", products);
   return (
-    <html lang="en" className={`dark !${trajan.className}`}>
-      <body className="bg-gray-200 relative dark:bg-gray-900 ">
-        <div className="main-container">
+    <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
+      <body className="bg-white relative dark:bg-gray-900 ">
+        <div className="main-container ">
           <HotjarInit />
           <LoadingScreen />
-          <Navigation />
-          <div className="!relative">
-            <Cart />
+          {/* <Navigation products={products} /> */}
+          <Cart />
 
-            {children}
-          </div>
+          {children}
           <Footer />
         </div>
         <ToastContainer

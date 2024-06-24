@@ -1,6 +1,6 @@
 "use client";
 import { globalStateAtom } from "@/context/atoms";
-import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
+import { handleSubscribe } from "@/app/utils/handleNewsLetterSignUp";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,7 +45,7 @@ const Footer = (props: Props) => {
   };
 
   return (
-    <div className="mt-6 w-full dark:text-white bg-white dark:bg-gray-800 grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
+    <div className="mt-[25px] w-full dark:text-white bg-white dark:bg-cypress-green grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
       <div className="border-r border-b md:border-b-0 border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
         <h1 className="text-xl font-bold underline decoration-1 underline-offset-4">
           Newsletter
@@ -57,7 +57,7 @@ const Footer = (props: Props) => {
             }}
             className="flex  gap-4 flex-col 2xl:flex-row">
             <input
-              className="border-2 font-bold text-black rounded-md placeholder:text-gray-600 p-2 focus-visible:outline-none 2xl:w-2/3 border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 dark:text-white"
+              className="border-2 font-bold text-black rounded-md dark:placeholder:text-white p-2 focus-visible:outline-none 2xl:w-2/3 border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 dark:text-white"
               name="email"
               type="email"
               placeholder="Email"

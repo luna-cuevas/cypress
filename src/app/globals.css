@@ -17,8 +17,21 @@
   src: url("../../public/fonts/trajan-light.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-thin.otf") format("opentype");
+}
+
+.cart * {
+  font-family: "trajan-regular", sans-serif;
+}
+
 .main-container * {
-  font-family: "trajan-light", sans-serif !important;
+  font-family: "trajan-light", sans-serif;
+}
+
+#about-paragraph {
+  font-family: "arpona", sans-serif;
 }
 
 .glow-circle {
@@ -45,4 +58,73 @@
 
 .underline-animation:hover::after {
   width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #567256;
+  border-radius: 50px;
+  background-clip: content-box; /* Adjust the padding as needed */
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.663);
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-container {
+  display: flex;
+  animation: ticker 30s linear infinite alternate;
+}
+
+@media screen and (max-width: 768px) {
+  @keyframes ticker {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-250%);
+    }
+  }
+  .ticker-container {
+    animation: ticker 30s linear infinite alternate;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.slide-up {
+  animation: slide-up 1s ease-in-out forwards;
+}
+
+.slide-down {
+  animation: slide-down 1s ease-in-out forwards;
 }
