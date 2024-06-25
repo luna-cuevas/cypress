@@ -25,18 +25,15 @@ const LoginModal = (props: Props) => {
 
   return (
     <div
-      className={`m-auto  h-full flex fixed top-0 bottom-0 left-0 right-0 ${
+      className={`m-auto z-[10000]  h-full fixed top-0 bottom-0 left-0 right-0 ${
         state.isSignInOpen ? "flex" : "hidden"
       } `}>
       <div
         onClick={() => {
-          setState({
-            ...state,
-            isSignInOpen: false,
-          });
+          setState((state) => ({ ...state, isSignInOpen: false }));
         }}
-        className="fixed top-0  left-0 right-0 bottom-0 bg-black opacity-60 z-10 w-full h-full"></div>
-      <div className="h-fit bg-cypress-green w-1/3 m-auto z-20 bg-neutral-800 p-8 rounded-xl">
+        className="fixed z-[10000] top-0  left-0 right-0 bottom-0 bg-black opacity-60  w-full h-full"></div>
+      <div className="h-fit bg-cypress-green w-1/3 m-auto z-[100000] bg-neutral-800 p-8 rounded-xl">
         <Auth
           supabaseClient={supabase}
           socialLayout="horizontal"
