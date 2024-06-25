@@ -8,6 +8,9 @@ import {
   MenuItem,
   Typography,
   Collapse,
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
 } from "@material-tailwind/react";
 import { ChevronDownIcon, Square3Stack3DIcon } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
@@ -35,6 +38,7 @@ const NavItem = ({
 }) => {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -86,8 +90,8 @@ const NavItem = ({
         allowHover={isMobile ? false : true}
         open={isMenuOpen}
         handler={setIsMenuOpen}>
-        <MenuHandler>
-          <MenuItem className="flex px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
+        <MenuHandler className="hidden lg:block">
+          <MenuItem className="flex px-2  lg:pt-[0.35rem] lg:pb-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
             <li
               className={`${
                 path == "/" ? "lg:text-white text-black" : "text-black"
@@ -129,43 +133,61 @@ const NavItem = ({
             </div>
           </Link>
         </MenuList>
-      </Menu>
 
-      <Collapse
-        animate={{
-          unmount: {
-            height: "0px",
-          },
-        }}
-        open={isMenuOpen}
-        className="h-fit">
-        <ul
-          className={`
-        lg:hidden
-          grid sm:grid-cols-3 grid-cols-2 border-b-2 border-gray-400  w-full gap-2 px-auto my-4 `}>
-          {shopCategories &&
-            shopCategories.map(({ title, url }) => (
-              <Link href={url} key={title}>
-                <MenuItem className="flex px-2 rounded-none hover:bg-opacity-80  active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light justify-center lg:justify-left items-center ">
-                  <li
-                    className={`${
-                      path == "/" ? "lg:text-white text-black" : "text-black"
-                    } ${
-                      trajanRegular.className
-                    } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
-                    {title}
-                  </li>
-                </MenuItem>
-              </Link>
-            ))}
-        </ul>
-      </Collapse>
+        <Accordion
+          className="lg:hidden w-full  justify-center items-center gap-2"
+          open={isShopMenuOpen}
+          animate={{
+            unmount: {
+              height: "0px",
+            },
+          }}>
+          <AccordionHeader
+            className="hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light mx-auto w-full py-[0.35rem] lg:hidden flex justify-center flex-grow px-2 ml-2 border-none"
+            onClick={() => setIsShopMenuOpen(!isShopMenuOpen)}>
+            <li
+              className={`${
+                path == "/" ? "lg:text-white text-black" : "text-black"
+              }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
+              {label}
+              <ChevronDownIcon
+                strokeWidth={2}
+                className={`h-3 w-3 transition-transform ${
+                  isMenuOpen ? "rotate-180" : ""
+                }`}
+              />
+            </li>
+          </AccordionHeader>
+          <AccordionBody className="w-full">
+            <ul
+              className={`lg:hidden grid sm:grid-cols-3 grid-cols-2 border-b-2 border-gray-400  w-full gap-2 px-auto my-4 `}>
+              {shopCategories &&
+                shopCategories.map(({ title, url }) => (
+                  <MenuItem className="flex px-2 rounded-none hover:bg-opacity-80  active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light justify-center lg:justify-left items-center ">
+                    <Link href={url} key={title}>
+                      <li
+                        className={`${
+                          path == "/"
+                            ? "lg:text-white text-black"
+                            : "text-black"
+                        } ${
+                          trajanRegular.className
+                        } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                        {title}
+                      </li>
+                    </Link>
+                  </MenuItem>
+                ))}
+            </ul>
+          </AccordionBody>
+        </Accordion>
+      </Menu>
     </div>
   ) : (
     <Link
       key={label}
       href={url || "/"}
-      className="justify-center h-fit text-blue-gray-500 w-full m-auto lg:m-0">
+      className="justify-center h-fit w-full m-auto lg:m-0">
       <MenuItem className="flex px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
         <li
           className={`${
