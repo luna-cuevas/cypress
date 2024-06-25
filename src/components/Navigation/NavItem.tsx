@@ -64,7 +64,7 @@ const NavItem = ({
   };
 
   return isCart ? (
-    <div className="justify-center h-fit text-blue-gray-500 w-full m-auto lg:m-0">
+    <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto lg:m-0">
       <MenuItem
         onClick={handleCartClick}
         className="flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
@@ -76,7 +76,7 @@ const NavItem = ({
           {label === "Cart" && (
             <span
               className={`${
-                path == "/" ? "border-white" : "border-black"
+                path == "/" ? "lg:border-white border-black" : "border-black"
               } rounded-full m-0 dark:border-white py-0 leading-tight h-fit border group-hover:border-black dark:group-hover:border-white group-hover/menuItem:border-black px-1`}>
               {state.cartItems.length}
             </span>
@@ -85,12 +85,12 @@ const NavItem = ({
       </MenuItem>
     </div>
   ) : isDropdown ? (
-    <div className="z-[1000000] w-full">
+    <div className="z-[1000000] w-full border-b border-gray-200 lg:border-none">
       <Menu
         allowHover={isMobile ? false : true}
         open={isMenuOpen}
         handler={setIsMenuOpen}>
-        <MenuHandler className="hidden lg:inline-block px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light">
+        <MenuHandler className="hidden lg:inline-block  px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light">
           <MenuItem className="flex px-2   !lg:pb-[0.35rem] rounded-none  justify-center items-center gap-2">
             <li
               className={`${
@@ -106,14 +106,14 @@ const NavItem = ({
             </li>
           </MenuItem>
         </MenuHandler>
-        <MenuList className="hidden gap-4 lg:flex w-full px-[10%] justify-center border-none rounded-none m-0 h-fit dark:bg-cypress-green ">
+        <MenuList className="hidden gap-4  lg:flex w-full px-[10%] justify-center border-none rounded-none m-0 h-fit dark:bg-cypress-green ">
           <ul className="grid grid-rows-3 focus:outline-none w-1/2 grid-cols-3 gap-2 m-4">
             {shopCategories &&
               shopCategories.map(({ title, url }) => (
                 <Link href={url} key={title}>
                   <MenuItem className="flex px-2 rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light  hover:bg-cypress-green-light justify-left items-center ">
                     <li
-                      className={` ${trajanRegular.className} text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                      className={`${trajanRegular.className} text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
                       {title}
                     </li>
                   </MenuItem>
@@ -158,9 +158,9 @@ const NavItem = ({
               />
             </li>
           </AccordionHeader>
-          <AccordionBody className="w-full">
+          <AccordionBody className="w-full pt-[9px] pb-2">
             <ul
-              className={`lg:hidden grid sm:grid-cols-3 grid-cols-2 border-b-2 border-gray-400  w-full gap-2 px-auto my-4 `}>
+              className={`lg:hidden grid sm:grid-cols-3 grid-cols-2  w-full gap-2 px-auto my-4 `}>
               {shopCategories &&
                 shopCategories.map(({ title, url }) => (
                   <MenuItem
@@ -174,7 +174,7 @@ const NavItem = ({
                             : "text-black"
                         } ${
                           trajanRegular.className
-                        } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                        } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                         {title}
                       </li>
                     </Link>
@@ -189,7 +189,7 @@ const NavItem = ({
     <Link
       key={label}
       href={url || "/"}
-      className="justify-center h-fit w-full m-auto lg:m-0">
+      className="justify-center h-fit w-full mx-auto lg:m-0 border-b border-gray-200 lg:border-none">
       <MenuItem className="flex px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
         <li
           className={`${

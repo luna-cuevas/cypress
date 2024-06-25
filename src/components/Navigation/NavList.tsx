@@ -20,7 +20,7 @@ const shopCategories = [
     url: "/shop/shirts",
   },
   {
-    title: "New Arrivals",
+    title: "New",
     url: "/shop/new-arrivals",
   },
   {
@@ -72,7 +72,7 @@ const NavList = ({
   }, [state.darkMode]);
 
   return (
-    <ul className="!z-[10000000] relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen lg:h-[70px] justify-between flex-col gap-2 lg:flex-row lg:items-center">
+    <ul className="!z-[10000000] h-[calc(100vh-70px)] relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen lg:h-[70px] justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <div className="lg:w-[80%] z-[1000000] w-full mx-auto mt-auto h-full flex justify-between">
         <Link href="/" className="relative hidden lg:block w-[250px]">
           <Image
@@ -98,12 +98,14 @@ const NavList = ({
               state={state}
               setState={setState}></NavItem>
           ))}
-          <div className="flex gap-3 lg:py-[0.45rem] items-center lg:mx-0 mx-auto">
+          <ProfileMenu />
+
+          <div className="flex gap-3 lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 mx-auto">
             <SunIcon
               opacity={state.darkMode ? "0.5" : "1"}
               className={`${
-                path == "/" ? "text-white" : "text-black"
-              } h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
+                path == "/" ? "lg:text-white text-black" : "text-black"
+              } h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
             />
             <Switch
               id="dark-mode"
@@ -117,11 +119,10 @@ const NavList = ({
             <MoonIcon
               opacity={state.darkMode ? "1" : "0.3"}
               className={`${
-                path == "/" ? "text-white" : "text-black"
+                path == "/" ? "lg:text-white text-black" : "text-black"
               } h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
             />
           </div>
-          <ProfileMenu />
         </div>
       </div>
     </ul>
