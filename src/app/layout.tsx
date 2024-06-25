@@ -18,6 +18,7 @@ import Cart from "@/components/Cart";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import fetchProducts from "@/app/utils/fetchProducts";
+import LoginModal from "@/components/Navigation/LoginModal";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -44,6 +45,7 @@ export default async function RootLayout({
           <HotjarInit />
           <LoadingScreen />
           <Navigation products={products} />
+          <LoginModal />
           <Cart />
 
           {children}

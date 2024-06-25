@@ -45,10 +45,12 @@ export const Navigation = (props: Props) => {
     console.log("session", session);
     if (event === "SIGNED_IN" && session !== null) {
       console.log("session", session);
+      setState({ ...state, user: session.user, session, isSignInOpen: false });
     } else if (event === "SIGNED_OUT") {
+      setState({ ...state, user: null, session: null, isSignInOpen: false });
       console.log("session", event);
-      console.log("SignIn Failed");
     } else {
+      console.log("session", event);
       setState({ ...state, user: null });
     }
   };

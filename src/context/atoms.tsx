@@ -1,8 +1,9 @@
 import { atom } from "jotai";
 
 type State = {
+  isSignInOpen: boolean;
   session: null | string;
-  user: { email: string };
+  user: null | string;
   showMobileMenu: boolean;
   darkMode: boolean;
   firstVisit: boolean;
@@ -42,8 +43,9 @@ const atomWithLocalStorage = (key: string, initialValue: any) => {
 
 // Define your initial state
 const initialState: State = {
+  isSignInOpen: false,
   session: null,
-  user: { email: "" },
+  user: null,
   showMobileMenu: false,
   darkMode: false,
   firstVisit: true,

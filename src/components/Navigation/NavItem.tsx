@@ -90,12 +90,12 @@ const NavItem = ({
         allowHover={isMobile ? false : true}
         open={isMenuOpen}
         handler={setIsMenuOpen}>
-        <MenuHandler className="hidden lg:block">
-          <MenuItem className="flex px-2  lg:pt-[0.35rem] lg:pb-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light justify-center items-center gap-2">
+        <MenuHandler className="hidden lg:inline-block px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-80 focus:bg-cypress-green-light active:bg-cypress-green-light hover:bg-cypress-green-light">
+          <MenuItem className="flex px-2   !lg:pb-[0.35rem] rounded-none  justify-center items-center gap-2">
             <li
               className={`${
                 path == "/" ? "lg:text-white text-black" : "text-black"
-              }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
+              }  relative justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
               {label}
               <ChevronDownIcon
                 strokeWidth={2}
@@ -122,7 +122,7 @@ const NavItem = ({
           </ul>
           <Link
             className="cursor-pointer"
-            href={products ? `/products/${products[0].handle}` : "/products"}>
+            href={products ? `/shop/${products[0].handle}` : "/products"}>
             <div className="relative w-[180px] h-[180px]">
               <Image
                 src={products ? products[0].images[0].src : "/cypress-logo.svg"}
