@@ -163,8 +163,10 @@ const NavItem = ({
               className={`lg:hidden grid sm:grid-cols-3 grid-cols-2 border-b-2 border-gray-400  w-full gap-2 px-auto my-4 `}>
               {shopCategories &&
                 shopCategories.map(({ title, url }) => (
-                  <MenuItem className="flex px-2 rounded-none hover:bg-opacity-80  active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light justify-center lg:justify-left items-center ">
-                    <Link href={url} key={title}>
+                  <MenuItem
+                    key={title}
+                    className="flex px-2 rounded-none hover:bg-opacity-80  active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light justify-center lg:justify-left items-center ">
+                    <Link href={url}>
                       <li
                         className={`${
                           path == "/"
