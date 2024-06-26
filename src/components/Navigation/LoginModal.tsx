@@ -37,11 +37,6 @@ const LoginModal = (props: Props) => {
         <Auth
           supabaseClient={supabase}
           socialLayout="horizontal"
-          redirectTo={
-            process.env.NODE_ENV === "production"
-              ? "rekomix.vercel.app/set-up"
-              : "http://localhost:3000/set-up"
-          }
           theme="dark"
           appearance={{
             theme: ThemeSupa,
@@ -95,7 +90,7 @@ const LoginModal = (props: Props) => {
                   },
                 },
           }}
-          providers={[]}
+          providers={["google"]}
           view={signUp ? "sign_up" : "sign_in"}
         />
       </div>

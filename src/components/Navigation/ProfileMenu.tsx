@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Navbar,
-  Collapse,
   Typography,
   Button,
   Menu,
@@ -9,27 +7,16 @@ import {
   MenuList,
   MenuItem,
   Avatar,
-  Card,
-  IconButton,
-  Switch,
   AccordionHeader,
   AccordionBody,
   Accordion,
 } from "@material-tailwind/react";
 import {
-  CubeTransparentIcon,
+  EllipsisHorizontalCircleIcon,
   UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
   LifebuoyIcon,
   PowerIcon,
-  RocketLaunchIcon,
-  Bars2Icon,
-  MoonIcon,
-  SunIcon,
 } from "@heroicons/react/24/solid";
 import { trajanLight, trajanRegular } from "@/lib/fonts";
 import { useAtom } from "jotai";
@@ -95,14 +82,16 @@ function ProfileMenu() {
             <UserCircleIcon
               className={`p-0 w-[25px] mx-auto h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
             />
-          ) : (
+          ) : state.user?.user_metadata.avatar_url ? (
             <Avatar
               variant="circular"
               size="sm"
-              alt="tania andrew"
+              alt={state.user?.user_metadata.full_name || "Profile Picture"}
               className="p-0 w-[25px] h-auto"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+              src={state.user?.user_metadata.avatar_url}
             />
+          ) : (
+            <EllipsisHorizontalCircleIcon className="w-6 h-6" />
           )}
         </Button>
       </MenuHandler>
@@ -167,9 +156,21 @@ function ProfileMenu() {
             className={`${
               path == "/" ? "lg:text-white text-black" : "text-black"
             }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-1 font-bold uppercase text-sm box-content`}>
-            <UserCircleIcon
-              className={`p-0 w-[25px] mx-auto h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
-            />
+            {state.session == null ? (
+              <UserCircleIcon
+                className={`p-0 w-[25px] mx-auto h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
+              />
+            ) : state.user?.user_metadata.avatar_url ? (
+              <Avatar
+                variant="circular"
+                size="sm"
+                alt={state.user?.user_metadata.full_name || "Profile Picture"}
+                className="p-0 w-[25px] h-auto"
+                src={state.user?.user_metadata.avatar_url}
+              />
+            ) : (
+              <EllipsisHorizontalCircleIcon className="w-6 h-6" />
+            )}
             <ChevronDownIcon
               strokeWidth={2}
               className={`h-3 w-3 my-auto transition-transform ${

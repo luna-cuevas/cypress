@@ -42,7 +42,11 @@ export const Navigation = (props: Props) => {
   }, [state.cartItems]);
 
   const handleAuthChange = async (event: any, session: any) => {
-    if (event === "SIGNED_IN" && session !== null) {
+    console.log("event", event);
+    if (
+      (event === "SIGNED_IN" || event === "INITIAL_SESSION") &&
+      session !== null
+    ) {
       setState({ ...state, user: session.user, session, isSignInOpen: false });
     } else if (event === "SIGNED_OUT") {
       setState({ ...state, user: null, session: null, isSignInOpen: false });
