@@ -1,4 +1,4 @@
-import fetchProducts from "@/app/utils/fetchProducts";
+import fetchProducts from "@/utils/fetchProducts";
 import ProductGallery from "@/components/shop/ProductGallery";
 import React from "react";
 
@@ -8,7 +8,7 @@ const page = async (props: Props) => {
   const products = await fetchProducts();
 
   return (
-    <div>
+    <div className="z-0 relative">
       <ProductGallery products={products} />
     </div>
   );

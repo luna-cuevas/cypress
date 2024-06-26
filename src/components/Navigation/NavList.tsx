@@ -12,6 +12,14 @@ import NavItem from "./NavItem";
 
 const shopCategories = [
   {
+    title: "All",
+    url: "/shop",
+  },
+  {
+    title: "New",
+    url: "/shop/new",
+  },
+  {
     title: "Pants",
     url: "/shop/pants",
   },
@@ -20,16 +28,12 @@ const shopCategories = [
     url: "/shop/shirts",
   },
   {
-    title: "New",
-    url: "/shop/new-arrivals",
+    title: "Jackets",
+    url: "/shop/jackets",
   },
   {
     title: "Featured",
     url: "/shop/featured",
-  },
-  {
-    title: "Accessories",
-    url: "/shop/accessories",
   },
   {
     title: "Sale",
@@ -72,7 +76,7 @@ const NavList = ({
   }, [state.darkMode]);
 
   return (
-    <ul className="!z-[10000000] h-[calc(100vh-70px)] relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen lg:h-[70px] justify-between flex-col gap-2 lg:flex-row lg:items-center">
+    <ul className="z-[10000000] h-[calc(100vh-70px)] relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen lg:h-[70px] justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <div className="lg:w-[80%] z-[1000000] w-full mx-auto mt-auto h-full flex justify-between">
         <Link href="/" className="relative hidden lg:block w-[250px]">
           <Image

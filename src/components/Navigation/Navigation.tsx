@@ -42,15 +42,11 @@ export const Navigation = (props: Props) => {
   }, [state.cartItems]);
 
   const handleAuthChange = async (event: any, session: any) => {
-    console.log("session", session);
     if (event === "SIGNED_IN" && session !== null) {
-      console.log("session", session);
       setState({ ...state, user: session.user, session, isSignInOpen: false });
     } else if (event === "SIGNED_OUT") {
       setState({ ...state, user: null, session: null, isSignInOpen: false });
-      console.log("session", event);
     } else {
-      console.log("session", event);
       setState({ ...state, user: null });
     }
   };
@@ -72,8 +68,8 @@ export const Navigation = (props: Props) => {
         variant="filled"
         fullWidth={true}
         className={`${
-          path == "/" && "absolute"
-        } h-[70px]  backdrop-blur-[2px] block  transition-all duration-300 group !z-[100000000] top-0 w-screen items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent drop-shadow-md max-w-none dark:bg-cypress-green dark:bg-opacity-75 py-4 p-0`}>
+          path == "/" ? "absolute" : "relative"
+        } h-[70px]  backdrop-blur-[2px] block   transition-all duration-300 group z-[100000000] top-0 w-screen items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent drop-shadow-md max-w-none dark:bg-cypress-green dark:bg-opacity-75 py-4 p-0`}>
         <Link
           href="/"
           className={`z-[1000] lg:hidden h-full sm:max-w-[250px] max-w-[180px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
@@ -106,7 +102,7 @@ export const Navigation = (props: Props) => {
         </div>
         <Collapse
           open={isNavOpen}
-          className=" sm:w-2/3 md:w-1/2   lg:w-full justify-end ml-auto">
+          className=" sm:w-2/3 md:w-1/2 z-[10000000] relative  lg:w-full justify-end ml-auto">
           <NavList isNavOpen={isNavOpen} />
         </Collapse>
       </Navbar>

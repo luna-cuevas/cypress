@@ -32,6 +32,7 @@ interface ShopifyResponse {
         title: string;
         description: string;
         handle: string;
+        productType: string;
         variants: {
           edges: {
             node: {
@@ -94,6 +95,7 @@ export async function POST(req: Request) {
         title,
         description,
         handle,
+        productType: node.productType,
         variants: flattenedVariants,
         images: flattenedImages, // Add this line
       };

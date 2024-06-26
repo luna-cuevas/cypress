@@ -128,3 +128,8 @@
 .slide-down {
   animation: slide-down 1s ease-in-out forwards;
 }
+
+.carousel {
+  touch-action: pan-x !important;
+  -ms-touch-action: pan-x !important;
+}

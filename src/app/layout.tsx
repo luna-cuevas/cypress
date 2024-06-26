@@ -17,8 +17,11 @@ import Cart from "@/components/Cart";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import fetchProducts from "@/app/utils/fetchProducts";
+import fetchProducts from "@/utils/fetchProducts";
 import LoginModal from "@/components/Navigation/LoginModal";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TanstackProvider from "@/utils/TanstackProvider";
+import "@glidejs/glide/dist/css/glide.core.min.css";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -41,27 +44,29 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
       <body className="bg-white relative dark:bg-gray-900 ">
-        <div className="main-container ">
-          <HotjarInit />
-          <LoadingScreen />
-          <Navigation products={products} />
-          <LoginModal />
-          <Cart />
+        <TanstackProvider>
+          <div className="main-container ">
+            <HotjarInit />
+            <LoadingScreen />
+            <Navigation products={products} />
+            <LoginModal />
+            <Cart />
 
-          {children}
-          <Footer />
-        </div>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={true}
-          closeOnClick={true}
-          rtl={false}
-          pauseOnFocusLoss={true}
-          draggable={true}
-          pauseOnHover={true}
-        />
+            {children}
+            <Footer />
+          </div>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss={true}
+            draggable={true}
+            pauseOnHover={true}
+          />
+        </TanstackProvider>
       </body>
     </html>
   );

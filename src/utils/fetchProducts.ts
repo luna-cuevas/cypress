@@ -2,6 +2,7 @@
 type Product = {
   id: string;
   handle: string;
+  productType: string;
   title: string;
   description: string;
   variants: any[];
@@ -37,6 +38,7 @@ const fetchProducts = async () => {
                 title
                 description
                 handle
+                productType
                 variants(first: 10) {
                   edges {
                     node {
@@ -72,6 +74,7 @@ const fetchProducts = async () => {
 
   const data = await response.json();
   const products: Product[] = data.products;
+  console.log("products", products);
 
   // Optimize product images
   const optimizedProducts = products.map((product) => ({

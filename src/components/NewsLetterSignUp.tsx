@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import { toast } from "react-toastify";
-import { handleSubscribe } from "@/app/utils/handleNewsLetterSignUp";
+import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
 
 type Props = {};
 

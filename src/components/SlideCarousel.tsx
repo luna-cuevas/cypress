@@ -10,6 +10,7 @@ type Props = {
   products?: {
     id: string;
     handle: string;
+    productType: string;
     images: { src: string; altText: string }[];
     title: string;
     variants: any[];
@@ -19,70 +20,8 @@ type Props = {
 const SlideCarousel: React.FC<Props> = ({ products }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useAtom(globalStateAtom);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
-
-  useEffect(() => {
-    const carousel = carouselRef.current;
-
-    if (!carousel) return;
-
-    const handleMouseDown = (e: MouseEvent) => {
-      setIsDragging(true);
-      setStartX(e.pageX - carousel.offsetLeft);
-      setScrollLeft(carousel.scrollLeft);
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 1;
-      carousel.scrollLeft = scrollLeft - walk;
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      setIsDragging(true);
-      setStartX(e.touches[0].pageX - carousel.offsetLeft);
-      setScrollLeft(carousel.scrollLeft);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging) return;
-      const x = e.touches[0].pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 1;
-      carousel.scrollLeft = scrollLeft - walk;
-    };
-
-    const handleTouchEnd = () => {
-      setIsDragging(false);
-    };
-
-    carousel.addEventListener("mousedown", handleMouseDown);
-    carousel.addEventListener("mousemove", handleMouseMove);
-    carousel.addEventListener("mouseup", handleMouseUp);
-    carousel.addEventListener("mouseleave", handleMouseUp);
-    carousel.addEventListener("touchstart", handleTouchStart);
-    carousel.addEventListener("touchmove", handleTouchMove);
-    carousel.addEventListener("touchend", handleTouchEnd);
-
-    return () => {
-      carousel.removeEventListener("mousedown", handleMouseDown);
-      carousel.removeEventListener("mousemove", handleMouseMove);
-      carousel.removeEventListener("mouseup", handleMouseUp);
-      carousel.removeEventListener("mouseleave", handleMouseUp);
-      carousel.removeEventListener("touchstart", handleTouchStart);
-      carousel.removeEventListener("touchmove", handleTouchMove);
-      carousel.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [isDragging, startX, scrollLeft]);
 
   const openBox = (product: object) => {
     console.log("product", product);
@@ -141,11 +80,15 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
     }
   };
 
+  const onDragStart = (e: any) => {
+    e.preventDefault();
+  };
+
   return (
-    <div className="w-full relative px-2 overflow-hidden">
+    <div className="w-full relative px-2 overflow-hidden ">
       <div
         ref={carouselRef}
-        className="flex space-x-1 overflow-x-scroll overflow-y-hidden">
+        className="flex space-x-1 overflow-x-scroll overflow-y-hidden carousel">
         {products &&
           products.map((product) => (
             <div
@@ -153,8 +96,10 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
               className="w-[200px] relative h-[300px] bg-gray-300 flex-shrink-0">
               <Link
                 // Need to fix issue with dragging on desktop causes the link to be clicked
-                onDragStartCapture={(e) => e.preventDefault()}
-                href={`/shop/${product.handle}`}>
+                onDragStart={onDragStart}
+                href={`/shop/${product.productType.toLowerCase()}/${
+                  product.handle
+                }`}>
                 <Image
                   priority
                   fill
@@ -165,7 +110,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                   src={product.images[0].src}
                   alt={product.images[0].altText}
                   draggable={false}
-                  className="w-full h-full object-cover cursor-pointer"
+                  className="w-full h-full object-cover cursor-pointer "
                 />
               </Link>
               <button

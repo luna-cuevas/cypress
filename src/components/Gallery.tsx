@@ -6,6 +6,7 @@ type Props = {
   products?: {
     id: string;
     handle: string;
+    productType: string;
     images: { src: string; altText: string }[];
     title: string;
     variants: any[];
@@ -29,7 +30,10 @@ const Gallery: React.FC<Props> = ({ products }) => {
         <div
           key={product.handle}
           className={`${classes[index % classes.length]} relative`}>
-          <Link href={`/shop/${product.handle}`}>
+          <Link
+            href={`/shop/${product.productType.toLowerCase()}/${
+              product.handle
+            }`}>
             <Image
               fill
               priority

@@ -65,8 +65,6 @@ function ProfileMenu() {
   const supabase = useSupabase();
   const path = usePathname();
 
-  console.log("isProfileMenuOpen", isProfileMenuOpen);
-
   const handleSignOut = async () => {
     // Sign out from Supabase
     await supabase.auth.signOut();
