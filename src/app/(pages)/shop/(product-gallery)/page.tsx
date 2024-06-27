@@ -19,6 +19,11 @@ const page = async (props: Props) => {
   }
 
   const data = await response.json();
+
+  if (!data) {
+    return console.error("No data returned from fetchProducts");
+  }
+
   const products = data.products;
 
   return (

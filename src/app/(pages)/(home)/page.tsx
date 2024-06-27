@@ -28,6 +28,9 @@ export default async function Home() {
   }
 
   const data = await response.json();
+  if (!data) {
+    return console.error("No data returned from fetchProducts");
+  }
   const products = data.products;
 
   const heroImages = [
