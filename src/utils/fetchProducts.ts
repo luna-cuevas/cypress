@@ -1,91 +1,81 @@
-// Define the type for a product to improve code readability and maintenance
-type Product = {
-  id: string;
-  handle: string;
-  productType: string;
-  title: string;
-  description: string;
-  variants: any[];
-  images: { src: string; altText: string }[];
-};
+// // Define the type for a product to improve code readability and maintenance
+// type Product = {
+//   id: string;
+//   handle: string;
+//   productType: string;
+//   title: string;
+//   description: string;
+//   variants: any[];
+//   images: { src: string; altText: string }[];
+// };
 
-// Function to optimize image URLs
-const optimizeImage = (
-  src: string,
-  width: number,
-  height: number,
-  format = "webp"
-) => {
-  return `${src}?width=${width}&height=${height}&format=${format}`;
-};
+// // Function to optimize image URLs
+// const optimizeImage = (
+//   src: string,
+//   width: number,
+//   height: number,
+//   format = "webp"
+// ) => {
+//   return `${src}?width=${width}&height=${height}&format=${format}`;
+// };
 
-// Main function to fetch and optimize products
-const fetchProducts = async () => {
-  const baseURL = process.env.BASE_URL;
-  const response = await fetch(`${baseURL}/api/fetchProducts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      productQuery: `
-        query {
-          products(first: 10) {
-            edges {
-              node {
-                id
-                handle
-                title
-                description
-                handle
-                productType
-                variants(first: 10) {
-                  edges {
-                    node {
-                      id
-                      title
-                      quantityAvailable
-                      price {
-                        amount
-                        currencyCode
-                      }
-                    }
-                  }
-                }
-                images(first: 1) {
-                  edges {
-                    node {
-                      src
-                      altText
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-    }),
-  });
+// // Main function to fetch and optimize products
+// const fetchProducts = async (category: string) => {
+//   const baseURL = process.env.BASE_URL;
+//   console.log("category from fetchProducts", category);
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+//   // Dynamically construct the productQuery to include a filter for productType if a category is provided
+//   const productQuery = `
+//     query {
+//       products(first: 10${
+//         category ? `, where: { productType: "${category}" }` : ""
+//       }) {
+//         edges {
+//           node {
+//             id
+//             handle
+//             title
+//             description
+//             productType
+//             variants(first: 10) {
+//               edges {
+//                 node {
+//                   id
+//                   title
+//                   quantityAvailable
+//                   price {
+//                     amount
+//                     currencyCode
+//                   }
+//                 }
+//               }
+//             }
+//             images(first: 1) {
+//               edges {
+//                 node {
+//                   src
+//                   altText
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
 
-  const data = await response.json();
-  const products: Product[] = data.products;
-  console.log("products", products);
+//   if (!response.ok) {
+//     throw new Error(`HTTP error! status: ${response.status}`);
+//   }
 
-  // Optimize product images
-  const optimizedProducts = products.map((product) => ({
-    ...product,
-    images: product.images.map((image) => ({
-      ...image,
-      src: optimizeImage(image.src, 800, 800), // Adjust width and height as needed
-    })),
-  }));
+//   const data = await response.json();
+//   const products: Product[] = data.products;
 
-  return optimizedProducts;
-};
+//   if (!products) {
+//     return products;
+//   }
 
-export default fetchProducts;
+//   return products;
+// };
+
+// export default fetchProducts;
