@@ -31,7 +31,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
           key={product.handle}
           className={`${classes[index % classes.length]} relative`}>
           <Link
-            href={`/shop/${product.productType.toLowerCase()}/${
+            href={`/shop/${product.productType?.toLowerCase() || "default"}/${
               product.handle
             }`}>
             <Image

@@ -97,9 +97,9 @@ const ProductGallery = (props: Props) => {
               transition={{ duration: 0.3, delay: index * 0.025 }}
               className="relative overflow-hidden">
               <Link
-                href={`/shop/${product.productType.toLowerCase()}/${
-                  product.handle
-                }`}
+                href={`/shop/${
+                  product.productType?.toLowerCase() || "default"
+                }/${product.handle}`}
                 className="group cursor-pointer">
                 <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-1 w-full  bg-gray-200 md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-6 2xl:aspect-w-5">
                   <Image

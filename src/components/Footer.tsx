@@ -90,7 +90,9 @@ const Footer = (props: Props) => {
                   e.preventDefault();
                 }}
                 aria-disabled="true"
-                href={`/shop/${item.toLowerCase().replace(" ", "-")}`}
+                href={`/shop/${
+                  item?.toLowerCase().replace(" ", "-") || "default"
+                }`}
                 className="underline-animation relative inline-block text-left before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent">
                 {" "}
                 {item}

@@ -25,7 +25,7 @@ const TickerCategories: React.FC<Props> = ({}) => {
             key={index}
             className="inline-block  justify-center text-center px-2 mx-5 md:mx-16">
             <Link
-              href={`/shop/${item.toLowerCase()}`}
+              href={`/shop/${item?.toLowerCase() || "default"}`}
               className={`${trajanRegular.className} text-black dark:text-white text-lg w-full font-bold text-center uppercase underline`}>
               {item}
             </Link>
