@@ -60,9 +60,20 @@ interface ShopifyResponse {
   };
 }
 
+const optimizeImage = (
+  src: string,
+  width: number,
+  height: number,
+  format = "webp"
+) => {
+  return `${src}?width=${width}&height=${height}&format=${format}`;
+};
+
 export async function POST(req: Request) {
   const body = await req.json();
   const { productQuery } = body;
+
+  console.log("productQuery", productQuery);
 
   if (!productQuery) {
     return NextResponse.json({ error: "Missing required fields" });
@@ -101,7 +112,16 @@ export async function POST(req: Request) {
       };
     });
 
-    return NextResponse.json({ products });
+    // Optimize images
+    const optimizedProducts = products.map((product) => ({
+      ...product,
+      images: product.images.map((image) => ({
+        ...image,
+        src: optimizeImage(image.src, 800, 800), // Adjust width and height as needed
+      })),
+    }));
+
+    return NextResponse.json({ products: optimizedProducts });
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json({ error: "Error fetching products" });

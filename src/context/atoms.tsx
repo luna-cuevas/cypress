@@ -9,6 +9,7 @@ type State = {
   firstVisit: boolean;
   cartOpen: boolean;
   cartItems: any[];
+  productViewSize: string;
 };
 
 // A helper function to work with localStorage and JSON serialization for the entire application state
@@ -51,6 +52,7 @@ const initialState: State = {
   firstVisit: true,
   cartOpen: false,
   cartItems: [],
+  productViewSize: "small",
 };
 
 // Create an atom with local storage persistence for the entire application state

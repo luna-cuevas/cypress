@@ -17,7 +17,6 @@ import Cart from "@/components/Cart";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import fetchProducts from "@/utils/fetchProducts";
 import LoginModal from "@/components/Navigation/LoginModal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TanstackProvider from "@/utils/TanstackProvider";
@@ -40,7 +39,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const products = await fetchProducts();
+  // const products = await fetchProducts();
   return (
     <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
       <body className="bg-white relative dark:bg-gray-900 ">
@@ -48,7 +47,7 @@ export default async function RootLayout({
           <div className="main-container ">
             <HotjarInit />
             <LoadingScreen />
-            <Navigation products={products} />
+            <Navigation />
             <LoginModal />
             <Cart />
 
