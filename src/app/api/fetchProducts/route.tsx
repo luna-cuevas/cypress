@@ -1,5 +1,6 @@
 // pages/api/fetchProducts.ts
 import { shopifyClient } from "@/lib/shopify";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export interface Variant {
@@ -101,6 +102,8 @@ const optimizeImage = (
 };
 
 export async function POST(req: Request) {
+  revalidatePath(req.url);
+
   const body = await req.json();
   const { productQuery } = body;
 
