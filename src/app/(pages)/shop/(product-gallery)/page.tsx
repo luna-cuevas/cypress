@@ -16,12 +16,14 @@ type Sort =
 
 const page = async ({
   searchParams,
-  props,
 }: {
-  searchParams: { sizes: string; sort: Sort; view: string };
-  props: Props;
+  searchParams: {
+    sizes: string;
+    sort?: Sort;
+    view?: string;
+  };
 }) => {
-  const { sizes, sort, view }: { sizes: string; sort?: Sort; view: string } =
+  const { sizes, sort, view }: { sizes: string; sort?: Sort; view?: string } =
     searchParams;
   const sizesArray = sizes ? (sizes as any).split(",") : [];
 
