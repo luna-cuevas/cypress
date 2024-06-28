@@ -20,6 +20,7 @@ type Props = {
 
 const ProductGallery = (props: Props) => {
   const products = props.products || [];
+  console.log("products", products);
   const view = props.view || "small";
   const [selectedProduct, setSelectedProduct] = React.useState<any | null>(
     null

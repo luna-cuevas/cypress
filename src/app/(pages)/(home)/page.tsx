@@ -32,6 +32,7 @@ export default async function Home({ params }: { params: any }) {
     return console.error("No data returned from fetchProducts");
   }
   const products = data.products;
+  console.log("products", products);
 
   const heroImages = [
     "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=800&height=800format=webp&quality=80&scale=1",

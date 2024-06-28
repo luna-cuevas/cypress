@@ -23,6 +23,8 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
 
+  console.log("products", products);
+
   const openBox = (product: object) => {
     console.log("product", product);
     setSelectedProduct(product);
