@@ -76,7 +76,7 @@ export default function ProductDetails({ product }: { product: any }) {
             <li key={product.handle}>
               <div className="flex items-center">
                 <Link
-                  href={`/shop/${product.productType.toLowerCase()}`}
+                  href={`/shop/${product.productType}`}
                   className="mr-2 text-sm font-medium text-gray-900">
                   {product.productType}
                 </Link>
@@ -93,9 +93,7 @@ export default function ProductDetails({ product }: { product: any }) {
             </li>
             <li className="text-sm">
               <Link
-                href={`/shop/${product.productType.toLowerCase()}/${
-                  product.handle
-                }`}
+                href={`/shop/${product.productType}/${product.handle}`}
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600">
                 {product.title}

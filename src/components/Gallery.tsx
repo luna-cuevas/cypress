@@ -31,10 +31,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
           <div
             key={product.handle}
             className={`${classes[index % classes.length]} relative`}>
-            <Link
-              href={`/shop/${product.productType.toLowerCase()}/${
-                product.handle
-              }`}>
+            <Link href={`/shop/${product.productType}/${product.handle}`}>
               <Image
                 fill
                 priority
