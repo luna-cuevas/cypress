@@ -120,8 +120,18 @@ const ProductGallery = (props: Props) => {
                 {selectedProduct?.id === product.id && (
                   <motion.div
                     className="absolute bottom-0 left-0 w-full bg-cypress-green bg-opacity-85 p-4 text-white z-50"
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
+                    initial={{
+                      y: "100%",
+                      opacity: 0,
+                    }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                    }}
+                    transition={{
+                      ease: "easeOut",
+                      duration: 0.2,
+                    }}
                     exit={{ y: "100%" }}>
                     <div className="relative">
                       <button
