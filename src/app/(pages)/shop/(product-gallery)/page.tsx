@@ -18,10 +18,10 @@ const page = async ({
   searchParams,
   props,
 }: {
-  searchParams: { sizes: any[]; sort: Sort; view: string };
+  searchParams: { sizes: string; sort: Sort; view: string };
   props: Props;
 }) => {
-  const { sizes, sort, view }: { sizes: any[]; sort?: Sort; view: string } =
+  const { sizes, sort, view }: { sizes: string; sort?: Sort; view: string } =
     searchParams;
   const sizesArray = sizes ? (sizes as any).split(",") : [];
 
