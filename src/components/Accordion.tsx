@@ -9,6 +9,7 @@ import { MinusIcon, PlusIcon, Squares2X2Icon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   title: string;
@@ -59,21 +60,29 @@ export function Accordion({
   setChecked,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
   const [state, setState] = useAtom(globalStateAtom);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const onSliderChange = (e: any) => {
-    setSliderValue(e.target.value);
-  };
+  const [sliderValue, setSliderValue] = useState(0);
 
   useEffect(() => {
-    if (sliderValue <= 33) {
-      setState({ ...state, view: "small" });
-    } else if (sliderValue <= 66 && sliderValue > 33) {
-      setState({ ...state, view: "medium" });
-    } else if (sliderValue <= 100 && sliderValue > 66) {
-      setState({ ...state, view: "large" });
+    const params = new URLSearchParams(searchParams.toString());
+
+    let viewValue = "";
+    if (sliderValue <= 32) {
+      viewValue = "small";
+    } else if (sliderValue <= 65) {
+      viewValue = "medium";
+    } else if (sliderValue <= 100) {
+      viewValue = "large";
     }
+
+    // Update the 'view' parameter
+    params.set("view", viewValue);
+
+    // Navigate to the updated URL without removing other parameters
+    router.push(`?${params.toString()}`);
   }, [sliderValue]);
 
   return (
@@ -101,6 +110,7 @@ export function Accordion({
           ? "lg:max-h-screen h-auto py-2 lg:border border-gray-200  dark:border-white"
           : "lg:max-h-0 py-0 overflow-hidden"
       }
+          ${view && "right-0"}
         flex flex-col w-auto rounded-lg drop-shadow-sm  transition-all  z-50 duration-300 lg:absolute top-full  bg-white dark:bg-cypress-green  `}>
         {body ? (
           body.map((option, optionIdx) => {
@@ -132,7 +142,9 @@ export function Accordion({
                 </label>
               </div>
             ) : (
-              <div className="flex lg:px-4 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
+              <div
+                key={option.value}
+                className="flex lg:px-4 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
                 <Link
                   href={option.href || "#"}
                   className=" text-base text-black dark:text-white w-full cursor-pointer">
@@ -142,15 +154,18 @@ export function Accordion({
             );
           })
         ) : (
-          <div className="flex lg:px-4 px-8 w-full  gap-0 py-2 ">
+          <div
+            key={title}
+            className="flex lg:px-4 px-8 w-full bg-white gap-0 py-0 ">
             <Slider
               onChange={(e) => {
-                onSliderChange(e);
+                setSliderValue(Number(e.target.value));
               }}
-              defaultValue={0}
+              defaultValue={sliderValue}
               value={sliderValue}
               step={33}
-              className="text-cypress-green-light min-w-[80px] max-w-[100px] w-full"
+              max={99}
+              className="text-cypress-green-light my-2 min-w-[80px] max-w-[100px] w-full"
               barClassName="rounded-none bg-cypress-green"
               thumbClassName="[&::-moz-range-thumb]:rounded-none [&::-webkit-slider-thumb]:rounded-none [&::-moz-range-thumb]:-mt-[4px] [&::-webkit-slider-thumb]:-mt-[4px]"
               trackClassName="[&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-track]:bg-transparent rounded-none !bg-cypress-green/10 border border-cypress-green/20"

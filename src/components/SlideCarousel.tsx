@@ -97,9 +97,9 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
               <Link
                 // Need to fix issue with dragging on desktop causes the link to be clicked
                 onDragStart={onDragStart}
-                href={`/shop/${product.productType.toLowerCase()}/${
-                  product.handle
-                }`}>
+                href={`/shop/${
+                  product.productType?.toLowerCase() || "default"
+                }/${product.handle}`}>
                 <Image
                   priority
                   fill

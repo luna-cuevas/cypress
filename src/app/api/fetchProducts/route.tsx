@@ -64,16 +64,16 @@ const optimizeImage = (
   src: string,
   width: number,
   height: number,
-  format = "webp"
+  format = "webp",
+  quality = 40, // Default quality set to 80
+  scale = 1 // Default scale set to 1
 ) => {
-  return `${src}?width=${width}&height=${height}&format=${format}`;
+  return `${src}?width=${width}&height=${height}&format=${format}&quality=${quality}&scale=${scale}`;
 };
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { productQuery } = body;
-
-  console.log("productQuery", productQuery);
 
   if (!productQuery) {
     return NextResponse.json({ error: "Missing required fields" });

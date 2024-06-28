@@ -32,8 +32,8 @@ const FadeCarousel: React.FC<Props> = ({ images }) => {
             src={image}
             fill
             priority
-            quality={25}
-            sizes="(max-width: 640px) 100vw,(min-width: 1024px) 75vw, 33vw"
+            quality={100}
+            sizes="(max-width: 640px) 100vw,(min-width: 1024px) 100vw, 100vw"
             blurDataURL="data:image/png;base64,L57-1h},?HxVETNdR.R*9vJC9tI="
             placeholder="blur"
             alt={`Slide ${index}`}

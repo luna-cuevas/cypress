@@ -22,15 +22,15 @@ import {
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Accordion } from "../Accordion";
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: "Relevance", value: "relevance", current: true },
+  { name: "Best Rating", value: "best_selling", current: false },
+  { name: "Newest", value: "created_at", current: false },
+  { name: "Price: Low to High", value: "price_asc", current: false },
+  { name: "Price: High to Low", value: "price_desc", current: false },
 ];
 const subCategories = [
   { name: "All", href: "/shop" },
@@ -67,8 +67,11 @@ function classNames(...classes: string[]) {
 export default function ProductFilters({ children, title }: Props) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<Set<string>>(new Set());
+  const [sortKey, setSortKey] = useState("");
   const [checked, setChecked] = useState<{ [key: string]: boolean }>({});
-
+  const searchParams = useSearchParams();
+  const view = searchParams.get("view");
+  const sizes = Array.from(selectedSizes).join(",");
   const router = useRouter();
 
   const handleSizeClick = (e: any) => {
@@ -85,13 +88,19 @@ export default function ProductFilters({ children, title }: Props) {
   };
 
   useEffect(() => {
-    if (selectedSizes.size > 0) {
-      const selectedSizesQuery = Array.from(selectedSizes).join(",");
-      router.push(`?sizes=${selectedSizesQuery}`);
-    } else {
-      router.push(`?`);
+    const params = new URLSearchParams(searchParams.toString());
+    console.log("selectedSizes.size", selectedSizes.size);
+    if (selectedSizes) {
+      params.set("sizes", sizes);
     }
-  }, [selectedSizes]);
+    if (sortKey) {
+      params.set("sort", sortKey);
+    }
+    if (view) {
+      params.set("view", view);
+    }
+    router.push(`?${params.toString()}`);
+  }, [selectedSizes, sortKey]);
 
   return (
     <div className="h-full w-full overflow-hidden">
@@ -126,7 +135,7 @@ export default function ProductFilters({ children, title }: Props) {
             <form className="mt-4 border-t border-gray-200">
               <Accordion
                 title="Categories"
-                buttonStyles="flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500"
+                buttonStyles="flex w-full items-center justify-between py-3 text-base font-medium text-gray-400 hover:text-gray-500"
                 bodyStyles="pt-6"
                 body={subCategories.map((category) => {
                   return {
@@ -163,7 +172,7 @@ export default function ProductFilters({ children, title }: Props) {
             <form className="hidden lg:flex gap-2 mx-2">
               <Accordion
                 title="Categories"
-                buttonStyles="flex w-full items-center justify-between  py-3 text-sm text-black hover:text-gray-500"
+                buttonStyles="flex w-full items-center justify-between  py-3 text-base font-medium text-black hover:text-gray-500"
                 bodyStyles="pt-6"
                 body={subCategories.map((category) => {
                   return {
@@ -193,7 +202,7 @@ export default function ProductFilters({ children, title }: Props) {
                   <MenuButton className="group inline-flex gap-4 justify-center text-base font-medium dark:text-white dark:hover:text-gray-300">
                     Sort
                     <ChevronDownIcon
-                      className="h-7 w-7 text-black "
+                      className="h-7 w-7 text-black dark:text-white "
                       aria-hidden="true"
                     />
                   </MenuButton>
@@ -201,36 +210,46 @@ export default function ProductFilters({ children, title }: Props) {
 
                 <MenuItems
                   transition
-                  className="absolute bg-white right-0 z-10 mt-2 w-40 origin-top-right rounded-md  shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
-                  <div className="py-1">
-                    {sortOptions.map((option) => (
-                      <MenuItem key={option.name}>
-                        {({ focus }) => (
-                          <a
-                            href={option.href}
-                            className={classNames(
-                              option.current
-                                ? "font-medium text-gray-900"
-                                : "text-gray-500",
-                              focus ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm"
-                            )}>
-                            {option.name}
-                          </a>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </div>
+                  className="absolute bg-white dark:bg-cypress-green right-0 z-10  w-40 py-2 origin-top-right rounded-xl  shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                  {sortOptions.map((option) => (
+                    <MenuItem key={option.name}>
+                      {({ focus }) => (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSortKey(option.value);
+                            sortOptions.forEach((item) => {
+                              item.current = false;
+                            });
+                            option.current = true;
+                          }}
+                          className={classNames(
+                            option.current
+                              ? "font-medium dark:text-white text-white bg-cypress-green-light bg-opacity-80"
+                              : "text-gray-600 dark:text-gray-300",
+                            focus
+                              ? "bg-cypress-green-light dark:bg-opacity-50 bg-opacity-60 text-white"
+                              : "",
+                            "block w-full my-0 px-4 py-2 text-sm "
+                          )}>
+                          {option.name}
+                        </button>
+                      )}
+                    </MenuItem>
+                  ))}
                 </MenuItems>
               </Menu>
             </form>
 
-            <Accordion
-              title="View"
-              buttonStyles="flex w-full items-center justify-between  py-3 text-sm text-black hover:text-gray-500"
-              bodyStyles="pt-6"
-              view={true}
-            />
+            <div className="hidden lg:block">
+              <Accordion
+                title="View"
+                buttonStyles="flex w-full items-center justify-between  py-3 text-sm text-black hover:text-gray-500"
+                bodyStyles="pt-6"
+                view={true}
+              />
+            </div>
+
             <button
               type="button"
               className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"

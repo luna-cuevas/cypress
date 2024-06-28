@@ -4,13 +4,7 @@ import { Navigation } from "@/components/Navigation/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  sedan,
-  arpona,
-  trajan,
-  trajanRegular,
-  trajanLight,
-} from "../lib/fonts";
+import { arpona, trajan, trajanRegular, trajanLight } from "../lib/fonts";
 import Footer from "@/components/Footer";
 import HotjarInit from "@/components/HotJarInit";
 import Cart from "@/components/Cart";
