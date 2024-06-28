@@ -12,6 +12,7 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     },
     body: JSON.stringify({
       productQuery: productQuery({

@@ -31,6 +31,7 @@ const page = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     },
     body: JSON.stringify({
       productQuery: productQuery({
