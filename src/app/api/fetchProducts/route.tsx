@@ -142,7 +142,7 @@ export async function POST(req: Request) {
             title,
             description,
             handle,
-            productType: node.productType || "", // Handle null productType
+            productType: node.productType.toLowerCase() || "", // Handle null productType
             variants: flattenedVariants,
             images: flattenedImages, // Add this line
           };
@@ -181,7 +181,7 @@ export async function POST(req: Request) {
           title,
           description,
           handle,
-          productType: response.data.product.productType || "", // Handle null productType
+          productType: response.data.product.productType.toLowerCase() || "", // Handle null productType
           variants: flattenedVariants,
           images: flattenedImages, // Add this line
         },
