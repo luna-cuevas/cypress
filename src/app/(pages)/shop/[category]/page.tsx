@@ -9,19 +9,26 @@ type Props = {};
 
 const page = async ({
   params,
+  searchParams,
 }: {
   params: {
     category: string;
   };
+  searchParams: { sizes: any[] };
 }) => {
   const category = params.category;
+  const { sizes } = searchParams;
+  const sizesArray = sizes ? (sizes as any).split(",") : [];
+  const capitalized = category.charAt(0).toUpperCase() + category.slice(1);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ productQuery: productQuery(category) }),
+    body: JSON.stringify({
+      productQuery: productQuery({ category: capitalized, sizes: sizesArray }),
+    }),
   });
 
   if (!response.ok) {

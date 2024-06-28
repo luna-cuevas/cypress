@@ -14,13 +14,13 @@ import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 import { productQuery } from "@/utils/productQuery";
 
-export default async function Home() {
+export default async function Home({ params }: { params: any }) {
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ productQuery: productQuery() }),
+    body: JSON.stringify({ productQuery: productQuery({}) }),
   });
 
   if (!response.ok) {
@@ -34,16 +34,16 @@ export default async function Home() {
   const products = data.products;
 
   const heroImages = [
-    "/hero-images/hero-img-1.webp",
-    "/hero-images/hero-img-2.webp",
-    "/hero-images/hero-img-3.webp",
-    "/hero-images/hero-img-4.webp",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=800&height=800format=webp&quality=80&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=800&height=800format=webp&quality=80&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=800&height=800format=webp&quality=80&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=800&height=800format=webp&quality=80&scale=1",
   ];
 
   return (
     <main className="flex flex-col relative justify-center overflow-x-hidden  min-h-[calc(100vh-70px)]">
       {/* Hero Section */}
-      <div className="w-screen h-screen  absolute top-0">
+      <div className="w-screen h-screen bg-black absolute top-0">
         {/* <TracedHalfLogo
           color="white"
           classes="md:w-1/2 w-[65%] z-50 absolute h-full object-contain -top-[15%] md:-top-[10%] -right-[20%] z-10"

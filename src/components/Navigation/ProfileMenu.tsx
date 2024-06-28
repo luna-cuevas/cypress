@@ -91,7 +91,7 @@ function ProfileMenu() {
               src={state.user?.user_metadata.avatar_url}
             />
           ) : (
-            <EllipsisHorizontalCircleIcon className="w-6 h-6" />
+            <EllipsisHorizontalCircleIcon className="w-6 h-6 text-gray-600 dark:text-white" />
           )}
         </Button>
       </MenuHandler>

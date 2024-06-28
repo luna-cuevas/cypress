@@ -130,6 +130,52 @@
 }
 
 .carousel {
-  touch-action: pan-x !important;
-  -ms-touch-action: pan-x !important;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-image-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0; /* Default state for most images */
+  animation: fadeCarousel 60s infinite; /* Total animation time is 60 seconds */
+}
+
+.animation-delay-0 {
+  opacity: 1; /* Make the first image visible immediately */
+}
+
+@keyframes fadeCarousel {
+  0%,
+  25%,
+  50%,
+  75%,
+  100% {
+    opacity: 0;
+  }
+  8.33%,
+  33.33% {
+    opacity: 1;
+  }
+  58.33%,
+  83.33% {
+    opacity: 1;
+  }
+}
+
+.animation-delay-0 {
+  animation-delay: 0s;
+}
+.animation-delay-1 {
+  animation-delay: 15s;
+}
+.animation-delay-2 {
+  animation-delay: 30s;
+}
+.animation-delay-3 {
+  animation-delay: 45s;
 }
