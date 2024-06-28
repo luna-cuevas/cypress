@@ -15,6 +15,9 @@ const config: Config = withMT({
         "cypress-green": "#567256",
         "cypress-green-light": "#6f936f",
       },
+      gridTemplateRows: {
+        "[auto,auto,1fr]": "auto auto 1fr",
+      },
     },
   },
   plugins: [

@@ -123,8 +123,18 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                 {selectedProduct?.id === product.id && (
                   <motion.div
                     className="absolute bottom-0 left-0 w-full bg-cypress-green bg-opacity-85 p-4 text-white z-50"
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
+                    initial={{
+                      y: "100%",
+                      opacity: 0,
+                    }}
+                    animate={{
+                      y: 0,
+                      opacity: 1,
+                    }}
+                    transition={{
+                      ease: "easeOut",
+                      duration: 0.2,
+                    }}
                     exit={{ y: "100%" }}>
                     <div className="relative">
                       <button
@@ -132,10 +142,8 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                         onClick={closeBox}>
                         X
                       </button>
-                      <h2 className="text-lg font-bold mb-4">
-                        {product.title}
-                      </h2>
-                      <ul className="flex space-x-2 mx-auto flex-wrap justify-around w-2/3">
+                      <h2 className="text-lg font-bold">{product.title}</h2>
+                      <ul className="flex space-x-2 mx-auto border-y py-1 my-1 border-gray-400 flex-wrap justify-center gap-4 w-full">
                         {product.variants.length === 1 ? (
                           <button
                             type="button"
@@ -157,7 +165,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                                 selectVariant(variant);
                               }}
                               key={variant.variantId}
-                              className={`w-fit items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
+                              className={`w-fit px-2 items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
                                 selectedVariant === variant
                                   ? "bg-cypress-green-light text-white"
                                   : ""
@@ -169,8 +177,11 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                           ))
                         )}
                       </ul>
+                      <p className="mx-auto w-fit">
+                        {product.variants[0].variantPrice}{" "}
+                      </p>
                       <button
-                        className={`mt-4 w-full px-4 py-2 bg-white text-black rounded ${
+                        className={`mt-2 w-full px-4 py-2 bg-white text-black rounded ${
                           !selectedVariant
                             ? "opacity-50 cursor-not-allowed"
                             : "opacity-100 cursor-pointer"

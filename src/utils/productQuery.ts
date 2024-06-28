@@ -1,4 +1,3 @@
-// utils/productQuery.ts
 type Sort =
   | "id"
   | "relevance"
@@ -11,12 +10,13 @@ export const productQuery = ({
   category,
   sizes,
   sort,
+  handle,
 }: {
   category?: string;
   sizes?: string[];
   sort?: Sort;
+  handle?: string;
 }) => {
-  // Construct the size query part
   let sizeQuery = "";
   if (Array.isArray(sizes)) {
     sizeQuery = sizes.map((size) => `title:${size}`).join(" OR ");
@@ -24,15 +24,12 @@ export const productQuery = ({
     sizeQuery = `title:${sizes}`;
   }
 
-  // Combine the category and size query parts
   const combinedQuery = [
     category ? `product_type:${category}` : null,
     sizeQuery ? `(${sizeQuery})` : null,
   ]
     .filter(Boolean)
     .join(" AND ");
-
-  console.log("combinedQuery", combinedQuery);
 
   const determineSortParams = (sort: Sort) => {
     let sortKey;
@@ -68,6 +65,41 @@ export const productQuery = ({
   };
 
   const { sortKey, reverse } = determineSortParams(sort || "relevance");
+
+  if (handle) {
+    return `
+      query {
+        product(handle: "${handle}") {
+          id
+          handle
+          title
+          description
+          productType
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                quantityAvailable
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+          images(first: 10) {
+            edges {
+              node {
+                src
+                altText
+              }
+            }
+          }
+        }
+      }
+    `;
+  }
 
   return `
     query {
