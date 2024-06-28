@@ -139,7 +139,7 @@ export async function POST(req: Request) {
             title,
             description,
             handle,
-            productType: node.productType.toLowerCase(),
+            productType: node.productType,
             variants: flattenedVariants,
             images: flattenedImages, // Add this line
           };
@@ -178,7 +178,7 @@ export async function POST(req: Request) {
           title,
           description,
           handle,
-          productType: response.data.product.productType.toLowerCase(),
+          productType: response.data.product.productType,
           variants: flattenedVariants,
           images: flattenedImages, // Add this line
         },
