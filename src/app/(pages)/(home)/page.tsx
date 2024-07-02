@@ -13,6 +13,7 @@ import { globalStateAtom } from "@/context/atoms";
 import Link from "next/link";
 import HeroTitle from "@/components/HeroTitle";
 import { productQuery } from "@/utils/productQuery";
+import { fetchFeatured } from "@/utils/fetchFeatured";
 
 export default async function Home({ params }: { params: any }) {
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
@@ -21,7 +22,7 @@ export default async function Home({ params }: { params: any }) {
       "Content-Type": "application/json",
       "Cache-Control": "no-store",
     },
-    body: JSON.stringify({ productQuery: productQuery({}) }),
+    body: JSON.stringify({ productQuery: fetchFeatured() }),
   });
 
   if (!response.ok) {
@@ -29,17 +30,18 @@ export default async function Home({ params }: { params: any }) {
   }
 
   const data = await response.json();
+  console.log("product data", data);
+
   if (!data) {
     return console.error("No data returned from fetchProducts");
   }
   const products = data.products;
-  console.log("products", products);
 
   const heroImages = [
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=800&height=800format=webp&quality=80&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=800&height=800format=webp&quality=80&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=800&height=800format=webp&quality=80&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=800&height=800format=webp&quality=80&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=800&height=800format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=800&height=800format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=800&height=800format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=800&height=800format=webp&quality=100&scale=1",
   ];
 
   return (

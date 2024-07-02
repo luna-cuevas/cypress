@@ -22,8 +22,14 @@ import {
 } from "@heroicons/react/20/solid";
 import Link from "next/link";
 
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+  usePathname,
+} from "next/navigation";
 import { Accordion } from "../Accordion";
+import { trajanRegular } from "@/lib/fonts";
 
 const sortOptions = [
   { name: "Relevance", value: "relevance", current: true },
@@ -33,12 +39,21 @@ const sortOptions = [
   { name: "Price: High to Low", value: "price_desc", current: false },
 ];
 const subCategories = [
-  { name: "All", href: "/shop" },
-  { name: "Pants", href: "/shop/pants" },
-  { name: "Shirts", href: "/shop/shirts" },
-  { name: "Hats", href: "/shop/hat" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
+  {
+    name: "All",
+    href: "/shop",
+    breadcrumb: "shop",
+  },
+  {
+    name: "Pants",
+    href: "/shop/pants",
+    breadcrumb: "pants",
+  },
+  {
+    name: "Shirts",
+    href: "/shop/shirts",
+    breadcrumb: "shirts",
+  },
 ];
 const filters = [
   {
@@ -73,6 +88,8 @@ export default function ProductFilters({ children, title }: Props) {
   const view = searchParams.get("view");
   const sizes = Array.from(selectedSizes).join(",");
   const router = useRouter();
+  const pathName = usePathname();
+  const pathSegments = pathName.split("/").filter(Boolean);
 
   const handleSizeClick = (e: any) => {
     const value = e.target.defaultValue;
@@ -89,9 +106,11 @@ export default function ProductFilters({ children, title }: Props) {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    console.log("selectedSizes.size", selectedSizes.size);
-    if (selectedSizes) {
+    if (selectedSizes.size > 0) {
       params.set("sizes", sizes);
+    }
+    if (selectedSizes.size === 0) {
+      params.delete("sizes");
     }
     if (sortKey) {
       params.set("sort", sortKey);
@@ -162,97 +181,146 @@ export default function ProductFilters({ children, title }: Props) {
         </div>
       </Dialog>
 
-      <main className="mx-auto max-w-screen  mt-12   h-full w-full">
-        <div className="flex items-baseline justify-between border-y border-gray-200 py-2 px-[2.5%] mx-auto">
-          <h1 className="lg:text-3xl text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+      {/* Desktop View */}
+      <main className="mx-auto max-w-screen  mt-6   h-full w-full">
+        <div className="flex flex-col  justify-between border-y border-gray-200 pt-2  mx-auto">
+          <nav aria-label="Breadcrumb" className="pb-2 pl-2 border-b lg:w-full">
+            <ol role="list" className="flex max-w-2xl items-center space-x-1">
+              <li className="flex items-center">
+                <Link
+                  href={`/`}
+                  className="font-medium text-xs text-gray-500 hover:text-gray-600">
+                  Home
+                </Link>
+              </li>
+              {pathSegments.map((segment, index) => {
+                const href = "/" + pathSegments.slice(0, index + 1).join("/");
+                const isLast = index === pathSegments.length - 1;
+
+                return (
+                  <li key={segment} className="flex items-center">
+                    <svg
+                      width={16}
+                      height={20}
+                      viewBox="0 0 16 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      className="h-5 w-4 mr-0 text-gray-300">
+                      <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                    </svg>
+                    <Link
+                      href={href}
+                      aria-current={
+                        index === pathSegments.length - 1 ? "page" : undefined
+                      }
+                      className={
+                        isLast
+                          ? "font-bold text-xs text-gray-900 dark:text-white"
+                          : "font-medium text-xs text-gray-500 hover:text-gray-600"
+                      }>
+                      {segment}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ol>
+          </nav>
+          <h1
+            className={`${trajanRegular.className} px-[2%] mt-2 lg:w-full lg:text-xl font-bold text-2xl tracking-widest text-black dark:text-white`}>
             {title}
           </h1>
+          <div className="flex items-center lg:w-full px-[2%]">
+            <div className=" w-full justify-between flex gap-2">
+              <div className="w-full flex gap-4 items-center">
+                {subCategories.map((category) => (
+                  <Link
+                    className={`text-sm  text-black dark:text-white
+                      ${
+                        pathSegments
+                          .slice(-1)
+                          .includes(category.breadcrumb.toLowerCase())
+                          ? `${trajanRegular.className} underline font-bold`
+                          : ""
+                      }
+                      `}
+                    key={category.name}
+                    href={category.href}>
+                    {category.name}
+                  </Link>
+                ))}
+              </div>
+              <div className="lg:w-full hidden lg:flex justify-end">
+                {filters.map((section) => (
+                  <Accordion
+                    key={section.id}
+                    title={section.name}
+                    checked={checked}
+                    setChecked={setChecked}
+                    buttonStyles={section.buttonStyles}
+                    bodyStyles={section.bodyStyles}
+                    body={section.options}
+                    handleSizeClick={handleSizeClick}
+                  />
+                ))}
 
-          <div className="flex items-center">
-            <form className="hidden lg:flex gap-2 mx-2">
-              <Accordion
-                title="Categories"
-                buttonStyles="flex w-full items-center justify-between  py-3 text-base font-medium text-black hover:text-gray-500"
-                bodyStyles="pt-6"
-                body={subCategories.map((category) => {
-                  return {
-                    name: category.name,
-                    href: category.href,
-                  };
-                })}
-              />
+                <Menu
+                  as="div"
+                  className="relative my-auto inline-block text-left">
+                  <div>
+                    <MenuButton className="group inline-flex gap-4 justify-center text-base font-medium dark:text-white dark:hover:text-gray-300">
+                      Sort
+                      <ChevronDownIcon
+                        className="h-7 w-7 text-black dark:text-white "
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                  </div>
 
-              {filters.map((section) => (
-                <Accordion
-                  key={section.id}
-                  title={section.name}
-                  checked={checked}
-                  setChecked={setChecked}
-                  buttonStyles={section.buttonStyles}
-                  bodyStyles={section.bodyStyles}
-                  body={section.options}
-                  handleSizeClick={handleSizeClick}
-                />
-              ))}
-
-              <Menu
-                as="div"
-                className="relative my-auto inline-block text-left">
-                <div>
-                  <MenuButton className="group inline-flex gap-4 justify-center text-base font-medium dark:text-white dark:hover:text-gray-300">
-                    Sort
-                    <ChevronDownIcon
-                      className="h-7 w-7 text-black dark:text-white "
-                      aria-hidden="true"
-                    />
-                  </MenuButton>
+                  <MenuItems
+                    transition
+                    className="absolute bg-white dark:bg-cypress-green right-0 z-10  w-40 py-2 origin-top-right rounded-xl  shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
+                    {sortOptions.map((option) => (
+                      <MenuItem key={option.name}>
+                        {({ focus }) => (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSortKey(option.value);
+                              sortOptions.forEach((item) => {
+                                item.current = false;
+                              });
+                              option.current = true;
+                            }}
+                            className={classNames(
+                              option.current
+                                ? "font-medium dark:text-white text-white bg-cypress-green-light bg-opacity-80"
+                                : "text-gray-600 dark:text-gray-300",
+                              focus
+                                ? "bg-cypress-green-light dark:bg-opacity-50 bg-opacity-60 text-white"
+                                : "",
+                              "block w-full my-0 px-4 py-2 text-sm "
+                            )}>
+                            {option.name}
+                          </button>
+                        )}
+                      </MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+                <div className="hidden lg:block">
+                  <Accordion
+                    title="View"
+                    buttonStyles="flex w-full items-center justify-between  py-3 text-sm text-black hover:text-gray-500"
+                    bodyStyles="pt-6"
+                    view={true}
+                  />
                 </div>
-
-                <MenuItems
-                  transition
-                  className="absolute bg-white dark:bg-cypress-green right-0 z-10  w-40 py-2 origin-top-right rounded-xl  shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
-                  {sortOptions.map((option) => (
-                    <MenuItem key={option.name}>
-                      {({ focus }) => (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSortKey(option.value);
-                            sortOptions.forEach((item) => {
-                              item.current = false;
-                            });
-                            option.current = true;
-                          }}
-                          className={classNames(
-                            option.current
-                              ? "font-medium dark:text-white text-white bg-cypress-green-light bg-opacity-80"
-                              : "text-gray-600 dark:text-gray-300",
-                            focus
-                              ? "bg-cypress-green-light dark:bg-opacity-50 bg-opacity-60 text-white"
-                              : "",
-                            "block w-full my-0 px-4 py-2 text-sm "
-                          )}>
-                          {option.name}
-                        </button>
-                      )}
-                    </MenuItem>
-                  ))}
-                </MenuItems>
-              </Menu>
-            </form>
-
-            <div className="hidden lg:block">
-              <Accordion
-                title="View"
-                buttonStyles="flex w-full items-center justify-between  py-3 text-sm text-black hover:text-gray-500"
-                bodyStyles="pt-6"
-                view={true}
-              />
+              </div>
             </div>
 
             <button
               type="button"
-              className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+              className=" p-2 text-gray-400 hover:text-gray-500  lg:hidden"
               onClick={() => setMobileFiltersOpen(true)}>
               <span className="sr-only">Filters</span>
               <FunnelIcon className="h-5 w-5" aria-hidden="true" />

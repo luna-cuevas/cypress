@@ -20,7 +20,6 @@ type Props = {
 
 const ProductGallery = (props: Props) => {
   const products = props.products || [];
-  console.log("products", products);
   const view = props.view || "small";
   const [selectedProduct, setSelectedProduct] = React.useState<any | null>(
     null
@@ -104,6 +103,11 @@ const ProductGallery = (props: Props) => {
                   <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full  bg-cypress-green md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-6 2xl:aspect-w-6">
                     <Image
                       fill
+                      priority
+                      quality={100}
+                      sizes="(max-width: 640px) 75vw,(min-width: 1024px) 100vw, 33vw"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                      placeholder="blur"
                       src={product.images[0].src}
                       alt={product.images[0].altText}
                       className="h-full w-full object-cover object-center group-hover:opacity-75 transition duration-200"
@@ -135,11 +139,23 @@ const ProductGallery = (props: Props) => {
                       exit={{ y: "100%" }}>
                       <div className="relative">
                         <button
-                          className="absolute top-0 right-0 p-1"
+                          className="absolute -top-3 -right-3 p-1"
                           onClick={closeBox}>
-                          X
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            className="size-6">
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                          </svg>
                         </button>
-                        <h2 className="text-lg font-bold">{product.title}</h2>
+                        <h2 className="font-bold text-sm">{product.title}</h2>
                         <ul className="flex space-x-2 mx-auto border-y py-1 my-1 border-gray-400 flex-wrap justify-center gap-4 w-full">
                           {product.variants.length === 1 ? (
                             <button
@@ -178,7 +194,7 @@ const ProductGallery = (props: Props) => {
                           {product.variants[0].variantPrice}{" "}
                         </p>
                         <button
-                          className={`mt-2 w-full px-4 py-2 bg-white text-black rounded ${
+                          className={`mt-2 w-full text-sm px-1 py-1 bg-white text-black rounded ${
                             !selectedVariant
                               ? "opacity-50 cursor-not-allowed"
                               : "opacity-100 cursor-pointer"

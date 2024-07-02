@@ -75,6 +75,7 @@ export const productQuery = ({
           title
           description
           productType
+          tags
           variants(first: 10) {
             edges {
               node {
@@ -111,6 +112,7 @@ export const productQuery = ({
             title
             description
             productType
+            tags
             variants(first: 10) {
               edges {
                 node {

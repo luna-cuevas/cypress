@@ -138,11 +138,25 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                     exit={{ y: "100%" }}>
                     <div className="relative">
                       <button
-                        className="absolute top-0 right-0 p-1"
+                        className="absolute -top-3 -right-3 p-1"
                         onClick={closeBox}>
-                        X
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="size-6">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
                       </button>
-                      <h2 className="text-lg font-bold">{product.title}</h2>
+                      <h2 className="text-sm font-bold">
+                        {product.title.slice(0, 16)}
+                      </h2>
                       <ul className="flex space-x-2 mx-auto border-y py-1 my-1 border-gray-400 flex-wrap justify-center gap-4 w-full">
                         {product.variants.length === 1 ? (
                           <button
@@ -181,7 +195,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
                         {product.variants[0].variantPrice}{" "}
                       </p>
                       <button
-                        className={`mt-2 w-full px-4 py-2 bg-white text-black rounded ${
+                        className={`mt-2 w-full text-sm px-1 py-1 bg-white text-black rounded ${
                           !selectedVariant
                             ? "opacity-50 cursor-not-allowed"
                             : "opacity-100 cursor-pointer"

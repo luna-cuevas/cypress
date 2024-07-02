@@ -87,7 +87,7 @@ export function Accordion({
 
   return (
     <MTAccordion
-      className=" h-fit border-b relative w-full lg:border-0 overflow-visible"
+      className=" h-fit border-b relative w-full lg:w-fit lg:border-0 overflow-visible"
       open={open}
       icon={<Icon id={1} open={open} />}>
       <AccordionHeader
