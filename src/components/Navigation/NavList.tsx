@@ -16,28 +16,12 @@ const shopCategories = [
     url: "/shop",
   },
   {
-    title: "New",
-    url: "/shop/new",
-  },
-  {
     title: "Pants",
     url: "/shop/pants",
   },
   {
     title: "Shirts",
     url: "/shop/shirts",
-  },
-  {
-    title: "Jackets",
-    url: "/shop/jackets",
-  },
-  {
-    title: "Featured",
-    url: "/shop/featured",
-  },
-  {
-    title: "Sale",
-    url: "/shop/sale",
   },
 ];
 

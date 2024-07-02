@@ -37,7 +37,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
                 fill
                 priority
                 quality={100}
-                sizes="(max-width: 640px) 75vw,(max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 75vw,(min-width: 1024px) 100vw, 33vw"
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
                 placeholder="blur"
                 className={`h-full w-full object-cover cursor-pointer`}
