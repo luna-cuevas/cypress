@@ -70,17 +70,17 @@ export default async function Home({ params }: { params: any }) {
           </Link>
         </div>
       </section>
-
+      {/* 
       <section className="w-screen relative h-fit py-[25px] z-50 flex ">
         <SlideCarousel products={products} />
-      </section>
-
-      <section className="w-full flex gap-4 border-y-2 py-2 border-cypress-green dark:border-cypress-green-light">
-        <TickerCategories />
-      </section>
+      </section> */}
 
       <section className="w-full flex  h-[100vh] md:h-[100vmax] xl:h-[85vmax] transition-all duration-500  mt-[25px]  mx-auto">
         <Gallery products={products} />
+      </section>
+
+      <section className="w-full flex gap-4 border-y-2 py-2 my-4 border-cypress-green dark:border-cypress-green-light">
+        <TickerCategories />
       </section>
 
       {/* <LoadingSkeleton /> */}

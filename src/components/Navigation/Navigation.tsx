@@ -73,12 +73,12 @@ export const Navigation = (props: Props) => {
         fullWidth={true}
         className={`${
           path == "/" ? "absolute" : "relative"
-        } h-[70px]  backdrop-blur-[2px] block   transition-background-color duration-1000 group z-[100000000] top-0 w-screen items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent drop-shadow-md max-w-none dark:bg-cypress-green dark:bg-opacity-75 py-4 p-0`}>
+        } h-[50px]  backdrop-blur-[2px] block   transition-background-color duration-1000 group z-[100000000] top-0 w-screen items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent drop-shadow-md max-w-none dark:bg-cypress-green dark:bg-opacity-75 py-4 p-0`}>
         <Link
           href="/"
-          className={`z-[1000] lg:hidden h-full sm:max-w-[250px] max-w-[180px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
+          className={`z-[1000] lg:hidden h-full sm:max-w-[180px] max-w-[150px] absolute left-0 right-0 flex m-auto top-0 bottom-0`}>
           <Image
-            src="/cypress-logo-with-text.svg"
+            src="/cypress-text-logo.svg"
             alt="Cypress Logo"
             fill
             className={`${

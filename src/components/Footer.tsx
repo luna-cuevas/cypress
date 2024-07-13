@@ -45,9 +45,9 @@ const Footer = (props: Props) => {
   };
 
   return (
-    <div className="mt-[25px] w-full dark:text-white bg-white dark:bg-cypress-green grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
+    <div className="mt-[25px] w-full dark:text-white grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
       <div className="border-r border-b md:border-b-0 border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
-        <h1 className="text-xl font-bold underline decoration-1 underline-offset-4">
+        <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Newsletter
         </h1>
         {signUpStatus.status === "" ? (
@@ -55,16 +55,16 @@ const Footer = (props: Props) => {
             onSubmit={(e) => {
               onSubmit(e);
             }}
-            className="flex  gap-4 flex-col 2xl:flex-row">
+            className="flex  gap-4 flex-col 3xl:flex-row">
             <input
-              className="border-2 font-bold text-black rounded-md dark:placeholder:text-white p-2 focus-visible:outline-none 2xl:w-2/3 border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 dark:text-white"
+              className="border-2 font-bold text-black rounded-md dark:placeholder:text-white p-2 focus-visible:outline-none 3xl:w-2/3 border-black dark:border-white bg-transparent border-t-0 border-r-0 border-l-0 dark:text-white"
               name="email"
               type="email"
               placeholder="Email"
               id="email"
             />
             <button
-              className="dark:bg-white transition-all duration-100 hover:scale-105 dark:hover:bg-gray-300 bg-gray-300 text-black font-bold rounded-md p-2 hover:bg-gray-600 focus-visible:outline-none"
+              className=" dark:text-white transition-all duration-100 hover:scale-105 dark:hover:bg-gray-300 bg-transparent border-gray-200 border-2 text-black font-bold rounded-md p-2 hover:bg-gray-200 focus-visible:outline-none"
               type="submit">
               Sign up
             </button>
@@ -79,7 +79,7 @@ const Footer = (props: Props) => {
         )}
       </div>
       <div className="border-b md:border-b-0 md:border-r border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
-        <h1 className="text-xl font-bold underline decoration-1 underline-offset-4">
+        <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Shop
         </h1>
         <ul className="grid lg:grid-cols-3 grid-cols-2 gap-y-2 ">
@@ -102,7 +102,7 @@ const Footer = (props: Props) => {
         </ul>
       </div>
       <div className=" border-r border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
-        <h1 className="text-xl font-bold underline decoration-1 underline-offset-4">
+        <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Info
         </h1>
         <ul className="grid lg:grid-cols-2 grid-cols-1 gap-y-2">
@@ -131,7 +131,7 @@ const Footer = (props: Props) => {
         </ul>
       </div>
       <div className=" flex flex-col gap-4 lg:p-8 p-4">
-        <h1 className="text-xl font-bold underline decoration-1 underline-offset-4">
+        <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Socials
         </h1>
         <div className="flex gap-2">
