@@ -19,9 +19,9 @@ export const productQuery = ({
 }) => {
   let sizeQuery = "";
   if (Array.isArray(sizes)) {
-    sizeQuery = sizes.map((size) => `title:${size}`).join(" OR ");
+    sizeQuery = sizes.map((size) => `variant.option:${size}`).join(" OR ");
   } else if (sizes) {
-    sizeQuery = `title:${sizes}`;
+    sizeQuery = `variant.option:${sizes}`;
   }
 
   const combinedQuery = [
@@ -76,7 +76,7 @@ export const productQuery = ({
           description
           productType
           tags
-          variants(first: 10) {
+          variants(first: 20) {
             edges {
               node {
                 id
@@ -104,7 +104,7 @@ export const productQuery = ({
 
   return `
     query {
-      products(first: 10, query: "${combinedQuery}", reverse: ${reverse}, sortKey: ${sortKey}) {
+      products(first: 20, query: "${combinedQuery}", reverse: ${reverse}, sortKey: ${sortKey}) {
         edges {
           node {
             id
@@ -113,7 +113,7 @@ export const productQuery = ({
             description
             productType
             tags
-            variants(first: 10) {
+            variants(first: 20) {
               edges {
                 node {
                   id

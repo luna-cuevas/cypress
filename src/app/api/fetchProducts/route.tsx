@@ -139,7 +139,7 @@ const optimizeImage = (
   quality = 100, // Default quality set to 80
   scale = 1 // Default scale set to 1
 ) => {
-  return `${src}?width=${width}&height=${height}&format=${format}&quality=${quality}&scale=${scale}`;
+  return `${src}?width=${width}&height=${height}&format=${format}&quality=${quality}&scale=${scale}&crop=center`;
 };
 
 export async function POST(req: Request) {
@@ -147,6 +147,7 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const { productQuery } = body;
+  console.log("productQuery", productQuery);
 
   if (!productQuery) {
     return NextResponse.json({ error: "Missing required fields" });
@@ -154,7 +155,6 @@ export async function POST(req: Request) {
 
   try {
     const response = await shopifyClient.request<ShopifyResponse>(productQuery);
-    console.log("response", response);
 
     if (!response.data || response.errors) {
       return NextResponse.json({ error: response.errors, data: response.data });
@@ -198,7 +198,7 @@ export async function POST(req: Request) {
         ...product,
         images: product.images.map((image) => ({
           ...image,
-          src: optimizeImage(image.src, 800, 800), // Adjust width and height as needed
+          src: optimizeImage(image.src, 1000, 1000), // Adjust width and height as needed
         })),
       }));
 
@@ -263,13 +263,15 @@ export async function POST(req: Request) {
         };
       });
 
-      const optimizedCollectionProducts = collectionProducts.map((product) => ({
-        ...product,
-        images: product.images.map((image) => ({
-          ...image,
-          src: optimizeImage(image.src, 800, 800),
-        })),
-      }));
+      const optimizedCollectionProducts = collectionProducts
+        .reverse()
+        .map((product) => ({
+          ...product,
+          images: product.images.map((image) => ({
+            ...image,
+            src: optimizeImage(image.src, 1000, 1000),
+          })),
+        }));
 
       console.log("optimizedCollectionProducts", optimizedCollectionProducts);
 

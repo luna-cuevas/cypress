@@ -75,7 +75,7 @@ export default async function Home({ params }: { params: any }) {
         <SlideCarousel products={products} />
       </section> */}
 
-      <section className="w-full flex  h-[100vh] md:h-[100vmax] xl:h-[85vmax] transition-all duration-500  mt-[25px]  mx-auto">
+      <section className="w-full flex  h-[100vh] md:h-[120vmax] xl:h-[100vmax] transition-all duration-500  mt-[25px]  mx-auto">
         <Gallery products={products} />
       </section>
 

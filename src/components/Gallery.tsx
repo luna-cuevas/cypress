@@ -26,7 +26,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
   ];
 
   return (
-    <div className="grid grid-cols-4 w-full h-full grid-rows-4 md:grid-rows-3 gap-[10px] 2xl:px-0">
+    <div className="grid grid-cols-4 w-full max-w-[1400px] mx-auto h-full grid-rows-4 md:grid-rows-3 gap-[10px] 2xl:px-0">
       {products &&
         products.slice(0, 7).map((product, index) => (
           <div

@@ -45,7 +45,7 @@ const subCategories = [
     breadcrumb: "shop",
   },
   {
-    name: "Pants",
+    name: "Trousers",
     href: "/shop/pants",
     breadcrumb: "pants",
   },
