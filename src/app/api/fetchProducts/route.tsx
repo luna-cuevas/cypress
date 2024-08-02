@@ -348,38 +348,38 @@ export async function POST(req: Request) {
         });
 
       // gid://shopify/Product/8967575732455 i want to only get the last part of the id
-      const productId = id.split("/").pop();
+      // const productId = id.split("/").pop();
 
-      const metadataResponse = await shopifyAdmin.rest.Metafield.all({
-        session: session,
-        metafield: { owner_id: productId, owner_resource: "product" },
-      });
+      // const metadataResponse = await shopifyAdmin.rest.Metafield.all({
+      //   session: session,
+      //   metafield: { owner_id: productId, owner_resource: "product" },
+      // });
 
-      console.log("metafieldResponse", metadataResponse);
+      // console.log("metafieldResponse", metadataResponse);
 
-      const metafields = metadataResponse.data;
+      // const metafields = metadataResponse.data;
 
-      const fetchMetafieldById = async (id: string) => {
-        console.log("id", id);
-        const metafieldResponse = await shopifyAdmin.rest.Metafield.find({
-          session: session,
-          product_id: productId,
-          id: `${id}`,
-        });
+      // const fetchMetafieldById = async (id: string) => {
+      //   console.log("id", id);
+      //   const metafieldResponse = await shopifyAdmin.rest.Metafield.find({
+      //     session: session,
+      //     product_id: productId,
+      //     id: `${id}`,
+      //   });
 
-        if (!metafieldResponse) {
-          console.error("Error fetching metafield");
-        } else {
-          return metafieldResponse;
-        }
-      };
+      //   if (!metafieldResponse) {
+      //     console.error("Error fetching metafield");
+      //   } else {
+      //     return metafieldResponse;
+      //   }
+      // };
 
-      const formattedIds = metafields.map((metafield: any) => {
-        const ids = JSON.parse(metafield.value);
-        return ids.map((id: string) => id.split("/").pop());
-      });
+      // const formattedIds = metafields.map((metafield: any) => {
+      //   const ids = JSON.parse(metafield.value);
+      //   return ids.map((id: string) => id.split("/").pop());
+      // });
 
-      console.log("formattedIds", formattedIds);
+      // console.log("formattedIds", formattedIds);
 
       // const metafieldResponse = await shopifyAdmin.rest.Metafield.find({
       //   session: session,
@@ -415,12 +415,12 @@ export async function POST(req: Request) {
 
       // console.log("metadataResponse", metadata);
 
-      if (!metadataResponse.data) {
-        return NextResponse.json({
-          error: "No metadata found",
-          data: metadataResponse.data,
-        });
-      }
+      // if (!metadataResponse.data) {
+      //   return NextResponse.json({
+      //     error: "No metadata found",
+      //     data: metadataResponse.data,
+      //   });
+      // }
 
       return NextResponse.json({
         product: {
