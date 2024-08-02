@@ -16,19 +16,22 @@ type Props = {
 const Gallery: React.FC<Props> = ({ products }) => {
   console.log("products", products);
   const classes = [
-    "md:row-span-1 row-span-2 col-span-2",
-    "row-span-1 col-span-2",
-    "md:row-span-2 row-span-1 col-span-2",
-    "row-span-1 col-span-2 md:col-span-1",
-    "md:row-span-1 row-span-2 col-span-2 md:col-span-1",
-    "row-span-1 col-span-2 md:col-span-1",
-    "row-span-1 hidden md:block col-span-2 md:col-span-1",
+    "row-span-2 col-span-2",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
+    "row-span-2 col-span-2",
+    "row-span-1 col-span-1",
+    "row-span-1 col-span-1",
   ];
 
   return (
-    <div className="grid grid-cols-4 w-full max-w-[1400px] mx-auto h-full grid-rows-4 md:grid-rows-3 gap-[10px] 2xl:px-0">
+    <div className="grid grid-cols-4 w-full max-w-[1400px] mx-auto h-full grid-rows-4  gap-[10px] 2xl:px-0">
       {products &&
-        products.slice(0, 7).map((product, index) => (
+        products.slice(0, 11).map((product, index) => (
           <div
             key={product.handle}
             className={`${classes[index % classes.length]} relative`}>

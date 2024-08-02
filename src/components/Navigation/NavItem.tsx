@@ -25,7 +25,6 @@ const NavItem = ({
   state,
   setState,
   shopCategories,
-  products,
 }: {
   label: string;
   url?: string;
@@ -34,12 +33,18 @@ const NavItem = ({
   state: any;
   setState: any;
   shopCategories?: { title: string; url: string }[];
-  products?: any[];
 }) => {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const totalCartItems = state.cartItems.reduce(
+    (total: number, item: { quantity: number }) => {
+      return total + Number(item.quantity);
+    },
+    0
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,21 +76,21 @@ const NavItem = ({
         <li
           className={`${
             path == "/" ? "lg:text-white text-black" : "text-black"
-          } underline-animation relative flex gap-2 font-bold uppercase text-sm box-content dark:text-white group-hover:text-black dark:group-hover:text-white`}>
+          } underline-animation relative flex gap-2  uppercase text-sm box-content dark:text-white group-hover:text-black dark:group-hover:text-white`}>
           {label}
           {label === "Cart" && (
             <span
               className={`${
                 path == "/" ? "lg:border-white border-black" : "border-black"
               } rounded-full m-0 dark:border-white py-0 leading-tight h-fit border group-hover:border-black dark:group-hover:border-white group-hover/menuItem:border-black px-1`}>
-              {state.cartItems.length}
+              {totalCartItems}
             </span>
           )}
         </li>
       </MenuItem>
     </div>
   ) : isDropdown ? (
-    <div className="z-[1000000] w-full border-b border-gray-200 lg:border-none">
+    <div className=" w-full border-b border-gray-200 lg:border-none">
       <Menu
         allowHover={isMobile ? false : true}
         open={isMenuOpen}
@@ -95,7 +100,7 @@ const NavItem = ({
             <li
               className={`${
                 path == "/" ? "lg:text-white text-black" : "text-black"
-              }  relative justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
+              }  relative justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2  uppercase text-sm box-content`}>
               {label}
               <ChevronDownIcon
                 strokeWidth={2}
@@ -120,18 +125,6 @@ const NavItem = ({
                 </Link>
               ))}
           </ul>
-          <Link
-            className="cursor-pointer"
-            href={products ? `/shop/${products[0].handle}` : "/products"}>
-            <div className="relative w-[180px] h-[180px]">
-              <Image
-                src={products ? products[0].images[0].src : "/cypress-logo.svg"}
-                alt="Cypress Logo"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </Link>
         </MenuList>
 
         <Accordion
@@ -148,7 +141,7 @@ const NavItem = ({
             <li
               className={`${
                 path == "/" ? "lg:text-white text-black" : "text-black"
-              }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
+              }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2  uppercase text-sm box-content`}>
               {label}
               <ChevronDownIcon
                 strokeWidth={2}
@@ -194,7 +187,7 @@ const NavItem = ({
         <li
           className={`${
             path == "/" ? "lg:text-white text-black" : "text-black"
-          } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 font-bold uppercase text-sm box-content`}>
+          } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2  uppercase text-sm box-content`}>
           {label}
         </li>
       </MenuItem>

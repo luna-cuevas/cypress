@@ -1,9 +1,8 @@
 import ProductFilters from "@/components/shop/ProductFilters";
 import ProductGallery from "@/components/shop/ProductGallery";
-// import fetchProducts from "@/utils/fetchProducts";
 import { productQuery } from "@/utils/productQuery";
-import { headers } from "next/headers";
 import React from "react";
+import { subCategories } from "@/utils/subCategories";
 
 type Props = {};
 
@@ -38,10 +37,14 @@ const page = async ({
 
   const data = await response.json();
   const products = data.products;
+  const productCount = products.length;
 
   return (
-    <div className="z-0 relative h-[calc(100vh-70px)] ">
-      <ProductFilters title={params.category}>
+    <div className="z-0 relative">
+      <ProductFilters
+        productCount={productCount}
+        subCategories={subCategories}
+        title={params.category}>
         <ProductGallery products={products} />
       </ProductFilters>
     </div>

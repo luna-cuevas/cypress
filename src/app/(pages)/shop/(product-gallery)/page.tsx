@@ -2,7 +2,7 @@ import ProductGallery from "@/components/shop/ProductGallery";
 import React from "react";
 import ProductFilters from "@/components/shop/ProductFilters";
 import { productQuery } from "@/utils/productQuery";
-import { useSearchParams } from "next/navigation";
+import { subCategories } from "@/utils/subCategories";
 
 type Props = {};
 
@@ -53,9 +53,14 @@ const page = async ({
 
   const products = data.products;
 
+  const productCount = products.length;
+
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)] ">
-      <ProductFilters title="All Products">
+      <ProductFilters
+        productCount={productCount}
+        subCategories={subCategories}
+        title="All Products">
         <ProductGallery view={view} products={products} />
       </ProductFilters>
     </div>

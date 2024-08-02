@@ -87,16 +87,16 @@ export function Accordion({
 
   return (
     <MTAccordion
-      className=" h-fit border-b relative w-full lg:w-fit lg:border-0 overflow-visible"
+      className=" h-fit my-auto border-b relative w-full lg:w-fit lg:border-0 overflow-visible"
       open={open}
       icon={<Icon id={1} open={open} />}>
       <AccordionHeader
-        className="w-full py-0 lg:px-2 px-4 border-0"
+        className="w-full border-0  lg:border lg:border-gray-300 rounded-full py-0 lg:px-2 px-4 "
         onClick={() => setOpen((prev) => !prev)}>
         <div className={`${buttonStyles}   w-full`}>
-          <h2 className="text-base text-black dark:text-white font-medium">
+          <h2 className="text-sm  text-black dark:text-white font-medium">
             {view ? (
-              <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
+              <Squares2X2Icon className="h-3 w-3" aria-hidden="true" />
             ) : (
               title
             )}
@@ -107,16 +107,16 @@ export function Accordion({
         className={`
       ${
         open
-          ? "lg:max-h-screen h-auto py-2 lg:border border-gray-200  dark:border-white"
+          ? "lg:max-h-screen h-auto py-0 lg:border border-gray-200  dark:border-white"
           : "lg:max-h-0 py-0 overflow-hidden"
       }
           ${view && "right-0"}
-        flex flex-col w-auto rounded-lg drop-shadow-sm  transition-all  z-50 duration-300 lg:absolute top-full  bg-white dark:bg-transparent lg:dark:bg-cypress-green  `}>
+        flex flex-col w-auto py-2 rounded-lg drop-shadow-sm  transition-all  z-50 duration-300 lg:absolute top-full  bg-white dark:bg-transparent lg:dark:bg-cypress-green  `}>
         {body ? (
           body.map((option, optionIdx) => {
             return checked ? (
               <div
-                key={option.value}
+                key={optionIdx}
                 className="flex lg:px-4 px-8  border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
                 <input
                   id={`filter-${option.value}-${optionIdx}`}
@@ -137,17 +137,17 @@ export function Accordion({
                 />
                 <label
                   htmlFor={`filter-${option.value}-${optionIdx}`}
-                  className="ml-3 text-base text-black dark:text-white w-full cursor-pointer">
+                  className="ml-3 text-sm lg:text-base text-black dark:text-white w-full cursor-pointer">
                   {option.label}
                 </label>
               </div>
             ) : (
               <div
-                key={option.value}
+                key={optionIdx}
                 className="flex lg:px-4 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
                 <Link
                   href={option.href || "#"}
-                  className=" text-base text-black dark:text-white w-full cursor-pointer">
+                  className=" text-sm  text-black dark:text-white w-full cursor-pointer">
                   {option.name}
                 </Link>
               </div>

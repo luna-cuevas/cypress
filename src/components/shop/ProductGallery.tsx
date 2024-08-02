@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { QuickViewDrawer } from "./QuickViewDrawer";
 
 type Props = {
   view?: string;
@@ -30,7 +31,11 @@ const ProductGallery = (props: Props) => {
 
   const [state, setState] = useAtom(globalStateAtom);
 
-  const openBox = (product: object) => {
+  const favorite = (product: object) => {
+    console.log("product", product);
+  };
+
+  const open = (product: object) => {
     setSelectedProduct(product);
     setSelectedVariant(null); // Reset selected variant when a new product is opened
   };
@@ -82,15 +87,11 @@ const ProductGallery = (props: Props) => {
     }
   };
 
-  console.log("products", products);
-
   return (
-    <div className="z-0 relative w-full h-auto">
+    <div className="z-0  w-full h-auto">
       <div className="mx-auto h-full lg:max-w-[100%] ">
         <div
-          className={`grid  gap-x-1 gap-y-1
-          grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-6
-          `}>
+          className={`grid  gap-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 `}>
           {products &&
             products.map((product: any, index) => (
               <motion.div
@@ -98,11 +99,11 @@ const ProductGallery = (props: Props) => {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.025 }}
-                className="relative overflow-hidden">
+                className="relative overflow-hidden group/image group  flex flex-col ">
                 <Link
                   href={`/shop/${product.productType}/${product.handle}`}
-                  className="group cursor-pointer">
-                  <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full  bg-cypress-green md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6">
+                  className=" cursor-pointer">
+                  <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full   md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6">
                     <Image
                       fill
                       priority
@@ -112,109 +113,59 @@ const ProductGallery = (props: Props) => {
                       placeholder="blur"
                       src={product.images[0].src}
                       alt={product.images[0].altText}
-                      className="h-full w-full object-cover object-center group-hover:opacity-75 transition duration-200"
+                      className="h-full w-full object-cover object-center "
+                    />
+                    <Image
+                      fill
+                      priority
+                      quality={100}
+                      sizes="(max-width: 640px) 75vw,(min-width: 1024px) 100vw, 33vw"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                      placeholder="blur"
+                      src={
+                        product.images[1]?.src
+                          ? product.images[1].src
+                          : product.images[0].src
+                      }
+                      alt={product.images[0].altText}
+                      className="h-full w-full object-cover  object-center group-hover/image:opacity-100 opacity-0 transition duration-500"
                     />
                   </div>
                 </Link>
-                <button
-                  type="button"
-                  className="absolute bottom-0 text-2xl right-0 px-2 py-0 hover:bg-cypress-green bg-cypress-green-light text-white"
-                  onClick={() => openBox(product)}>
-                  +
-                </button>
-                <AnimatePresence>
-                  {selectedProduct?.id === product.id && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 w-full bg-cypress-green bg-opacity-85 p-4 text-white z-50"
-                      initial={{
-                        y: "100%",
-                        opacity: 0,
-                      }}
-                      animate={{
-                        y: 0,
-                        opacity: 1,
-                      }}
-                      transition={{
-                        ease: "easeOut",
-                        duration: 0.2,
-                      }}
-                      exit={{ y: "100%" }}>
-                      <div className="relative">
-                        <button
-                          className="absolute -top-3 -right-3 p-1"
-                          onClick={closeBox}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            className="size-6">
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                            />
-                          </svg>
-                        </button>
-                        <h2 className="font-bold text-sm">{product.title}</h2>
-                        <ul className="flex space-x-2 mx-auto border-y py-1 my-1 border-gray-400 flex-wrap justify-center gap-4 w-full">
-                          {product.variants.length === 1 ? (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                selectVariant(product.variants[0]);
-                              }}
-                              className={`w-fit items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
-                                selectedVariant === product.variants[0]
-                                  ? "bg-cypress-green-light text-white"
-                                  : ""
-                              }`}>
-                              <span>One Size</span>
-                            </button>
-                          ) : (
-                            product.variants.map((variant: any) => (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  selectVariant(variant);
-                                }}
-                                key={variant.variantId}
-                                className={`w-fit px-2 items-center underline-animation before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent relative inline-block ${
-                                  selectedVariant === variant
-                                    ? "bg-cypress-green-light text-white"
-                                    : ""
-                                }`}>
-                                <span className="word-break-all">
-                                  {variant.variantTitle.slice(0, 10)}
-                                </span>
-                              </button>
-                            ))
-                          )}
-                        </ul>
-                        <p className="mx-auto w-fit">
-                          {product.variants[0].variantPrice}{" "}
-                        </p>
-                        <button
-                          className={`mt-2 w-full text-sm px-1 py-1 bg-white text-black rounded ${
-                            !selectedVariant
-                              ? "opacity-50 cursor-not-allowed"
-                              : "opacity-100 cursor-pointer"
-                          }`}
-                          onClick={() => {
-                            handleAddToCart();
-                          }}
-                          disabled={!selectedVariant}>
-                          Add to Cart
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+
+                <div
+                  className={`absolute hidden group-hover:flex  bottom-1/4 xl:bottom-[20%] left-0 right-0 `}>
+                  <button
+                    type="button"
+                    className="text-sm py-2 px-4 rounded-3xl w-fit mx-auto hover:bg-cypress-green bg-cypress-green-light text-white"
+                    onClick={() => open(product)}>
+                    Quick View
+                  </button>
+                </div>
+
+                <div className="flex h-full flex-col items-center pt-2 pb-6 px-2 ">
+                  <div className="flex lg:justify-between xl:px-2  dark:text-white w-full justify-center flex-wrap flex-col ">
+                    <h2 className="font-light text-sm text-[#444]  my-1 order-2 w-fit  2xl:mx-0 ">
+                      {product.title}
+                    </h2>
+                    <p className="text-sm  w-fit   2xl:mx-0 text-black dark:text-gray-400 order-1 xl:order-2 items-center h-fit my-auto">
+                      ${product.variants[0].variantPrice}0
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             ))}
         </div>
       </div>
+      <QuickViewDrawer
+        open={open}
+        product={selectedProduct}
+        variant={selectedVariant}
+        selectVariant={selectVariant}
+        selectedProduct={selectedProduct}
+        closeBox={closeBox}
+        handleAddToCart={handleAddToCart}
+      />
     </div>
   );
 };

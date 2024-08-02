@@ -75,6 +75,7 @@ export const productQuery = ({
           title
           description
           productType
+          vendor
           tags
           variants(first: 20) {
             edges {
@@ -110,6 +111,7 @@ export const productQuery = ({
             id
             handle
             title
+            vendor
             description
             productType
             tags
@@ -126,7 +128,7 @@ export const productQuery = ({
                 }
               }
             }
-            images(first: 1) {
+            images(first: 10) {
               edges {
                 node {
                   src

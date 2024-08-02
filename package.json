@@ -15,7 +15,7 @@
     "@hotjar/browser": "^1.0.9",
     "@material-tailwind/react": "^2.1.9",
     "@radix-ui/react-navigation-menu": "^1.1.4",
-    "@shopify/shopify-api": "^11.0.0",
+    "@shopify/shopify-api": "^11.2.0",
     "@shopify/storefront-api-client": "^1.0.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
@@ -34,12 +34,14 @@
     "nodemailer": "^6.9.13",
     "react": "^18",
     "react-dom": "^18",
+    "react-multi-carousel": "^2.8.5",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.5",
     "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "yet-another-react-lightbox": "^3.21.1"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

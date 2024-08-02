@@ -7,6 +7,7 @@ type Props = {};
 const LoadingScreen = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const environment = process.env.NODE_ENV;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,9 +26,11 @@ const LoadingScreen = (props: Props) => {
 
   return (
     <div
-      className={`w-screen fixed z-[20000000000] flex bg-white h-screen   mx-auto transition-opacity duration-1000 ${
-        fadeOut ? "opacity-0" : "opacity-100"
-      } ${!loading && "hidden"}`}>
+      className={`
+        ${environment == "development" ? "hidden" : ""}
+        w-screen fixed z-[20000000000] flex bg-white h-screen   mx-auto transition-opacity duration-1000 ${
+          fadeOut ? "opacity-0" : "opacity-100"
+        } ${!loading && "hidden"}`}>
       <div className="h-screen w-screen  my-auto">
         <TracedLogo duration={2} strokeWidth={1} color="#535353" />
       </div>

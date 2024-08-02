@@ -45,13 +45,7 @@ const navListItems = [
   },
 ];
 
-const NavList = ({
-  isNavOpen,
-  products,
-}: {
-  isNavOpen?: boolean;
-  products?: any[];
-}) => {
+const NavList = () => {
   const [state, setState] = useAtom(globalStateAtom);
   const path = usePathname();
 
@@ -60,8 +54,8 @@ const NavList = ({
   }, [state.darkMode]);
 
   return (
-    <ul className="z-[10000000]  relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen  justify-between flex-col gap-2 lg:flex-row lg:items-center">
-      <div className="lg:w-[80%] z-[1000000] w-full mx-auto mt-auto h-full flex justify-between">
+    <ul className="  relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen  justify-between flex-col gap-2 lg:flex-row lg:items-center">
+      <div className="lg:w-[80%]  w-full mx-auto mt-auto h-full flex justify-between">
         <Link href="/" className="relative hidden lg:block w-[180px]">
           <Image
             src="/cypress-text-logo.svg"
@@ -73,10 +67,9 @@ const NavList = ({
             } w-full h-full !object-contain dark:invert group-hover:invert-0 dark:group-hover:invert `}
           />
         </Link>
-        <div className="lg:w-fit !z-[3000000] items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
+        <div className="lg:w-fit  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
           {navListItems.map(({ label, url, isDropdown }, key) => (
             <NavItem
-              products={products}
               key={key}
               label={label}
               url={url}

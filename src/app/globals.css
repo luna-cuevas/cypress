@@ -22,6 +22,10 @@
   src: url("../../public/fonts/arpona-thin.otf") format("opentype");
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .cart * {
   font-family: "arpona", sans-serif;
 }
@@ -178,4 +182,12 @@
 }
 .animation-delay-3 {
   animation-delay: 45s;
+}
+
+.absolute.inset-0.w-full.h-full.pointer-events-auto.z-\[9995\].bg-black.bg-opacity-60.backdrop-blur-sm {
+  position: fixed !important;
+}
+
+span.absolute.top-2\/4.-translate-y-2\/4.left-0.pt-3 {
+  padding: 0;
 }

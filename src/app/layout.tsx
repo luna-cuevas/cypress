@@ -8,13 +8,11 @@ import { arpona, trajan, trajanRegular, trajanLight } from "../lib/fonts";
 import Footer from "@/components/Footer";
 import HotjarInit from "@/components/HotJarInit";
 import Cart from "@/components/Cart";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import LoginModal from "@/components/Navigation/LoginModal";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TanstackProvider from "@/utils/TanstackProvider";
 import "@glidejs/glide/dist/css/glide.core.min.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -36,9 +34,9 @@ export default async function RootLayout({
   // const products = await fetchProducts();
   return (
     <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
-      <body className="bg-white relative dark:bg-gray-900 ">
-        <TanstackProvider>
-          <div className="main-container ">
+      <body className="bg-white  dark:bg-gray-900 ">
+        <AuthProvider>
+          <div className="main-container relative">
             <HotjarInit />
             <LoadingScreen />
             <Navigation />
@@ -59,7 +57,7 @@ export default async function RootLayout({
             draggable={true}
             pauseOnHover={true}
           />
-        </TanstackProvider>
+        </AuthProvider>
       </body>
     </html>
   );

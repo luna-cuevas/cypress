@@ -93,7 +93,7 @@ const Footer = (props: Props) => {
                 href={`/shop/${
                   item?.toLowerCase().replace(" ", "-") || "default"
                 }`}
-                className="underline-animation relative inline-block text-left before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent">
+                className="inline-block text-left ">
                 {" "}
                 {item}
               </Link>
@@ -121,7 +121,7 @@ const Footer = (props: Props) => {
                       ? "about"
                       : item.toLowerCase().replace(" ", "-")
                   }`}
-                  className="underline-animation relative inline-block text-left before:absolute before:inset-0 before:bg-transparent before:transition-all hover:before:bg-transparent">
+                  className="inline-block text-left ">
                   {" "}
                   {item}
                 </Link>
