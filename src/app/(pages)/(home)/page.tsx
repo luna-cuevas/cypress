@@ -87,7 +87,7 @@ export default async function Home({ params }: { params: any }) {
         <div className="gap-16 items-center py-8 px-4 mx-auto max-w-[1400px] lg:grid lg:grid-cols-2 lg:py-8 lg:px-6">
           <div className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-              We didn't reinvent the wheel
+              We didn&apos;t reinvent the wheel
             </h2>
             <p className="mb-4">
               We are strategists, designers and developers. Innovators and
