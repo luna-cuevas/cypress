@@ -18,7 +18,7 @@ import Template from "./template";
 export const metadata: Metadata = {
   title: "Cypress",
   description: "Cypress Fashion",
-  metadataBase: new URL(`${process.env.NEXT_PUBLIC_BASE_URL}`),
+  metadataBase: new URL(`${process.env.BASE_URL}`),
   icons: [
     {
       rel: "icon",
