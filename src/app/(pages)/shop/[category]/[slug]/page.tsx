@@ -66,17 +66,17 @@ const ProductPage = async ({
 }: {
   params: {
     slug: string;
+    category: string;
   };
   searchParams: {
     variantSize?: any;
     selectedTab?: string;
   };
 }) => {
-  const { slug } = params;
+  const { slug, category } = params;
   const { variantSize, selectedTab = "description" } = searchParams;
 
-  const headerList = headers();
-  const pathname = headerList.get("x-pathname") || "/";
+  console.log("params", params);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
@@ -109,7 +109,7 @@ const ProductPage = async ({
     (variant: any) => variant.variantTitle == variantSize
   );
 
-  const pathSegments = pathname.split("/").filter(Boolean);
+  const pathSegments = ["shop", category, slug];
 
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)] ">

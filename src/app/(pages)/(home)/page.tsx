@@ -1,47 +1,34 @@
 import NewsLetterSignUp from "@/components/NewsLetterSignUp";
-import { shopifyClient } from "../../../lib/shopify";
-import { useEffect } from "react";
-import { LoadingSkeleton } from "@/components/LoadingSkeleton";
-import Image from "next/image";
-import SlideCarousel from "@/components/SlideCarousel";
-import TickerCategories from "@/components/TickerCategories";
-import Gallery from "@/components/Gallery";
-import FadeCarousel from "@/components/FadeCarousel";
-import { TracedHalfLogo } from "@/components/TracedHalfLogo";
-import { useAtom } from "jotai";
-import { globalStateAtom } from "@/context/atoms";
+import TickerCategories from "@/components/Home/TickerCategories";
+import Gallery from "@/components/Home/Gallery";
+import FadeCarousel from "@/components/Home/FadeCarousel";
 import Link from "next/link";
-import HeroTitle from "@/components/HeroTitle";
-import { productQuery } from "@/utils/productQuery";
-import { fetchFeatured } from "@/utils/fetchFeatured";
+import { arpona, trajan, trajanRegular, trajanLight } from "@/lib/fonts";
+import { Motion } from "@/utils/Motion";
 
 export default async function Home({ params }: { params: any }) {
-  const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store",
-    },
-    body: JSON.stringify({ productQuery: fetchFeatured() }),
-  });
+  const featuredProducts = await fetch(
+    `${process.env.BASE_URL}/api/fetchCollections`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+    }
+  );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  if (!featuredProducts.ok) {
+    throw new Error(`HTTP error! status: ${featuredProducts.status}`);
   }
 
-  const data = await response.json();
-  console.log("product data", data);
-
-  if (!data) {
-    return console.error("No data returned from fetchProducts");
-  }
-  const products = data.products;
+  const featuredData = await featuredProducts.json();
 
   const heroImages = [
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=800&height=800format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=800&height=800format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=800&height=800format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=800&height=800format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=1600&height=1600format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=1600&height=1600format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=1600&height=1600format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=1600&height=1600format=webp&quality=100&scale=1",
   ];
 
   return (
@@ -58,16 +45,73 @@ export default async function Home({ params }: { params: any }) {
         /> */}
         <FadeCarousel images={heroImages} />
       </div>
-      <section className="w-full h-screen  bg-opacity-50 bg-black  z-0 flex items-center justify-start">
-        <div className="text-center h-[50px]  w-full">
-          <div className="flex mx-auto w-full md:w-fit text-center md:text-left relative">
-            <HeroTitle />
+      <section className="w-full h-screen  bg-opacity-30 bg-black  z-0 flex items-end justify-start ">
+        <div className="text-center h-fit flex flex-col gap-8 w-full  max-w-[1200px] mx-auto mb-[5%]">
+          <Motion
+            type="h1"
+            initial={{
+              y: -100,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+            }}
+            transition={{ duration: 0.5 }}
+            className={`text-5xl ${trajanRegular.className} text-white font-bold tracking-widest leading-tight  uppercase`}>
+            Quality Designs
+          </Motion>
+          <div className="flex justify-evenly">
+            <div className="w-1/3 flex flex-col gap-2 text-right">
+              <h2 className={`uppercase text-xl text-white `}>
+                {" Stylish men's wear "}
+              </h2>
+              <h3 className="uppercase text-xl text-white">
+                {"Designed to last"}
+              </h3>
+            </div>
+            <Link href="/shop" className="w-1/3">
+              <button className="bg-cypress-green font-bold hover:bg-cypress-green-light text-xl text-white px-6 py-3 rounded-lg">
+                Shop Now
+              </button>
+            </Link>
+            <div className="text-white uppercase text-xl w-1/3 text-left">
+              <p>{"Find us in"}</p>
+              <p>{"Texas, USA"}</p>
+            </div>
           </div>
-          <Link href="/shop">
-            <button className="bg-cypress-green font-bold hover:bg-cypress-green-light text-white px-4 py-2 mt-4 rounded-lg">
-              Shop Now
-            </button>
-          </Link>
+          <Motion
+            type="h1"
+            initial={{
+              y: 40,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+            }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+            className={`  text-white w-fit mx-auto`}>
+            <Link href="#featured" className="cursor-pointer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="size-8">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"
+                />
+              </svg>
+            </Link>
+          </Motion>
         </div>
       </section>
       {/* 
@@ -75,8 +119,10 @@ export default async function Home({ params }: { params: any }) {
         <SlideCarousel products={products} />
       </section> */}
 
-      <section className="w-full flex  h-[100vh] md:h-[120vmax] xl:h-[100vmax] transition-all duration-500  mt-[25px]  mx-auto">
-        <Gallery products={products} />
+      <section
+        id="featured"
+        className="w-full flex  h-[100vmax] sm:h-[150vmax] md:h-[200vmax] lg:h-[80vmax] xl:h-[75vmax] transition-all duration-500  mt-4  mx-auto">
+        <Gallery products={featuredData.collections} />
       </section>
 
       <section className="w-full flex gap-4 border-y-2 py-2 my-4 border-cypress-green dark:border-cypress-green-light">

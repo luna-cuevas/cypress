@@ -23,10 +23,7 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<any | null>(null);
 
-  console.log("products", products);
-
   const openBox = (product: object) => {
-    console.log("product", product);
     setSelectedProduct(product);
     setSelectedVariant(null); // Reset selected variant when a new product is opened
   };
@@ -36,15 +33,11 @@ const SlideCarousel: React.FC<Props> = ({ products }) => {
   };
 
   const selectVariant = (variant: object | string) => {
-    console.log("variant", variant);
     setSelectedVariant(variant);
   };
 
   const handleAddToCart = () => {
     if (!selectedVariant) return; // Prevent adding to cart if no variant is selected
-
-    console.log("selectedProduct", selectedProduct);
-    console.log("selectedVariant", selectedVariant);
 
     // Check if the item with the exact variant already exists in the cart
     const existingItemIndex = state.cartItems.findIndex(

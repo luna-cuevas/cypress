@@ -6,8 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { arpona, trajan, trajanRegular, trajanLight } from "../lib/fonts";
 import Footer from "@/components/Footer";
-import HotjarInit from "@/components/HotJarInit";
-import Cart from "@/components/Cart";
+import HotjarInit from "@/utils/HotJarInit";
+import Cart from "@/components/shop/Cart";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import LoginModal from "@/components/Navigation/LoginModal";
@@ -31,7 +31,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const products = await fetchProducts();
   return (
     <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
       <body className="bg-white  dark:bg-gray-900 ">

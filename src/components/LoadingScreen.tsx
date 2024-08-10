@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { TracedLogo } from "./TracedLogo";
+import { TracedLogo } from "./Home/TracedLogo";
 
 type Props = {};
 

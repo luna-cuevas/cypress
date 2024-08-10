@@ -1,9 +1,6 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { TracedHalfLogo } from "./TracedHalfLogo";
-import { useAtom } from "jotai";
-import { globalStateAtom } from "@/context/atoms";
 
 type Props = {
   images: string[];

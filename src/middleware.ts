@@ -1,20 +1,14 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function middleware(request: Request) {
+  // Store current request url in a custom header, which you can read later
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  requestHeaders.set("x-url", request.url);
 
   return NextResponse.next({
     request: {
+      // Apply new request headers
       headers: requestHeaders,
     },
   });
 }
-
-export const config = {
-  matcher: [
-    // match all routes except static files and APIs
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
-};

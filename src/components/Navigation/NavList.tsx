@@ -9,6 +9,8 @@ import { useAtom } from "jotai";
 import { usePathname } from "next/navigation";
 import ProfileMenu from "./ProfileMenu";
 import NavItem from "./NavItem";
+import { Motion } from "../../utils/Motion";
+import { stagger } from "framer-motion";
 
 const shopCategories = [
   {
@@ -56,18 +58,49 @@ const NavList = () => {
   return (
     <ul className="  relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen  justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <div className="lg:w-[80%]  w-full mx-auto mt-auto h-full flex justify-between">
-        <Link href="/" className="relative hidden lg:block w-[180px]">
-          <Image
-            src="/cypress-text-logo.svg"
-            alt="Cypress Logo"
-            fill
-            loading="eager"
-            className={`${
-              path == "/" ? "invert" : "invert-0"
-            } w-full h-full !object-contain dark:invert group-hover:invert-0 dark:group-hover:invert `}
-          />
-        </Link>
-        <div className="lg:w-fit  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
+        <Motion
+          type="div"
+          initial={{
+            x: -100,
+            opacity: 0,
+          }}
+          animate={{
+            x: 0,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 1,
+            staggerChildren: 0.5,
+          }}
+          className="relative hidden lg:block w-[180px]">
+          <Link href="/">
+            <Image
+              src="/cypress-text-logo.svg"
+              alt="Cypress Logo"
+              fill
+              loading="eager"
+              className={`${
+                path == "/" ? "invert" : "invert-0"
+              } w-full h-full !object-contain dark:invert group-hover:invert-0 dark:group-hover:invert `}
+            />
+          </Link>
+        </Motion>
+
+        <Motion
+          type="div"
+          initial={{
+            x: 100,
+            opacity: 0,
+          }}
+          animate={{
+            x: 0,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 1,
+            staggerChildren: 0.1,
+          }}
+          className="lg:w-fit  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
           {navListItems.map(({ label, url, isDropdown }, key) => (
             <NavItem
               key={key}
@@ -104,7 +137,7 @@ const NavList = () => {
               } h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
             />
           </div>
-        </div>
+        </Motion>
       </div>
     </ul>
   );

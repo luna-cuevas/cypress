@@ -38,6 +38,11 @@ const NavItem = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const totalCartItems = state.cartItems.reduce(
     (total: number, item: { quantity: number }) => {
@@ -63,10 +68,7 @@ const NavItem = ({
     setState({ ...state, cartOpen: true });
   };
 
-  const handleMenuToggle = () => {
-    setIsMenuOpen((prev) => !prev);
-    console.log("isMenuOpen", isMenuOpen);
-  };
+  if (!isClient) return null;
 
   return isCart ? (
     <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto lg:m-0">
@@ -83,7 +85,7 @@ const NavItem = ({
               className={`${
                 path == "/" ? "lg:border-white border-black" : "border-black"
               } rounded-full m-0 dark:border-white py-0 leading-tight h-fit border group-hover:border-black dark:group-hover:border-white group-hover/menuItem:border-black px-1`}>
-              {totalCartItems}
+              {totalCartItems || 0}
             </span>
           )}
         </li>
