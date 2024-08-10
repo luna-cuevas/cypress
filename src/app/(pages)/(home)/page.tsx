@@ -45,58 +45,109 @@ export default async function Home({ params }: { params: any }) {
         /> */}
         <FadeCarousel images={heroImages} />
       </div>
-      <section className="w-full h-screen  bg-opacity-30 bg-black  z-0 flex items-end justify-start ">
-        <div className="text-center h-fit flex flex-col gap-8 w-full  max-w-[1200px] mx-auto mb-[5%]">
+      <section className="w-full h-screen  bg-opacity-20 bg-black  z-0 flex items-end justify-start ">
+        <div className="text-center h-fit flex flex-col gap-8 w-full  max-w-[1000px] mx-auto mb-[5%]">
           <Motion
             type="h1"
             initial={{
               y: -100,
               opacity: 0,
             }}
-            animate={{
+            whileInView={{
               y: 0,
               opacity: 1,
             }}
+            exit={{
+              y: -100,
+              opacity: 0,
+            }}
             transition={{ duration: 0.5 }}
-            className={`text-5xl ${trajanRegular.className} text-white font-bold tracking-widest leading-tight  uppercase`}>
+            className={`md:text-5xl text-4xl  ${trajanRegular.className} text-white font-bold tracking-widest leading-tight  uppercase`}>
             Quality Designs
           </Motion>
-          <div className="flex justify-evenly">
-            <div className="w-1/3 flex flex-col gap-2 text-right">
+          <div className="grid grid-cols-2 justify-center md:grid-cols-3  gap-4 ">
+            <Motion
+              type="div"
+              initial={{
+                x: -50,
+                opacity: 0,
+              }}
+              whileInView={{
+                x: 0,
+                opacity: 1,
+              }}
+              exit={{
+                x: -50,
+                opacity: 0,
+              }}
+              transition={{ duration: 0.5 }}
+              className=" col-span-2 md:col-span-1 font-bold order-1 flex md:block w-fit mx-auto md:mr-0 gap-2 text-center md:text-right">
               <h2 className={`uppercase text-xl text-white `}>
-                {" Stylish men's wear "}
+                {"Stylish men's wear "}
               </h2>
               <h3 className="uppercase text-xl text-white">
                 {"Designed to last"}
               </h3>
-            </div>
-            <Link href="/shop" className="w-1/3">
-              <button className="bg-cypress-green font-bold hover:bg-cypress-green-light text-xl text-white px-6 py-3 rounded-lg">
+            </Motion>{" "}
+            <Link
+              href="/shop"
+              className="order-3 col-span-2 md:col-span-1 md:order-2">
+              <Motion
+                type="button"
+                initial={{
+                  y: 100,
+                  opacity: 0,
+                }}
+                whileInView={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                exit={{
+                  y: -100,
+                  opacity: 0,
+                }}
+                transition={{ duration: 0.5 }}
+                className="hover:bg-cypress-green hover:bg-opacity-60 font-bold bg-transparent backdrop-blur-sm border-cypress-green border-2 text-lg text-white px-6 py-3 rounded-lg">
                 Shop Now
-              </button>
+              </Motion>
             </Link>
-            <div className="text-white uppercase text-xl w-1/3 text-left">
-              <p>{"Find us in"}</p>
+            <Motion
+              type="div"
+              initial={{
+                x: 50,
+                opacity: 0,
+              }}
+              whileInView={{
+                x: 0,
+                opacity: 1,
+              }}
+              exit={{
+                x: 50,
+                opacity: 0,
+              }}
+              transition={{ duration: 0.5 }}
+              className="text-white font-bold col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
+              <p>{"Visit us in store  "}</p>
               <p>{"Texas, USA"}</p>
-            </div>
+            </Motion>
           </div>
-          <Motion
-            type="h1"
-            initial={{
-              y: 40,
-              opacity: 0,
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-            className={`  text-white w-fit mx-auto`}>
-            <Link href="#featured" className="cursor-pointer">
+          <Link href="#featured" className="cursor-pointer">
+            <Motion
+              type="h1"
+              initial={{
+                y: 40,
+                opacity: 0,
+              }}
+              animate={{
+                y: 0,
+                opacity: 1,
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+              className={`  text-white w-fit mx-auto`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -110,8 +161,8 @@ export default async function Home({ params }: { params: any }) {
                   d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"
                 />
               </svg>
-            </Link>
-          </Motion>
+            </Motion>
+          </Link>
         </div>
       </section>
       {/* 

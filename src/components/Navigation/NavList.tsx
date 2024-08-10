@@ -64,13 +64,16 @@ const NavList = () => {
             x: -100,
             opacity: 0,
           }}
-          animate={{
+          whileInView={{
             x: 0,
             opacity: 1,
           }}
+          exit={{
+            x: -100,
+            opacity: 0,
+          }}
           transition={{
-            duration: 1,
-            staggerChildren: 0.5,
+            duration: 0.5,
           }}
           className="relative hidden lg:block w-[180px]">
           <Link href="/">
@@ -92,13 +95,16 @@ const NavList = () => {
             x: 100,
             opacity: 0,
           }}
-          animate={{
+          whileInView={{
             x: 0,
             opacity: 1,
           }}
+          exit={{
+            x: 100,
+            opacity: 0,
+          }}
           transition={{
-            duration: 1,
-            staggerChildren: 0.1,
+            duration: 0.5,
           }}
           className="lg:w-fit  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
           {navListItems.map(({ label, url, isDropdown }, key) => (

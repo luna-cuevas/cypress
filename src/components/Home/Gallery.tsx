@@ -1,3 +1,4 @@
+import { Motion } from "@/utils/Motion";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -43,15 +44,6 @@ type Props = {
 };
 
 const Gallery: React.FC<Props> = ({ products }) => {
-  const classes = [
-    "row-span-1 col-span-1",
-    "row-span-1 col-span-1",
-    "row-span-1 col-span-1",
-    "row-span-1 col-span-1",
-    "row-span-1 col-span-1",
-    "row-span-1 col-span-1",
-  ];
-
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 w-full px-2 sm:px-4 mx-auto h-full gap-2 sm:gap-4 ">
       {products &&
@@ -60,9 +52,18 @@ const Gallery: React.FC<Props> = ({ products }) => {
             ? "shop/" + product.products[0]?.productType.toLowerCase()
             : "shop";
           return (
-            <div
+            <Motion
+              type="div"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 25 }} // Reverses the animation when scrolling up
+              viewport={{ once: false, amount: 0.15 }} // Controls when the animation triggers
+              transition={{
+                duration: 1,
+                delay: index * 0.08,
+              }}
               key={product.handle}
-              className={`${classes[index % classes.length]} relative`}>
+              className={`row-span-1 col-span-1 relative`}>
               <Link href={link}>
                 <Image
                   fill
@@ -82,7 +83,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
                 </h3>
                 <p className="text-white text-xs">{product.productType}</p>
               </div>
-            </div>
+            </Motion>
           );
         })}
     </div>

@@ -81,7 +81,9 @@ function ProfileMenu() {
           className="lg:flex w-full hidden justify-center items-center gap-1 rounded-full py-[0.35rem] px-2 lg:ml-auto">
           {state.session == null ? (
             <UserCircleIcon
-              className={`p-0 w-[25px] mx-auto h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
+              className={`p-0 w-[25px] mx-auto h-auto ${
+                path == "/" ? "text-white" : "text-gray-800"
+              }  group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
             />
           ) : state.user?.user_metadata.avatar_url ? (
             <Avatar
