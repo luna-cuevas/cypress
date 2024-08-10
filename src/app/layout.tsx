@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick-theme.css";
 import LoginModal from "@/components/Navigation/LoginModal";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import { AuthProvider } from "@/context/AuthContext";
+import Template from "./template";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -37,12 +38,11 @@ export default async function RootLayout({
         <AuthProvider>
           <div className="main-container relative">
             <HotjarInit />
-            <LoadingScreen />
+            {/* <LoadingScreen /> */}
             <Navigation />
             <LoginModal />
             <Cart />
-
-            {children}
+            <Template>{children}</Template>
             <Footer />
           </div>
           <ToastContainer
