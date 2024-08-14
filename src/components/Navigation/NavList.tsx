@@ -3,7 +3,12 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MenuItem, Switch, Typography } from "@material-tailwind/react";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import {
+  SunIcon,
+  MoonIcon,
+  EnvelopeIcon,
+  BookOpenIcon,
+} from "@heroicons/react/24/solid";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
 import { usePathname } from "next/navigation";
@@ -18,12 +23,28 @@ const shopCategories = [
     url: "/shop",
   },
   {
-    title: "Pants",
+    title: "Shirting",
+    url: "/shop/shirts",
+  },
+  {
+    title: "T-Shirts",
+    url: "/shop/t-shirts",
+  },
+  {
+    title: "Trousers",
     url: "/shop/pants",
   },
   {
-    title: "Shirts",
-    url: "/shop/shirts",
+    title: "Denim",
+    url: "/shop/denim",
+  },
+  {
+    title: "Footwear",
+    url: "/shop/footwear",
+  },
+  {
+    title: "Accessories",
+    url: "/shop/accessories",
   },
 ];
 
@@ -36,10 +57,12 @@ const navListItems = [
   {
     label: "About",
     url: "/about",
+    icon: <BookOpenIcon className="h-5 w-5" />,
   },
   {
     label: "Contact",
     url: "/contact",
+    icon: <EnvelopeIcon className="h-5 w-5" />,
   },
   {
     label: "Cart",
@@ -47,7 +70,7 @@ const navListItems = [
   },
 ];
 
-const NavList = () => {
+const NavList = (collections: any) => {
   const [state, setState] = useAtom(globalStateAtom);
   const path = usePathname();
 
@@ -56,39 +79,8 @@ const NavList = () => {
   }, [state.darkMode]);
 
   return (
-    <ul className="  relative border-t border-gray-200 lg:border-t-0 flex max-w-screen lg:w-screen  justify-between flex-col gap-2 lg:flex-row lg:items-center">
-      <div className="lg:w-[80%]  w-full mx-auto mt-auto h-full flex justify-between">
-        <Motion
-          type="div"
-          initial={{
-            x: -100,
-            opacity: 0,
-          }}
-          whileInView={{
-            x: 0,
-            opacity: 1,
-          }}
-          exit={{
-            x: -100,
-            opacity: 0,
-          }}
-          transition={{
-            duration: 0.5,
-          }}
-          className="relative hidden lg:block w-[180px]">
-          <Link href="/">
-            <Image
-              src="/cypress-text-logo.svg"
-              alt="Cypress Logo"
-              fill
-              loading="eager"
-              className={`${
-                path == "/" ? "invert" : "invert-0"
-              } w-full h-full !object-contain dark:invert group-hover:invert-0 dark:group-hover:invert `}
-            />
-          </Link>
-        </Motion>
-
+    <ul className="  relative border-t border-gray-200 lg:border-t-0 flex   justify-between flex-col gap-2 lg:flex-row lg:items-center">
+      <div className="  w-full mx-auto mt-auto h-full flex justify-between">
         <Motion
           type="div"
           initial={{
@@ -106,8 +98,8 @@ const NavList = () => {
           transition={{
             duration: 0.5,
           }}
-          className="lg:w-fit  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
-          {navListItems.map(({ label, url, isDropdown }, key) => (
+          className="lg:w-fit ju  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
+          {navListItems.map(({ label, url, isDropdown, icon }, key) => (
             <NavItem
               key={key}
               label={label}
@@ -116,11 +108,12 @@ const NavList = () => {
               isDropdown={isDropdown}
               shopCategories={shopCategories}
               state={state}
+              icon={icon}
               setState={setState}></NavItem>
           ))}
           <ProfileMenu />
 
-          <div className="flex gap-3 lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 mx-auto">
+          <div className="lg:flex gap-3 hidden w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
             <SunIcon
               opacity={state.darkMode ? "0.5" : "1"}
               className={`${

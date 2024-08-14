@@ -12,7 +12,7 @@ const FadeCarousel: React.FC<Props> = ({ images }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 12000); // Change image every 3 seconds
+    }, 9000);
 
     return () => clearInterval(interval);
   }, [images.length]);

@@ -33,7 +33,7 @@ const LoginModal = (props: Props) => {
           setState((state) => ({ ...state, isSignInOpen: false }));
         }}
         className="fixed z-[10000] top-0  left-0 right-0 bottom-0 bg-black opacity-60  w-full h-full"></div>
-      <div className="h-fit bg-cypress-green w-1/3 m-auto z-[100000] bg-neutral-800 p-8 rounded-xl">
+      <div className="h-fit bg-cypress-green w-full max-w-[500px] m-auto z-[100000] bg-neutral-800 p-4 rounded-xl">
         <Auth
           supabaseClient={supabase}
           socialLayout="horizontal"

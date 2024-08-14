@@ -11,6 +11,10 @@ import {
   AccordionHeader,
   AccordionBody,
   Accordion,
+  ListItem,
+  ListItemPrefix,
+  Switch,
+  ListItemSuffix,
 } from "@material-tailwind/react";
 import {
   EllipsisHorizontalCircleIcon,
@@ -18,6 +22,8 @@ import {
   ChevronDownIcon,
   LifebuoyIcon,
   PowerIcon,
+  SunIcon,
+  MoonIcon,
 } from "@heroicons/react/24/solid";
 import { trajanLight, trajanRegular } from "@/lib/fonts";
 import { useAtom } from "jotai";
@@ -73,7 +79,11 @@ function ProfileMenu() {
   const closeMenu = () => setIsProfileMenuOpen(false);
 
   return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
+    <Menu
+      allowHover
+      open={isMenuOpen}
+      handler={setIsMenuOpen}
+      placement="bottom-end">
       <MenuHandler>
         <Button
           variant="text"
@@ -99,14 +109,14 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList
-        className={`p-1 hidden lg:flex lg:flex-col border-none ${
+        className={`p-0 hidden rounded-none lg:flex lg:flex-col border-none ${
           state.darkMode ? "bg-cypress-green" : "bg-white"
         }`}>
         {state.session == null ? (
-          <div className="p-4 flex w-full h-full justify-center">
+          <div className="p-0 flex w-full h-full justify-center">
             <Button
               variant="filled"
-              className={`w-ful hover:shadow-none shadow-none hover:scale-110 text-black bg-gray-300 group-hover:bg-gray-800 dark:group-hover:bg-white dark:bg-gray-300`}
+              className={`w-full rounded-none text-black bg-gray-200  dark:group-hover:bg-white dark:bg-gray-300`}
               onClick={() => {
                 setState({ ...state, isSignInOpen: true });
               }}>
@@ -122,8 +132,8 @@ function ProfileMenu() {
                 onClick={label === "Sign Out" ? handleSignOut : closeMenu}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem
-                    ? "hover:bg-red-500 hover:bg-opacity-80 focus:bg-opacity-80 active:bg-opacity-80 focus:bg-red-500 active:bg-red-500"
-                    : "hover:bg-opacity-80 active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light"
+                    ? "hover:bg-red-500 hover:bg-opacity-60  active:bg-opacity-80 focus:bg-red-500 active:bg-red-500"
+                    : "hover:bg-opacity-60 active:bg-cypress-green-light  hover:bg-cypress-green-light"
                 }`}>
                 {React.createElement(icon, {
                   className: `h-4 w-4 ${
@@ -145,7 +155,7 @@ function ProfileMenu() {
         )}
       </MenuList>
       <Accordion
-        className="lg:hidden w-full  justify-center items-center gap-2 border-b border-gray-200"
+        className="lg:hidden w-full   justify-center items-center border-b border-gray-200"
         open={isProfileMenuOpen}
         animate={{
           unmount: {
@@ -154,66 +164,114 @@ function ProfileMenu() {
         }}>
         <AccordionHeader
           onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-          className="hover:bg-opacity-80 items-center focus:bg-cypress-green-light pt-[9px] pb-2 px-2 active:bg-cypress-green-light hover:bg-cypress-green-light mx-auto w-full lg:py-[0.35rem] lg:hidden flex justify-center flex-grow  ml-2 border-none">
-          <li
+          className="hover:bg-opacity-60 items-center  pt-[9px] pb-2 px-2  hover:bg-cypress-green-light  w-full lg:py-[0.35rem] lg:hidden !flex justify-start lg:justify-center flex-grow  border-none">
+          <ListItem
             className={`${
               path == "/" ? "lg:text-white text-black" : "text-black"
-            }  relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-1 font-bold uppercase text-sm box-content`}>
-            {state.session == null ? (
-              <UserCircleIcon
-                className={`p-0 w-[25px] mx-auto h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
+            }  relative hover:bg-transparent focus:bg-transparent group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex font-normal uppercase lg:font-bold  text-sm box-content`}>
+            <ListItemPrefix>
+              {state.session == null ? (
+                <UserCircleIcon
+                  className={` w-[25px]  h-auto text-gray-800 group-hover:text-gray-800 dark:group-hover:text-white dark:text-gray-200 `}
+                />
+              ) : state.user?.user_metadata.avatar_url ? (
+                <Avatar
+                  variant="circular"
+                  size="sm"
+                  alt={state.user?.user_metadata.full_name || "Profile Picture"}
+                  className=" w-[25px] h-auto"
+                  src={state.user?.user_metadata.avatar_url}
+                />
+              ) : (
+                <EllipsisHorizontalCircleIcon className="w-6 h-6" />
+              )}
+            </ListItemPrefix>
+            Account
+            <ListItemSuffix>
+              <ChevronDownIcon
+                strokeWidth={2}
+                className={`h-3 w-3 my-auto transition-transform ${
+                  isProfileMenuOpen ? "rotate-180" : ""
+                }`}
               />
-            ) : state.user?.user_metadata.avatar_url ? (
-              <Avatar
-                variant="circular"
-                size="sm"
-                alt={state.user?.user_metadata.full_name || "Profile Picture"}
-                className="p-0 w-[25px] h-auto"
-                src={state.user?.user_metadata.avatar_url}
-              />
-            ) : (
-              <EllipsisHorizontalCircleIcon className="w-6 h-6" />
-            )}
-            <ChevronDownIcon
-              strokeWidth={2}
-              className={`h-3 w-3 my-auto transition-transform ${
-                isProfileMenuOpen ? "rotate-180" : ""
-              }`}
-            />
-          </li>
+            </ListItemSuffix>
+          </ListItem>
         </AccordionHeader>
         <AccordionBody className="w-full pt-[9px] pb-2">
           <ul className={`flex flex-col  w-full gap-2 px-auto my-1 `}>
-            {profileMenuItems &&
-              profileMenuItems.map(({ label, url }) => (
+            {state.session == null ? (
+              <MenuItem className="flex px-2 rounded-none hover:bg-opacity-60  hover:bg-cypress-green-light justify-left items-center ">
+                <ListItem
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      isSignInOpen: true,
+                      showMobileMenu: false,
+                    });
+                  }}
+                  className={`${
+                    path == "/" ? "lg:text-white text-black" : "text-black"
+                  } ${
+                    trajanRegular.className
+                  } lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                  Sign In
+                </ListItem>
+              </MenuItem>
+            ) : (
+              profileMenuItems &&
+              profileMenuItems.map(({ label, url, icon }) => (
                 <MenuItem
                   key={label}
-                  className="flex px-2 rounded-none hover:bg-opacity-80  active:bg-cypress-green-light focus:bg-cypress-green-light hover:bg-cypress-green-light justify-center lg:justify-left items-center ">
+                  className="flex px-2 rounded-none hover:bg-opacity-60  hover:bg-cypress-green-light justify-left items-center ">
                   {label == "Sign Out" ? (
-                    <li
+                    <ListItem
                       className={`${
                         path == "/" ? "lg:text-white text-black" : "text-black"
                       } ${
                         trajanRegular.className
-                      } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                      } lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                       {label}
-                    </li>
+                    </ListItem>
                   ) : (
                     <Link href={url || "/"}>
-                      <li
+                      <ListItem
                         className={`${
                           path == "/"
                             ? "lg:text-white text-black"
                             : "text-black"
                         } ${
                           trajanRegular.className
-                        } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                        } lg:underline-animation focus:bg-transparent hover:bg-transparent py-0 relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                         {label}
-                      </li>
+                      </ListItem>
                     </Link>
                   )}
                 </MenuItem>
-              ))}
+              ))
+            )}
+            <div className="flex gap-3 lg:hidden  w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
+              <SunIcon
+                opacity={state.darkMode ? "0.5" : "1"}
+                className={`${
+                  path == "/" ? "lg:text-white text-black" : "text-black"
+                } h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
+              />
+              <Switch
+                id="dark-mode"
+                name="dark-mode"
+                checked={state.darkMode}
+                onChange={(event) => {
+                  setState({ ...state, darkMode: event.target.checked });
+                }}
+                crossOrigin={undefined}
+              />
+              <MoonIcon
+                opacity={state.darkMode ? "1" : "0.3"}
+                className={`${
+                  path == "/" ? "lg:text-white text-black" : "text-black"
+                } h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
+              />
+            </div>
           </ul>
         </AccordionBody>
       </Accordion>

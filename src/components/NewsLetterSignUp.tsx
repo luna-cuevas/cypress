@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import { toast } from "react-toastify";
 import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
+import { trajanRegular } from "@/lib/fonts";
 
 type Props = {};
 
@@ -48,9 +49,10 @@ const NewsLetterSignUp = (props: Props) => {
   };
 
   return (
-    <div className="flex py-8 lg:p-0 box-content max-w-[1400px] mx-auto flex-col  opacity-80 sticky h-fit   w-full  justify-center text-center">
-      <div className="flex-col bg-cypress-green py-8 px-[5%] w-full rounded-xl  h-2/3 gap-3 mx-auto flex dark:text-white">
-        <h2 className="mb-4 text-3xl tracking-tight font-extrabold text-white sm:text-4xl dark:text-white">
+    <div className="flex pt-8 lg:p-0 box-content  mx-auto flex-col  opacity-80 sticky h-fit   w-full  justify-center text-center">
+      <div className="flex-col bg-cypress-green py-8 px-[5%] w-full rounded-none  h-2/3 gap-3 mx-auto flex dark:text-white">
+        <h2
+          className={`${trajanRegular.className} mb-4 text-3xl tracking-tight font-extrabold text-white sm:text-4xl dark:text-white`}>
           Subscribe to our newsletter
         </h2>{" "}
         <p className="mx-auto mb-4 max-w-2xl font-light text-white md:mb-8 sm:text-xl ">

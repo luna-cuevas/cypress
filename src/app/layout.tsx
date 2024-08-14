@@ -14,6 +14,7 @@ import LoginModal from "@/components/Navigation/LoginModal";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Template from "./template";
+import { NavDrawer } from "@/components/Navigation/NavDrawer";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -34,10 +35,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark !${trajan.className} overflow-x-hidden`}>
+    <html
+      lang="en"
+      className={`dark !${trajan.className} overflow-x-hidden w-screen`}>
       <body className="bg-white  dark:bg-gray-900 ">
         <AuthProvider>
-          <div className="main-container relative">
+          <div className="main-container relative w-screen overflow-x-hidden">
             <HotjarInit />
             {/* <LoadingScreen /> */}
             <Navigation />
@@ -45,6 +48,7 @@ export default async function RootLayout({
             <Cart />
             <Template>{children}</Template>
             <Footer />
+            <NavDrawer />
           </div>
           <ToastContainer
             position="bottom-right"

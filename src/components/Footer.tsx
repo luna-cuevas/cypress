@@ -45,7 +45,7 @@ const Footer = (props: Props) => {
   };
 
   return (
-    <div className="mt-[25px] w-full dark:text-white grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
+    <div className=" w-full dark:text-white grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
       <div className="border-r border-b md:border-b-0 border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
         <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Newsletter

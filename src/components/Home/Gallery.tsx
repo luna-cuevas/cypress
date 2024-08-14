@@ -45,7 +45,7 @@ type Props = {
 
 const Gallery: React.FC<Props> = ({ products }) => {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 w-full px-2 sm:px-4 mx-auto h-full gap-2 sm:gap-4 ">
+    <div className="grid sm:grid-cols-3 grid-cols-2  w-full px-2 sm:px-4 mx-auto h-full gap-2 sm:gap-4 ">
       {products &&
         products.map((product, index) => {
           const link = product.products[0]?.productType
@@ -54,16 +54,19 @@ const Gallery: React.FC<Props> = ({ products }) => {
           return (
             <Motion
               type="div"
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 25 }} // Reverses the animation when scrolling up
+              exit={{ opacity: 0, y: 40 }} // Reverses the animation when scrolling up
               viewport={{ once: false, amount: 0.15 }} // Controls when the animation triggers
               transition={{
                 duration: 1,
                 delay: index * 0.08,
               }}
               key={product.handle}
-              className={`row-span-1 col-span-1 relative`}>
+              className={`row-span-1  relative ${
+                // if last item in row, make it span 2 columns
+                index % 3 === 2 ? "col-span-2 sm:col-span-1" : "col-span-1"
+              }`}>
               <Link href={link}>
                 <Image
                   fill
