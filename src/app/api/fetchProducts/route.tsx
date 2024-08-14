@@ -1,7 +1,7 @@
-// pages/api/fetchProducts.ts
 import { shopifyClient } from "@/lib/shopify";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import "@shopify/shopify-api/adapters/node";
 
 export interface Variant {
   variantId: string;
@@ -18,8 +18,9 @@ export interface Image {
 
 export interface Product {
   id: string;
-  title: string;
   description: string;
+  vendor?: string;
+  title: string;
   handle: string;
   variants: Variant[];
   images: Image[]; // Add this line
@@ -32,6 +33,11 @@ interface ShopifyResponse {
         id: string;
         title: string;
         description: string;
+        vendor: string;
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
         handle: string;
         productType: string;
         tags: string[];
@@ -65,6 +71,7 @@ interface ShopifyResponse {
     title: string;
     description: string;
     handle: string;
+    vendor: string;
     productType: string;
     tags: string[];
     variants: {
@@ -86,6 +93,26 @@ interface ShopifyResponse {
         node: {
           src: string;
           altText: string | null;
+        };
+      }[];
+    };
+    relatedProducts: {
+      edges: {
+        node: {
+          id: string;
+          description: string;
+          handle: string;
+          title: string;
+          vendor: string;
+
+          images: {
+            edges: {
+              node: {
+                src: string;
+                altText: string | null;
+              };
+            }[];
+          };
         };
       }[];
     };
@@ -139,7 +166,7 @@ const optimizeImage = (
   quality = 100, // Default quality set to 80
   scale = 1 // Default scale set to 1
 ) => {
-  return `${src}?width=${width}&height=${height}&format=${format}&quality=${quality}&scale=${scale}`;
+  return `${src}?width=${width}&height=${height}&format=${format}&quality=${quality}&scale=${scale}&crop=center`;
 };
 
 export async function POST(req: Request) {
@@ -154,7 +181,6 @@ export async function POST(req: Request) {
 
   try {
     const response = await shopifyClient.request<ShopifyResponse>(productQuery);
-    console.log("response", response);
 
     if (!response.data || response.errors) {
       return NextResponse.json({ error: response.errors, data: response.data });
@@ -198,14 +224,15 @@ export async function POST(req: Request) {
         ...product,
         images: product.images.map((image) => ({
           ...image,
-          src: optimizeImage(image.src, 800, 800), // Adjust width and height as needed
+          src: optimizeImage(image.src, 1000, 1000), // Adjust width and height as needed
         })),
       }));
 
       return NextResponse.json({ products: optimizedProducts });
     } else if (response.data.product) {
-      const { id, title, description, handle, variants, images, tags } =
+      const { id, title, description, handle, variants, images, tags, vendor } =
         response.data.product;
+
       const flattenedVariants: Variant[] = variants.edges.map(
         ({ node: variant }) => ({
           variantId: variant.id,
@@ -219,6 +246,85 @@ export async function POST(req: Request) {
         src: image.src,
         altText: image.altText || "", // Handle null altText
       }));
+
+      // Fetch related products using the vendor
+      const relatedProductsQuery = `
+        query {
+          products(first: 10, query: "vendor:${vendor}") {
+            edges {
+              node {
+                id
+                handle
+                title
+                vendor
+                productType
+                variants(first: 20) {
+                  edges {
+                    node {
+                      id
+                      title
+                      quantityAvailable
+                      price {
+                        amount
+                        currencyCode
+                      }
+                    }
+                  }
+                }
+                images(first: 1) {
+                  edges {
+                    node {
+                      src
+                      altText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const relatedProductsResponse =
+        await shopifyClient.request<ShopifyResponse>(relatedProductsQuery);
+
+      if (!relatedProductsResponse.data || relatedProductsResponse.errors) {
+        return NextResponse.json({
+          error: relatedProductsResponse.errors,
+          data: relatedProductsResponse.data,
+        });
+      }
+
+      const relatedProducts: Product[] =
+        relatedProductsResponse.data.products.edges.map(({ node }) => {
+          const { id, handle, title, vendor, images, productType } = node;
+          const flattenedImages: Image[] = images.edges.map(
+            ({ node: image }) => ({
+              src: image.src,
+              altText: image.altText || "",
+            })
+          );
+          const flattenedVariants: Variant[] = variants.edges.map(
+            ({ node: variant }) => ({
+              variantId: variant.id,
+              variantTitle: variant.title,
+              variantPrice: variant.price.amount,
+              variantCurrencyCode: variant.price.currencyCode,
+              variantQuantityAvailable: variant.quantityAvailable,
+            })
+          );
+          return {
+            id,
+            title,
+            description,
+            handle,
+            productType: productType.toLowerCase() || "",
+            vendor,
+            variants: flattenedVariants,
+            images: flattenedImages,
+          };
+        });
+
       return NextResponse.json({
         product: {
           id,
@@ -226,10 +332,11 @@ export async function POST(req: Request) {
           description,
           handle,
           tags,
-          productType: response.data.product.productType.toLowerCase() || "", // Handle null productType
+          productType: response.data.product.productType.toLowerCase() || "",
           variants: flattenedVariants,
-          images: flattenedImages, // Add this line
+          images: flattenedImages,
         },
+        relatedProducts,
       });
     } else if (response.data.collectionByHandle) {
       const { id, title, description, products } =
@@ -263,15 +370,15 @@ export async function POST(req: Request) {
         };
       });
 
-      const optimizedCollectionProducts = collectionProducts.map((product) => ({
-        ...product,
-        images: product.images.map((image) => ({
-          ...image,
-          src: optimizeImage(image.src, 800, 800),
-        })),
-      }));
-
-      console.log("optimizedCollectionProducts", optimizedCollectionProducts);
+      const optimizedCollectionProducts = collectionProducts
+        .reverse()
+        .map((product) => ({
+          ...product,
+          images: product.images.map((image) => ({
+            ...image,
+            src: optimizeImage(image.src, 1000, 1000),
+          })),
+        }));
 
       return NextResponse.json({
         id,
