@@ -40,7 +40,7 @@ export default async function RootLayout({
       className={`dark !${trajan.className} overflow-x-hidden w-screen`}>
       <body className="bg-white  dark:bg-gray-900 ">
         <AuthProvider>
-          <div className="main-container relative w-screen overflow-x-hidden">
+          <div className="main-container relative w-screen">
             <HotjarInit />
             {/* <LoadingScreen /> */}
             <Navigation />

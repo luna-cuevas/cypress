@@ -61,7 +61,7 @@ const AddToCartButton = (props: Props) => {
         cartOpen: true,
       });
     }
-    closeBox((prev: boolean) => !prev);
+    closeBox && closeBox((prev: boolean) => !prev);
     toast.success("Added to cart");
   };
   return (

@@ -9,6 +9,7 @@ import TabContent from "@/components/shop/TabContent";
 import { headers } from "next/headers";
 import RelatedProducts from "@/components/shop/RelatedProducts";
 import { Accordions } from "@/components/shop/Accordions";
+import { Motion } from "@/utils/Motion";
 
 export async function generateMetadata({
   params,
@@ -112,8 +113,8 @@ const ProductPage = async ({
   const pathSegments = ["shop", category, slug];
 
   return (
-    <div className="z-0 relative min-h-[calc(100vh-70px)] ">
-      <div className="bg-white ">
+    <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-gray-800">
+      <div className="">
         <div className=" ">
           <nav
             aria-label="Breadcrumb"
@@ -162,7 +163,17 @@ const ProductPage = async ({
           <div className="w-full h-full flex md:flex-row flex-col max-w-[1600px] px-0 mx-auto">
             {/* Image gallery */}
             <div className="hidden h-full relative gap-2 md:w-[50%] lg:w-[60%] md:flex">
-              <div className="w-[50px] pt-4 sticky top-0 h-fit gap-2  flex-col hidden lg:flex">
+              <Motion
+                type="div"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                viewport={{ once: false, amount: 0.8 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                }}
+                className="w-[50px] pt-4 sticky top-0 h-fit gap-2  flex-col hidden lg:flex">
                 {product.images.map((image: any, index: number) => (
                   <Link
                     href={`#image-${index}`}
@@ -183,8 +194,17 @@ const ProductPage = async ({
                     </div>
                   </Link>
                 ))}
-              </div>
-              <div
+              </Motion>
+              <Motion
+                type="div"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                viewport={{ once: false, amount: 0.15 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.25,
+                }}
                 className={`
                 ${
                   product.images.length > 1
@@ -210,18 +230,28 @@ const ProductPage = async ({
                     />
                   </div>
                 ))}
-              </div>
+              </Motion>
             </div>
 
             <div className="md:hidden flex h-[70vh]">
               <Carousel slides={product.images} />
             </div>
 
-            <div className="!relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4">
+            <Motion
+              type="div"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.5,
+              }}
+              className="!relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4">
               {/* Product info */}
               <div className="m-auto md:sticky right-0 top-0 pt-4 left-0 max-w-2xl   ">
                 <div className="lg:col-span-2 mb-2  lg:border-gray-200 lg:pr-8">
-                  <h1 className="text-2xl  text-gray-900 sm:text-2xl">
+                  <h1 className="text-2xl  text-gray-900 dark:text-white sm:text-2xl">
                     {product.title}
                   </h1>
                 </div>
@@ -229,7 +259,7 @@ const ProductPage = async ({
                 {/* Options */}
                 <div className="mt-4 lg:row-span-3 lg:mt-0">
                   <h2 className="sr-only">Product information</h2>
-                  <p className="text-xl tracking-tight text-gray-600">
+                  <p className="text-xl tracking-tight text-gray-600 dark:text-gray-400">
                     $
                     {selectedVariant?.variantPrice ||
                       product.variants[0].variantPrice}
@@ -239,7 +269,7 @@ const ProductPage = async ({
                     {/* Sizes */}
                     <div className="">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium text-gray-600">
+                        <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
                           {selectedVariant?.variantTitle ? (
                             <span className="gap-1 flex">
                               Size
@@ -253,7 +283,7 @@ const ProductPage = async ({
                         </h3>
                         <Link
                           href="#"
-                          className="text-sm underline font-medium text-gray-800 hover:text-cypress-green-light">
+                          className="text-sm underline font-medium text-gray-800 dark:text-gray-400 hover:text-cypress-green-light">
                           Size guide
                         </Link>
                       </div>
@@ -297,7 +327,7 @@ const ProductPage = async ({
                   <Accordions />
                 </div>
               </div>
-            </div>
+            </Motion>
           </div>
           <div>
             <RelatedProducts relatedProducts={relatedProducts} />

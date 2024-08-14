@@ -23,14 +23,18 @@ export const Navigation = (props: Props) => {
       <Motion
         type="div"
         initial={{
-          y: 50,
+          x: -50,
           opacity: 0,
         }}
-        animate={{
-          y: 0,
+        whileInView={{
+          x: 0,
           opacity: 1,
         }}
-        transition={{ duration: 1 }}
+        exit={{
+          x: -50,
+          opacity: 0,
+        }}
+        transition={{ duration: 0.5 }}
         className="mx-auto lg:ml-0 w-fit justify-center flex">
         <Link
           href="/"

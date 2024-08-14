@@ -39,6 +39,24 @@ export default function Cart() {
   const [state, setState] = useAtom(globalStateAtom);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const createCheckout = async () => {
+    const lineItems = state.cartItems.map((item: any) => ({
+      variantId: item.variant.variantId,
+      quantity: item.quantity,
+    }));
+    const checkout = await fetch("/api/createCheckout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lineItems,
+      }),
+    }).then((res) => res.json());
+
+    window.location.href = checkout.webUrl;
+  };
+
   useEffect(() => {
     setIsLoaded(true);
   }, []);
@@ -217,11 +235,12 @@ export default function Cart() {
                           Shipping and taxes calculated at checkout.
                         </p>
                         <div className="mt-6">
-                          <a
-                            href="#"
+                          <button
+                            type="button"
+                            onClick={createCheckout}
                             className="flex items-center justify-center rounded-md border border-transparent bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light">
                             Checkout
-                          </a>
+                          </button>
                         </div>
                         <div className="mt-6 flex justify-center text-center text-sm text-gray-500 dark:text-white">
                           <p>

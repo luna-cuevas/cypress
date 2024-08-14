@@ -20,9 +20,9 @@ type RelatedProducts = {
 
 export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-0 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+    <div className="">
+      <div className="mx-auto  px-0 py-16 sm:px-6 sm:py-24  lg:px-8">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">
           More from {relatedProducts[0].vendor}
         </h2>
 
@@ -37,13 +37,13 @@ export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
                 />
               </div>
               <div className="mt-4 flex justify-between">
-                <h3 className="text-sm text-gray-700">
+                <h3 className="text-sm text-gray-700 dark:text-gray-300">
                   <Link href={`/shop/${product.productType}/${product.handle}`}>
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.title}
                   </Link>
                 </h3>
-                <p className="text-sm font-medium text-gray-900">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-400">
                   ${product.variants[0].variantPrice}0
                 </p>
               </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { arpona, trajan, trajanRegular, trajanLight } from "@/lib/fonts";
 import { Motion } from "@/utils/Motion";
 import ParallaxSection from "@/components/Home/ParallaxSection";
+import { stagger } from "framer-motion";
 
 export default async function Home({ params }: { params: any }) {
   const featuredProducts = await fetch(
@@ -130,9 +131,13 @@ export default async function Home({ params }: { params: any }) {
                 opacity: 0,
               }}
               transition={{ duration: 0.5 }}
-              className="text-white font-bold col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
-              <p>{"Visit our store  "}</p>
-              <p className="">{"Texas, USA"}</p>
+              className="text-white hover:underline cursor-pointer font-bold col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
+              <a
+                target="_blank"
+                href="https://maps.app.goo.gl/fmgy5j3BDaSrKZzv6">
+                <p>{"Visit our store  "}</p>
+                <p className="">{"Dallas, Texas"}</p>
+              </a>
             </Motion>
           </div>
           <Link href="#featured" className="cursor-pointer">
@@ -210,7 +215,24 @@ export default async function Home({ params }: { params: any }) {
 
       <section className="bg-white mb-16">
         <div className="gap-8 items-center py-0 px-4 mx-auto  lg:grid lg:grid-cols-2 ">
-          <div className="font-light text-left mx-auto sm:w-2/3 text-gray-800 sm:text-lg dark:text-gray-400">
+          <Motion
+            type="div"
+            initial={{
+              x: -50,
+              opacity: 0,
+            }}
+            whileInView={{
+              x: 0,
+              opacity: 1,
+            }}
+            exit={{
+              x: -50,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+            }}
+            className="font-light text-left mx-auto sm:w-2/3 text-gray-800 sm:text-lg dark:text-gray-400">
             <h2
               className={`${trajanRegular.className} mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-white`}>
               Who We Are
@@ -225,8 +247,25 @@ export default async function Home({ params }: { params: any }) {
               Our selections revolve around craftsmanship and experimentation,
               constructing a playground for self-expression.
             </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 mt-8 lg:mt-0">
+          </Motion>
+          <Motion
+            type="div"
+            initial={{
+              x: 50,
+              opacity: 0,
+            }}
+            whileInView={{
+              x: 0,
+              opacity: 1,
+            }}
+            exit={{
+              x: 50,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.5,
+            }}
+            className="grid grid-cols-2 gap-4 mt-8 lg:mt-0">
             <img
               className="w-full rounded-lg"
               src="/about-image.jpg"
@@ -237,7 +276,7 @@ export default async function Home({ params }: { params: any }) {
               src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
               alt="office content 2"
             />
-          </div>
+          </Motion>
         </div>
       </section>
 

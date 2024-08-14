@@ -9,6 +9,7 @@ const shopifyAdmin = shopifyApi({
   isCustomStoreApp: true, // this MUST be set to true (default is false)
   adminApiAccessToken: `${process.env.SHOPIFY_ADMIN_API_TOKEN}`,
   isEmbeddedApp: false,
+  shop: `${process.env.SHOPIFY_HOSTNAME}`,
   hostName: `${process.env.SHOPIFY_HOSTNAME}`,
   // Mount REST resources.
   restResources,
@@ -18,4 +19,6 @@ const session = shopifyAdmin.session.customAppSession(
   `${process.env.SHOPIFY_STOREFRONT_API_URL}`
 );
 
-export const adminClient = new shopifyAdmin.clients.Graphql({ session });
+export const adminClientGraphQL = new shopifyAdmin.clients.Graphql({ session });
+
+export const adminClientRest = new shopifyAdmin.clients.Rest({ session });
