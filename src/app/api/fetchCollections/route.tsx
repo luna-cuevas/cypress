@@ -15,6 +15,7 @@ export interface Image {
   altText: string;
 }
 
+export interface Product {
   id: string;
   title: string;
   description: string;
