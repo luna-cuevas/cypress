@@ -20,7 +20,10 @@ export default async function Home({ params }: { params: any }) {
   );
 
   if (!featuredProducts.ok) {
-    throw new Error(`HTTP error! status: ${featuredProducts.status}`);
+    console.error(`HTTP error! status: ${featuredProducts.status}`);
+    console.error(`HTTP error! status: ${featuredProducts.statusText}`);
+
+    // throw new Error(`HTTP error! status: ${featuredProducts.status}`);
   }
 
   const featuredData = await featuredProducts.json();
