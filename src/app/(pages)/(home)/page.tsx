@@ -281,7 +281,27 @@ export default async function Home({ params }: { params: any }) {
       </section>
 
       {/* <LoadingSkeleton /> */}
-      <NewsLetterSignUp />
+
+      <Motion
+        type="div"
+        initial={{
+          scale: 0.9,
+          opacity: 0,
+        }}
+        whileInView={{
+          scale: 1,
+          opacity: 1,
+        }}
+        exit={{
+          scale: 0.9,
+          opacity: 0,
+        }}
+        transition={{
+          duration: 0.5,
+        }}
+        className="">
+        <NewsLetterSignUp />
+      </Motion>
     </main>
   );
 }

@@ -97,7 +97,7 @@ const ProductPage = async ({
   }
 
   const data = await response.json();
-  console.error("ERRresponseOR", data);
+  console.error("response", data);
 
   if (!data) {
     return <div>No product found</div>;
@@ -115,7 +115,17 @@ const ProductPage = async ({
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-gray-800">
       <div className="">
-        <div className=" ">
+        <Motion
+          type="div"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{
+            duration: 0.5,
+            delay: 0.1,
+          }}
+          className=" ">
           <nav
             aria-label="Breadcrumb"
             className="md:pt-4 md:pb-0 py-2 pl-2 lg:w-full ">
@@ -334,7 +344,7 @@ const ProductPage = async ({
           </div>
 
           <div></div>
-        </div>
+        </Motion>
       </div>
     </div>
   );

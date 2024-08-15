@@ -42,7 +42,7 @@ export default async function RootLayout({
         <AuthProvider>
           <div className="main-container relative w-screen">
             <HotjarInit />
-            {/* <LoadingScreen /> */}
+            <LoadingScreen />
             <Navigation />
             <LoginModal />
             <Cart />

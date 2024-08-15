@@ -1,6 +1,7 @@
 "use client";
 import { globalStateAtom } from "@/context/atoms";
 import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
+import { Motion } from "@/utils/Motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,37 @@ const Footer = (props: Props) => {
     }
   }, [signUpStatus]);
 
+  const shopCategories = [
+    {
+      title: "All",
+      url: "/shop",
+    },
+    {
+      title: "Shirting",
+      url: "/shop/shirts",
+    },
+    {
+      title: "T-Shirts",
+      url: "/shop/t-shirts",
+    },
+    {
+      title: "Trousers",
+      url: "/shop/pants",
+    },
+    {
+      title: "Denim",
+      url: "/shop/denim",
+    },
+    {
+      title: "Footwear",
+      url: "/shop/footwear",
+    },
+    {
+      title: "Accessories",
+      url: "/shop/accessories",
+    },
+  ];
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = (e.currentTarget.email as HTMLInputElement).value;
@@ -45,8 +77,23 @@ const Footer = (props: Props) => {
   };
 
   return (
-    <div className=" w-full dark:text-white grid grid-cols-2 md:grid-cols-4  border-y border-gray-900 dark:border-white">
-      <div className="border-r border-b md:border-b-0 border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
+    <Motion
+      type="footer"
+      initial={{
+        opacity: 0,
+        y: 40,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        y: 40,
+      }}
+      transition={{ duration: 0.5 }}
+      className=" w-full dark:text-white grid grid-cols-2 md:grid-cols-4  border-y border-gray-600 dark:border-white">
+      <div className="border-r border-b md:border-b-0 border-gray-400 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
         <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Newsletter
         </h1>
@@ -78,30 +125,22 @@ const Footer = (props: Props) => {
           </p>
         )}
       </div>
-      <div className="border-b md:border-b-0 md:border-r border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
+      <div className="border-b md:border-b-0 md:border-r border-gray-400 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
         <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Shop
         </h1>
         <ul className="grid lg:grid-cols-3 grid-cols-2 gap-y-2 ">
-          {["All", "New", "Jackets", "Pants", "Shirts", "Tees"].map((item) => (
-            <li className="text-sm" key={item}>
-              <Link
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-                aria-disabled="true"
-                href={`/shop/${
-                  item?.toLowerCase().replace(" ", "-") || "default"
-                }`}
-                className="inline-block text-left ">
+          {shopCategories.map(({ title, url }) => (
+            <li className="text-sm" key={title}>
+              <Link href={url} className="inline-block text-left ">
                 {" "}
-                {item}
+                {title}
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div className=" border-r border-gray-900 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
+      <div className=" border-r border-gray-400 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
         <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
           Info
         </h1>
@@ -164,7 +203,7 @@ const Footer = (props: Props) => {
           </Link>
         </div>
       </div>
-    </div>
+    </Motion>
   );
 };
 

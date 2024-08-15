@@ -92,7 +92,7 @@ export default function Cart() {
                   leave="transform transition ease-in-out duration-500 sm:duration-700"
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full">
-                  <DialogPanel className="pointer-events-auto w-screen max-w-md">
+                  <DialogPanel className="pointer-events-auto w-screen max-w-lg">
                     <div className="flex h-full flex-col overflow-y-scroll dark:bg-gray-900 bg-white shadow-xl">
                       <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                         <div className="flex items-start justify-between">
@@ -153,11 +153,12 @@ export default function Cart() {
                                           <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
                                             <h3>
                                               <Link
+                                                className={`hover:text-cypress-green  ${trajanRegular.className}`}
                                                 href={`/shop/${product.handle}`}>
                                                 {product.title}
                                               </Link>
                                             </h3>
-                                            <p className="ml-4">
+                                            <p className="ml-4 font-bold">
                                               ${variant.variantPrice}0
                                             </p>
                                           </div>
@@ -166,7 +167,7 @@ export default function Cart() {
                                           </p>
                                         </div>
                                         <div className="flex flex-1 items-end justify-between text-sm">
-                                          <p className="text-gray-500">
+                                          <p className="text-gray-800">
                                             Qty {quantity}
                                           </p>
 
@@ -186,7 +187,7 @@ export default function Cart() {
                                                   cartItems: newCartItems,
                                                 });
                                               }}
-                                              className="font-bold  text-cypress-green hover:text-cypress-green-light">
+                                              className={`font-bold ${trajanRegular.className}  text-cypress-green hover:text-cypress-green-light`}>
                                               Remove
                                             </button>
                                           </div>
@@ -217,7 +218,7 @@ export default function Cart() {
                         className={`border-t ${
                           state.cartItems.length > 0 ? "block" : "hidden"
                         } border-gray-200 px-4 py-6 sm:px-6`}>
-                        <div className="flex justify-between text-base font-medium text-gray-900">
+                        <div className="flex justify-between text-base font-bold text-gray-900">
                           <p>Subtotal</p>
                           <p>
                             $
@@ -234,11 +235,11 @@ export default function Cart() {
                         <p className="mt-0.5 text-sm text-gray-500 dark:text-white">
                           Shipping and taxes calculated at checkout.
                         </p>
-                        <div className="mt-6">
+                        <div className="mt-6 w-full">
                           <button
                             type="button"
                             onClick={createCheckout}
-                            className="flex items-center justify-center rounded-md border border-transparent bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light">
+                            className="flex items-center w-full justify-center rounded-md border border-transparent bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light">
                             Checkout
                           </button>
                         </div>
