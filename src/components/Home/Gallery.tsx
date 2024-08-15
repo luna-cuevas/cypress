@@ -1,3 +1,4 @@
+import { trajanRegular } from "@/lib/fonts";
 import { Motion } from "@/utils/Motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -64,7 +65,6 @@ const Gallery: React.FC<Props> = ({ products }) => {
               }}
               key={product.handle}
               className={`row-span-1  relative ${
-                // if last item in row, make it span 2 columns
                 index % 3 === 2 ? "col-span-2 sm:col-span-1" : "col-span-1"
               }`}>
               <Link href={link}>
@@ -80,11 +80,12 @@ const Gallery: React.FC<Props> = ({ products }) => {
                   alt={"Product image"}
                 />
               </Link>
-              <div className="absolute bottom-6 left-6 ">
-                <h3 className="text-gray-900  text-lg font-bold  ">
+              <div className="absolute top-6 left-6 ">
+                <h3
+                  className={`text-black tracking-widest text-xl font-bold ${trajanRegular.className} `}>
                   {product.title}
                 </h3>
-                <p className="text-white text-xs">{product.productType}</p>
+                {/* <p className="text-white text-xs">{product.productType}</p> */}
               </div>
             </Motion>
           );

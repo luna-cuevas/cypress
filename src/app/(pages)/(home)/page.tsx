@@ -86,7 +86,7 @@ export default async function Home({ params }: { params: any }) {
                 opacity: 0,
               }}
               transition={{ duration: 0.5 }}
-              className=" flex-col col-span-2  md:col-span-1 font-bold order-1 flex md:block w-fit mx-auto md:mr-0 md:gap-2 text-center md:text-right">
+              className=" flex-col sm:flex-row sm:gap-2 col-span-2  md:col-span-1 font-bold order-1 flex md:block w-fit mx-auto md:mr-0 md:gap-2 text-center md:text-right">
               <h2 className={`uppercase text-xl text-white `}>
                 {"Stylish men's wear "}
               </h2>
@@ -96,7 +96,7 @@ export default async function Home({ params }: { params: any }) {
             </Motion>{" "}
             <Link
               href="/shop"
-              className="order-3 col-span-2 md:col-span-1 md:order-2 mt-6">
+              className="order-3 col-span-2 md:col-span-1 md:order-2 mt-6 md:mt-0">
               <Motion
                 type="button"
                 initial={{
@@ -135,7 +135,7 @@ export default async function Home({ params }: { params: any }) {
               <a
                 target="_blank"
                 href="https://maps.app.goo.gl/fmgy5j3BDaSrKZzv6">
-                <p>{"Visit our store  "}</p>
+                <p>{"Visit our store in "}</p>
                 <p className="">{"Dallas, Texas"}</p>
               </a>
             </Motion>
@@ -181,7 +181,7 @@ export default async function Home({ params }: { params: any }) {
         <Gallery products={featuredData.collections.slice(0, 3)} />
       </section>
 
-      <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center">
+      <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center dark:text-white">
         <h2
           className={`${trajanRegular.className} tracking-widest text-center sm:text-left text-lg sm:text-2xl w-fit font-bold mx-auto`}>
           Crafting Elegance, Curating Excellence
@@ -213,7 +213,7 @@ export default async function Home({ params }: { params: any }) {
         <TickerCategories />
       </section>
 
-      <section className="bg-white mb-16">
+      <section className=" mb-16">
         <div className="gap-8 items-center py-0 px-4 mx-auto  lg:grid lg:grid-cols-2 ">
           <Motion
             type="div"
