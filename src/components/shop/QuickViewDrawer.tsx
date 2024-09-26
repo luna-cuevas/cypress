@@ -21,7 +21,6 @@ type Props = {
   closeBox: any;
   variant: any;
   selectVariant: any;
-  handleAddToCart: any;
 };
 
 interface DrawerStylesType {
@@ -64,15 +63,8 @@ function classNames(...classes: any[]) {
 }
 
 export function QuickViewDrawer(props: Props) {
-  const {
-    product,
-    open,
-    variant,
-    selectVariant,
-    selectedProduct,
-    closeBox,
-    handleAddToCart,
-  } = props;
+  const { product, open, variant, selectVariant, selectedProduct, closeBox } =
+    props;
 
   const theme = {
     drawer: {
@@ -101,12 +93,12 @@ export function QuickViewDrawer(props: Props) {
             boxShadow: "shadow-2xl shadow-blue-gray-900/10",
           },
           overlay: {
-            position: "absolute",
+            position: "fixed",
             inset: "inset-0",
             width: "w-full",
             height: "h-full",
             pointerEvents: "pointer-events-auto",
-            zIndex: "z-[9995]",
+            zIndex: "z-[9999]",
             backgroundColor: "bg-black",
             backgroundOpacity: "bg-opacity-60",
             backdropBlur: "backdrop-blur-sm",

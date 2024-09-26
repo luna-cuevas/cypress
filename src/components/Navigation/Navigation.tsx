@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import NavList from "./NavList";
@@ -14,12 +14,17 @@ type Props = {
 
 export const Navigation = (props: Props) => {
   const pathName = usePathname();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  React.useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   return (
     <nav
       className={`${
         pathName == "/" ? "absolute z-50  " : " z-[0] "
-      } h-[50px] lg:px-[10%] backdrop-blur-[1px] w-full block  justify-between transition-background-color duration-1000 group   top-0  items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent  max-w-none dark:bg-cypress-green dark:bg-opacity-75 lg:py-4 p-0`}>
+      } h-[50px] lg:px-[2%] backdrop-blur-[1px] w-full block  justify-between transition-background-color duration-1000 group   top-0  items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent  max-w-none dark:bg-cypress-green dark:bg-opacity-75 lg:py-4 p-0`}>
       <Motion
         type="div"
         initial={{
@@ -50,12 +55,17 @@ export const Navigation = (props: Props) => {
         </Link>
       </Motion>
 
-      <div className=" my-auto  hidden  w-fit  h-full lg:flex items-center justify-between text-blue-gray-900">
-        <NavList />
-      </div>
-      <div className="w-fit absolute right-0  top-2 flex justify-end">
-        <DropDownButton />
-      </div>
+      {isLoaded && (
+        <>
+          <div className=" my-auto  hidden  w-fit  h-full lg:flex items-center justify-between text-blue-gray-900">
+            <NavList />
+          </div>
+          <div className="w-fit absolute right-0  top-2 flex justify-end">
+            <DropDownButton />
+          </div>
+        </>
+      )}
+
       <NavDrawer />
     </nav>
   );

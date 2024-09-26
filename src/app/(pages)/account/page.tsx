@@ -1,10 +1,10 @@
-import LoginForm from "@/components/LoginForm";
+import ProfilePage from "@/components/Profile";
 import React from "react";
 
 type Props = {};
 
 const page = (props: Props) => {
-  return <LoginForm />;
+  return <ProfilePage />;
 };
 
 export default page;

@@ -1,6 +1,6 @@
 "use client";
 import { globalStateAtom } from "@/context/atoms";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,67 +31,25 @@ const ProductGallery = (props: Props) => {
 
   const [state, setState] = useAtom(globalStateAtom);
 
-  const favorite = (product: object) => {
-    console.log("product", product);
-  };
-
-  const open = (product: object) => {
+  const open = (product: any) => {
     setSelectedProduct(product);
-    setSelectedVariant(null); // Reset selected variant when a new product is opened
+    setSelectedVariant(product.variants[0]); // Set the first variant as default
   };
 
   const closeBox = () => {
     setSelectedProduct(null);
+    setSelectedVariant(null);
   };
 
-  const selectVariant = (variant: object | string) => {
+  const selectVariant = (variant: any) => {
     setSelectedVariant(variant);
   };
 
-  const handleAddToCart = () => {
-    if (!selectedVariant) return; // Prevent adding to cart if no variant is selected
-
-    // Check if the item with the exact variant already exists in the cart
-    const existingItemIndex = state.cartItems.findIndex(
-      (item: any) =>
-        item.product.id === selectedProduct.id &&
-        item.variant.variantId === selectedVariant.variantId
-    );
-
-    if (existingItemIndex !== -1) {
-      // The exact product variant exists, update its quantity
-      const updatedCartItems = [...state.cartItems];
-      updatedCartItems[existingItemIndex] = {
-        ...updatedCartItems[existingItemIndex],
-        quantity: updatedCartItems[existingItemIndex].quantity + 1,
-      };
-
-      setState({
-        ...state,
-        cartItems: updatedCartItems,
-      });
-    } else {
-      // The exact product variant does not exist, add a new item
-      setState({
-        ...state,
-        cartItems: [
-          ...state.cartItems,
-          {
-            quantity: 1,
-            handle: selectedProduct.handle,
-            product: selectedProduct,
-            variant: selectedVariant,
-          },
-        ],
-      });
-    }
-  };
-
   return (
-    <div className="z-0  w-full h-auto">
+    <div className="z-0 w-full h-auto">
       <div className="mx-auto h-full lg:max-w-[100%] ">
         <div
-          className={`grid  gap-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 `}>
+          className={`grid gap-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 `}>
           {products &&
             products.map((product: any, index) => (
               <motion.div
@@ -99,11 +57,11 @@ const ProductGallery = (props: Props) => {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.025 }}
-                className="relative overflow-hidden group/image group  flex flex-col ">
+                className="relative overflow-hidden group/image group flex flex-col ">
                 <Link
                   href={`/shop/${product.productType}/${product.handle}`}
-                  className=" cursor-pointer">
-                  <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full   md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6">
+                  className="cursor-pointer">
+                  <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6">
                     <Image
                       fill
                       priority
@@ -128,13 +86,13 @@ const ProductGallery = (props: Props) => {
                           : product.images[0].src
                       }
                       alt={product.images[0].altText}
-                      className="h-full w-full object-cover  object-center group-hover/image:opacity-100 opacity-0 transition duration-500"
+                      className="h-full w-full object-cover object-center group-hover/image:opacity-100 opacity-0 transition duration-500"
                     />
                   </div>
                 </Link>
 
                 <div
-                  className={`absolute hidden group-hover:flex  bottom-1/4 xl:bottom-[20%] left-0 right-0 `}>
+                  className={`absolute hidden group-hover:flex bottom-1/4 xl:bottom-[20%] left-0 right-0 `}>
                   <button
                     type="button"
                     className="text-sm py-2 px-4 rounded-3xl w-fit mx-auto hover:bg-cypress-green bg-cypress-green-light text-white"
@@ -144,11 +102,11 @@ const ProductGallery = (props: Props) => {
                 </div>
 
                 <div className="flex h-full flex-col items-center pt-2 pb-6 px-2 ">
-                  <div className="flex lg:justify-between xl:px-2  dark:text-white w-full justify-center flex-wrap flex-col ">
-                    <h2 className="font-light text-sm text-[#444]  my-1 order-2 w-fit  2xl:mx-0 ">
+                  <div className="flex lg:justify-between xl:px-2 dark:text-white w-full justify-center flex-wrap flex-col ">
+                    <h2 className="font-light text-sm text-[#444] dark:text-white my-1 order-2 w-fit 2xl:mx-0 ">
                       {product.title}
                     </h2>
-                    <p className="text-sm  w-fit   2xl:mx-0 text-black dark:text-gray-400 order-1 xl:order-2 items-center h-fit my-auto">
+                    <p className="text-sm w-fit 2xl:mx-0 text-black dark:text-gray-500 order-1 xl:order-2 items-center h-fit my-auto">
                       ${product.variants[0].variantPrice}0
                     </p>
                   </div>
@@ -157,15 +115,16 @@ const ProductGallery = (props: Props) => {
             ))}
         </div>
       </div>
-      <QuickViewDrawer
-        open={open}
-        product={selectedProduct}
-        variant={selectedVariant}
-        selectVariant={selectVariant}
-        selectedProduct={selectedProduct}
-        closeBox={closeBox}
-        handleAddToCart={handleAddToCart}
-      />
+      {selectedProduct && (
+        <QuickViewDrawer
+          open={open}
+          product={selectedProduct}
+          variant={selectedVariant}
+          selectVariant={selectVariant}
+          selectedProduct={selectedProduct}
+          closeBox={closeBox}
+        />
+      )}
     </div>
   );
 };

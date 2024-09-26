@@ -107,11 +107,11 @@ export function Accordion({
         className={`
       ${
         open
-          ? "lg:max-h-screen h-auto py-0 lg:border border-gray-200  dark:border-white"
+          ? "lg:max-h-screen h-auto py-2 lg:border border-gray-200  dark:border-white"
           : "lg:max-h-0 py-0 overflow-hidden"
       }
           ${view && "right-0"}
-        flex flex-col w-auto py-2 rounded-lg drop-shadow-sm  transition-all  z-50 duration-300 lg:absolute top-full  bg-white dark:bg-transparent lg:dark:bg-cypress-green  `}>
+        flex flex-col w-auto  rounded-lg drop-shadow-sm  transition-all  z-50 duration-300 lg:absolute top-full  bg-white dark:bg-transparent lg:dark:bg-cypress-green  `}>
         {body ? (
           body.map((option, optionIdx) => {
             return checked ? (

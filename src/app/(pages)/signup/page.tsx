@@ -1,10 +1,10 @@
-import LoginForm from "@/components/LoginForm";
+import SignUpForm from "@/components/SignUpForm";
 import React from "react";
 
 type Props = {};
 
 const page = (props: Props) => {
-  return <LoginForm />;
+  return <SignUpForm />;
 };
 
 export default page;

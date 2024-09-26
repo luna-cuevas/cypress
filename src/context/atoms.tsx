@@ -1,14 +1,45 @@
 import { atom } from "jotai";
 
+type Address = {
+  id: string;
+  address1: string;
+  address2: string;
+  city: string;
+  province: string;
+  country: string;
+  zip: string;
+};
+
+type Customer = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  addresses: Address[];
+};
+
 type State = {
   isSignInOpen: boolean;
   session: null | string;
   user: null | string;
+  customer: Customer | null;
   showMobileMenu: boolean;
   darkMode: boolean;
   firstVisit: boolean;
   cartOpen: boolean;
+  cartId: string | null;
   cartItems: any[];
+  cartCost: {
+    subtotalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    totalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+  } | null;
+  checkoutUrl: string | null;
   productViewSize: string;
 };
 
@@ -47,16 +78,29 @@ const initialState: State = {
   isSignInOpen: false,
   session: null,
   user: null,
+  customer: null,
   showMobileMenu: false,
   darkMode: false,
   firstVisit: true,
   cartOpen: false,
+  cartId: null,
   cartItems: [],
+  cartCost: {
+    subtotalAmount: {
+      amount: "0",
+      currencyCode: "USD",
+    },
+    totalAmount: {
+      amount: "0",
+      currencyCode: "USD",
+    },
+  },
+  checkoutUrl: null,
   productViewSize: "small",
 };
 
 // Create an atom with local storage persistence for the entire application state
 export const globalStateAtom = atomWithLocalStorage(
-  "CypressAppState",
+  "CypressAppState-v2",
   initialState
 );

@@ -4,15 +4,52 @@ export async function POST(req: NextRequest) {
   try {
     const { lineItems } = await req.json();
 
-    console.log("Creating cart with line items:", lineItems);
-
-    // Build the GraphQL mutation
     const query = `
       mutation cartCreate($input: CartInput!) {
         cartCreate(input: $input) {
           cart {
             id
             checkoutUrl
+            cost {
+              subtotalAmount {
+                amount
+                currencyCode
+              }
+              totalAmount {
+                amount
+                currencyCode
+              }
+            }
+            lines(first: 100) {
+              edges {
+                node {
+                  id
+                  quantity
+                  merchandise {
+                    ... on ProductVariant {
+                      id
+                      title
+                      price {
+                        amount
+                        currencyCode
+                      }
+                      product {
+                        title
+                        handle
+                        images(first: 1) {
+                          edges {
+                            node {
+                              url
+                              altText
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
           userErrors {
             field
@@ -25,7 +62,7 @@ export async function POST(req: NextRequest) {
     const variables = {
       input: {
         lines: lineItems.map((item: any) => ({
-          quantity: parseInt(item.quantity, 10), // Convert quantity to an integer
+          quantity: item.quantity,
           merchandiseId: item.variantId,
         })),
       },
@@ -53,23 +90,21 @@ export async function POST(req: NextRequest) {
 
     const responseData = await response.json();
 
-    console.log("server createCart response:", responseData);
+    console.log("create cart response:", responseData.data.cartCreate.cart);
 
     if (responseData.data && responseData.data.cartCreate.cart) {
       return NextResponse.json({
-        checkoutUrl: responseData.data.cartCreate.cart.checkoutUrl,
+        cart: responseData.data.cartCreate.cart,
       });
     } else {
-      console.error("Failed to create cart:", responseData);
       return NextResponse.json(
         { error: "Failed to create cart", details: responseData },
         { status: 500 }
       );
     }
-  } catch (error) {
-    console.error("Failed to create Shopify cart:", error);
+  } catch (error: any) {
     return NextResponse.json(
-      { error: "Failed to create cart" },
+      { error: "Failed to create cart", details: error.message },
       { status: 500 }
     );
   }

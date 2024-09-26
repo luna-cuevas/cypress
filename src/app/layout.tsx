@@ -10,7 +10,6 @@ import HotjarInit from "@/utils/HotJarInit";
 import Cart from "@/components/shop/Cart";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import LoginModal from "@/components/Navigation/LoginModal";
 import "@glidejs/glide/dist/css/glide.core.min.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Template from "./template";
@@ -20,6 +19,7 @@ export const metadata: Metadata = {
   title: "Cypress",
   description: "Cypress Fashion",
   metadataBase: new URL(`${process.env.BASE_URL}`),
+
   icons: [
     {
       rel: "icon",
@@ -38,13 +38,12 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`dark !${trajan.className} overflow-x-hidden w-screen`}>
-      <body className="bg-white  dark:bg-gray-900 ">
+      <body className="bg-white  dark:bg-[#02140a] ">
         <AuthProvider>
           <div className="main-container relative w-screen">
             <HotjarInit />
             <LoadingScreen />
             <Navigation />
-            <LoginModal />
             <Cart />
             <Template>{children}</Template>
             <Footer />

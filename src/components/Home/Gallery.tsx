@@ -64,7 +64,7 @@ const Gallery: React.FC<Props> = ({ products }) => {
                 delay: index * 0.08,
               }}
               key={product.handle}
-              className={`row-span-1  relative ${
+              className={`row-span-1  !relative ${
                 index % 3 === 2 ? "col-span-2 sm:col-span-1" : "col-span-1"
               }`}>
               <Link href={link}>
