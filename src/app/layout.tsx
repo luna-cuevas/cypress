@@ -34,10 +34,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark  overflow-x-hidden w-screen`}>
-      <body className="bg-white  dark:bg-[#02140a] ">
+    <html lang="en" className={`dark h-full  overflow-x-hidden w-screen`}>
+      <body className="bg-white h-full dark:bg-[#02140a] ">
         <AuthProvider>
-          <div className="main-container relative w-screen">
+          <div className="main-container h-full relative w-screen overflow-x-hidden">
             <HotjarInit />
             <LoadingScreen />
             <Navigation />

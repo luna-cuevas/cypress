@@ -24,7 +24,7 @@ export const Navigation = (props: Props) => {
     <nav
       className={`${
         pathName == "/" ? "absolute z-50  " : " z-[0] "
-      } h-[50px] lg:px-[2%] backdrop-blur-[1px] w-full block  justify-between transition-background-color duration-1000 group   top-0  items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent  max-w-none dark:bg-cypress-green dark:bg-opacity-75 lg:py-4 p-0`}>
+      } h-[50px]  w-screen lg:px-[2%] backdrop-blur-[1px]  block  justify-between transition-background-color duration-1000 group   top-0  items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent  max-w-none dark:bg-cypress-green dark:bg-opacity-75 lg:py-4 p-0`}>
       <Motion
         type="div"
         initial={{
@@ -55,16 +55,12 @@ export const Navigation = (props: Props) => {
         </Link>
       </Motion>
 
-      {isLoaded && (
-        <>
-          <div className=" my-auto  hidden  w-fit  h-full lg:flex items-center justify-between text-blue-gray-900">
-            <NavList />
-          </div>
-          <div className="w-fit absolute right-0  top-2 flex justify-end">
-            <DropDownButton />
-          </div>
-        </>
-      )}
+      <div className=" my-auto  hidden  w-fit  h-full lg:flex items-center justify-between text-blue-gray-900">
+        <NavList />
+      </div>
+      <div className="w-fit absolute right-0  top-2 flex justify-end">
+        <DropDownButton />
+      </div>
 
       <NavDrawer />
     </nav>

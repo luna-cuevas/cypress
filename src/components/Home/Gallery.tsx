@@ -71,11 +71,14 @@ const Gallery: React.FC<Props> = ({ products }) => {
                   fill
                   priority
                   quality={100}
-                  sizes="(max-width: 640px) 75vw,(min-width: 1024px) 100vw, 33vw"
+                  sizes="(max-width: 640px) 50vw,(min-width: 1024px) 33vw, 33vw"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
                   placeholder="blur"
                   className={`h-full w-full object-cover cursor-pointer`}
-                  src={product.image.src}
+                  src={
+                    product.image.src +
+                    "?height=800&width=600&format=webp&quality=50&scale=1"
+                  }
                   alt={"Product image"}
                 />
               </Link>

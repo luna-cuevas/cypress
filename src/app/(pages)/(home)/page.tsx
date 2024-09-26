@@ -29,14 +29,14 @@ export default async function Home({ params }: { params: any }) {
   const featuredData = await featuredProducts.json();
 
   const heroImages = [
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=1600&height=1600format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=1600&height=1600format=webp&quality=70&scale=1",
     // "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=1600&height=1600format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=1600&height=1600format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=1600&height=1600format=webp&quality=100&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=1600&height=1600format=webp&quality=70&scale=1",
+    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=1600&height=1600format=webp&quality=70&scale=1",
   ];
 
   return (
-    <main className="flex flex-col relative justify-center w-screen min-h-[calc(100vh-70px)]">
+    <main className="flex flex-col relative justify-center w-screen :min-h-[calc(100vh-70px)]">
       {/* Hero Section */}
       <div className="w-screen h-screen bg-black absolute top-0">
         {/* <TracedHalfLogo

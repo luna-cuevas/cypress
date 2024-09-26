@@ -19,7 +19,7 @@ export function NavDrawer() {
 
   return (
     <Drawer
-      className={`${state.darkMode ? "bg-cypress-green" : "bg-white"}`}
+      className={`${state.darkMode ? "bg-cypress-green" : "bg-white"} w-fit`}
       placement="right"
       open={state.showMobileMenu}>
       <div className="mb-2 flex items-center justify-between p-4">
