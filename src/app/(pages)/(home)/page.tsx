@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Motion } from "@/utils/Motion";
 import ParallaxSection from "@/components/Home/ParallaxSection";
 import { stagger } from "framer-motion";
+import Image from "next/image";
 
 export default async function Home({ params }: { params: any }) {
   const featuredProducts = await fetch(
@@ -231,7 +232,7 @@ export default async function Home({ params }: { params: any }) {
             transition={{
               duration: 0.5,
             }}
-            className="font-light text-left mx-auto sm:w-2/3 text-gray-800 sm:text-lg dark:text-gray-400">
+            className="font-light text-left mx-auto sm:px-6 2xl:w-5/6 text-gray-800 sm:text-lg dark:text-gray-400">
             <h2
               className={`!font-['trajan'] mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-white`}>
               Who We Are
@@ -264,17 +265,33 @@ export default async function Home({ params }: { params: any }) {
             transition={{
               duration: 0.5,
             }}
-            className="grid grid-cols-2 gap-4 mt-8 lg:mt-0">
-            <img
-              className="w-full rounded-lg"
-              src="/about-image.jpg"
-              alt="office content 1"
-            />
-            <img
-              className="mt-4 w-full lg:mt-10 rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
-              alt="office content 2"
-            />
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 lg:mt-0 relative">
+            <div className="w-full h-[250px] sm:h-[350px] relative">
+              <Image
+                fill
+                priority
+                quality={100}
+                sizes="(max-width: 640px) 50vw,(min-width: 1024px) 33vw, 33vw"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                placeholder="blur"
+                className={`h-full w-full rounded-lg object-cover cursor-pointer`}
+                src="/about-image.jpg"
+                alt="office content 1"
+              />
+            </div>
+            <div className="w-full h-[250px] sm:h-[350px] mt-4 relative">
+              <Image
+                fill
+                priority
+                quality={100}
+                sizes="(max-width: 640px) 50vw,(min-width: 1024px) 33vw, 33vw"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                placeholder="blur"
+                className={`h-full w-full rounded-lg object-cover cursor-pointer`}
+                alt="office content 1"
+                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
+              />
+            </div>
           </Motion>
         </div>
       </section>
