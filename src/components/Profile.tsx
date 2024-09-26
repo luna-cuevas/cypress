@@ -29,22 +29,30 @@ const ProfilePage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
-  if (!state.customer) {
-    return null;
-  }
-
   const [formData, setFormData] = useState({
-    firstName: state.customer.firstName || "",
-    lastName: state.customer.lastName || "",
+    firstName: "",
+    lastName: "",
     gender: "", // Initialize as needed
     birthDate: "", // Initialize as needed
-    email: state.customer.email || "",
-    confirmEmail: state.customer.email || "",
+    email: "", // Initialize based on customer
+    confirmEmail: "", // Initialize based on customer
     location: "", // Initialize based on addresses
-    phoneNumber: state.customer.phone || "",
+    phoneNumber: "", // Initialize based on customer
     language: "",
     skills: "",
   });
+
+  useEffect(() => {
+    if (!state.customer) return;
+    setFormData({
+      ...formData,
+      firstName: state.customer.firstName || "",
+      lastName: state.customer.lastName,
+      email: state.customer.email,
+      confirmEmail: state.customer.email,
+      phoneNumber: state.customer.phone,
+    });
+  }, [state.customer]);
 
   useEffect(() => {
     setIsLoaded(true);
