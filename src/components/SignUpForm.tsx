@@ -1,11 +1,12 @@
-// components/SignUpForm.tsx
-
 "use client";
-
-import React, { useState } from "react";
+import { useState } from "react";
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-const SignUpForm = () => {
+export function SignUp() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -13,7 +14,11 @@ const SignUpForm = () => {
     password: "",
   });
 
+  const [passwordShown, setPasswordShown] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const router = useRouter();
+
+  const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -47,11 +52,16 @@ const SignUpForm = () => {
         toast.success(data.message);
         // Optionally, reset the form
         setForm({
+          ...form,
           firstName: "",
           lastName: "",
-          email: "",
           password: "",
         });
+
+        // after 5 seconds, redirect to login page
+        setTimeout(() => {
+          router.push("/login");
+        }, 5000);
       } else {
         const errors = data.userErrors;
         errors.forEach((error: any) => {
@@ -66,86 +76,151 @@ const SignUpForm = () => {
 
   if (isSignedUp) {
     return (
-      <div className="p-4 bg-green-100 text-green-700 rounded-md">
-        <p>
-          Thank you for signing up! Please check your email (
-          <strong>{form.email}</strong>) and click the verification link to
-          activate your account.
+      <div className="h-screen p-4 flex items-center  rounded-md">
+        <p className="max-w-2xl mx-auto text-xl text-center">
+          Thank you for signing up! You will be redirected to the login page in
+          a few seconds.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSignUp} className="space-y-4">
+    <section className="grid text-center h-screen items-center p-8">
       <div>
-        <label htmlFor="firstName" className="block text-sm font-medium">
-          First Name
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          id="firstName"
-          required
-          value={form.firstName}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-        />
+        <Typography variant="h3" color="blue-gray" className="mb-2">
+          Sign Up
+        </Typography>
+        <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
+          Enter your details to create an account
+        </Typography>
+        <form
+          onSubmit={handleSignUp}
+          className="mx-auto max-w-[24rem] text-left">
+          <div className="mb-6">
+            <label htmlFor="firstName">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                First Name
+              </Typography>
+            </label>
+            <Input
+              id="firstName"
+              color="gray"
+              size="lg"
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              value={form.firstName}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
+              crossOrigin={undefined}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="lastName">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                Last Name
+              </Typography>
+            </label>
+            <Input
+              id="lastName"
+              color="gray"
+              size="lg"
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              value={form.lastName}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
+              crossOrigin={undefined}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              id="email"
+              color="gray"
+              size="lg"
+              type="email"
+              name="email"
+              placeholder="name@mail.com"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
+              crossOrigin={undefined}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="password">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                Password
+              </Typography>
+            </label>
+            <Input
+              size="lg"
+              placeholder="********"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
+              icon={
+                <i onClick={togglePasswordVisibility}>
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  )}
+                </i>
+              }
+              crossOrigin={undefined}
+            />
+          </div>
+          <Button
+            type="submit"
+            color="gray"
+            size="lg"
+            className="mt-6"
+            fullWidth>
+            Sign Up
+          </Button>
+          <Typography
+            variant="small"
+            color="gray"
+            className="!mt-4 text-center font-normal">
+            Already registered?{" "}
+            <Link href="/login" className="font-medium text-gray-900">
+              Login
+            </Link>
+          </Typography>
+        </form>
       </div>
-
-      <div>
-        <label htmlFor="lastName" className="block text-sm font-medium">
-          Last Name
-        </label>
-        <input
-          type="text"
-          name="lastName"
-          id="lastName"
-          required
-          value={form.lastName}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email Address
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          required
-          value={form.email}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          value={form.password}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          placeholder="Minimum 6 characters"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-cypress-green text-white py-2 rounded-md hover:bg-cypress-green-light">
-        Sign Up
-      </button>
-    </form>
+    </section>
   );
-};
+}
 
-export default SignUpForm;
+export default SignUp;

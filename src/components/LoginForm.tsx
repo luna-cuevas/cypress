@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
+import { Typography, Input, Button } from "@material-tailwind/react";
+import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [form, setForm] = useState({
@@ -15,6 +18,7 @@ const LoginForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const [state, setState] = useAtom(globalStateAtom);
   const router = useRouter();
@@ -68,7 +72,7 @@ const LoginForm = () => {
         }
 
         toast.success("Successfully logged in!");
-        router.push("/account"); // Redirect to profile or home
+        router.push("/"); // Redirect to profile or home
       } else {
         const errors = data.userErrors;
         errors.forEach((error: any) => {
@@ -83,45 +87,120 @@ const LoginForm = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
+
   return (
-    <form onSubmit={handleLogin} className="space-y-4">
+    <section className="grid text-center h-screen items-center p-8">
       <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email Address
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          required
-          value={form.email}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-        />
+        <Typography variant="h3" color="blue-gray" className="mb-2">
+          Sign In
+        </Typography>
+        <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
+          Enter your email and password to sign in
+        </Typography>
+        <form
+          onSubmit={handleLogin}
+          className="mx-auto max-w-[24rem] text-left">
+          <div className="mb-6">
+            <label htmlFor="email">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                Your Email
+              </Typography>
+            </label>
+            <Input
+              crossOrigin={null}
+              id="email"
+              color="gray"
+              size="lg"
+              type="email"
+              name="email"
+              placeholder="name@mail.com"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              labelProps={{
+                className: "hidden",
+              }}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="password">
+              <Typography
+                variant="small"
+                className="mb-2 block font-medium text-gray-900">
+                Password
+              </Typography>
+            </label>
+            <Input
+              crossOrigin={null}
+              size="lg"
+              placeholder="********"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              labelProps={{
+                className: "hidden",
+              }}
+              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              type={passwordShown ? "text" : "password"}
+              icon={
+                <i onClick={togglePasswordVisibility}>
+                  {passwordShown ? (
+                    <EyeIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  )}
+                </i>
+              }
+            />
+          </div>
+          <Button
+            type="submit"
+            color="gray"
+            size="lg"
+            className="mt-6"
+            fullWidth
+            disabled={loading}>
+            {loading ? "Logging in..." : "Sign In"}
+          </Button>
+          <div className="!mt-4 flex justify-between">
+            <Typography
+              variant="small"
+              color="gray"
+              className="text-center font-normal">
+              Not registered?{" "}
+              <Link href="/signup" className="font-medium text-gray-900">
+                Create account
+              </Link>
+            </Typography>
+            <Typography
+              as="a"
+              href="#"
+              color="blue-gray"
+              variant="small"
+              className="font-medium">
+              Forgot password
+            </Typography>
+          </div>
+          {/* <Button
+            variant="outlined"
+            size="lg"
+            className="mt-6 flex h-12 items-center justify-center gap-2"
+            fullWidth>
+            <img
+              src={`https://www.material-tailwind.com/logos/logo-google.png`}
+              alt="google"
+              className="h-6 w-6"
+            />{" "}
+            Sign in with Google
+          </Button> */}
+        </form>
       </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium">
-          Password
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          value={form.password}
-          onChange={handleChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-        />
-      </div>
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:bg-blue-300">
-        {loading ? "Logging in..." : "Log In"}
-      </button>
-    </form>
+    </section>
   );
 };
 

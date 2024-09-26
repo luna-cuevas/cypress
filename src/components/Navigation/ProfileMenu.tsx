@@ -120,21 +120,31 @@ function ProfileMenu() {
           </Button>
         </MenuHandler>
         <MenuList
-          className={`h-fit   overflow-hidden hidden rounded-none lg:flex lg:flex-col border-none ${
+          className={`h-fit gap-4  overflow-hidden hidden rounded-none lg:flex lg:flex-col border-none ${
             state.darkMode ? "bg-cypress-green" : "bg-white"
           }`}>
           {state.customer == null ? (
-            <div className="text-lg px-0 text-black flex text-center gap-4 flex-col w-full h-full justify-center">
-              <Link
-                className={`w-full border-b py-1 border-gray-400 hover:bg-gray-200 rounded-none `}
-                href="/login">
-                Sign In
+            <div className="text-lg px-0 text-black gap-2 flex text-center  flex-col w-full h-full justify-center">
+              <Link href="/login">
+                <Typography
+                  as="span"
+                  variant="small"
+                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 ${
+                    trajanLight.className
+                  } ${state.darkMode ? "text-white" : "text-black"}`}>
+                  Login
+                </Typography>
               </Link>
 
-              <Link
-                className={`w-full border-b py-1 border-gray-400 hover:bg-gray-200 rounded-none `}
-                href="/signup">
-                Sign Up
+              <Link href="/signup">
+                <Typography
+                  as="span"
+                  variant="small"
+                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 ${
+                    trajanLight.className
+                  } ${state.darkMode ? "text-white" : "text-black"}`}>
+                  Sign Up
+                </Typography>
               </Link>
             </div>
           ) : (
@@ -191,7 +201,7 @@ function ProfileMenu() {
               )}
             </>
           )}
-          <div className="lg:flex gap-3 hidden w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
+          <div className="lg:flex gap-3 hidden w-full justify-center  pb-2 px-2 items-center lg:mx-0 ">
             <SunIcon
               opacity={state.darkMode ? "0.5" : "1"}
               className={`text-black h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
