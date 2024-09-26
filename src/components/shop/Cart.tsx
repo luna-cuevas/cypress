@@ -335,8 +335,8 @@ export default function Cart() {
                               </h2>
                               <p
                                 className={`${trajanLight.className} text-center text-lg text-gray-600 dark:text-white`}>
-                                Looks like you haven't added any items to your
-                                cart yet.
+                                Looks like you haven&lsquo;t added any items to
+                                your cart yet.
                               </p>
                             </div>
                           )}

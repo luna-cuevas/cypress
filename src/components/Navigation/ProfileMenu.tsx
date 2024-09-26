@@ -136,30 +136,6 @@ function ProfileMenu() {
                 href="/signup">
                 Sign Up
               </Link>
-
-              <div className="lg:flex gap-3 hidden w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
-                <SunIcon
-                  opacity={state.darkMode ? "0.5" : "1"}
-                  className={`${
-                    path == "/" ? "lg:text-white text-black" : "text-black"
-                  } h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
-                />
-                <Switch
-                  id="dark-mode"
-                  name="dark-mode"
-                  checked={state.darkMode}
-                  onChange={(event) => {
-                    setState({ ...state, darkMode: event.target.checked });
-                  }}
-                  crossOrigin={undefined}
-                />
-                <MoonIcon
-                  opacity={state.darkMode ? "1" : "0.3"}
-                  className={`${
-                    path == "/" ? "lg:text-white text-black" : "text-black"
-                  } h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
-                />
-              </div>
             </div>
           ) : (
             <>
@@ -213,27 +189,27 @@ function ProfileMenu() {
                   );
                 }
               )}
-              <div className="lg:flex gap-3 hidden w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
-                <SunIcon
-                  opacity={state.darkMode ? "0.5" : "1"}
-                  className={`text-black h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
-                />
-                <Switch
-                  id="dark-mode"
-                  name="dark-mode"
-                  checked={state.darkMode}
-                  onChange={(event) => {
-                    setState({ ...state, darkMode: event.target.checked });
-                  }}
-                  crossOrigin={undefined}
-                />
-                <MoonIcon
-                  opacity={state.darkMode ? "1" : "0.3"}
-                  className={`text-black h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
-                />
-              </div>
             </>
           )}
+          <div className="lg:flex gap-3 hidden w-full justify-center lg:py-[0.45rem] pt-[9px] pb-2 px-2 items-center lg:mx-0 ">
+            <SunIcon
+              opacity={state.darkMode ? "0.5" : "1"}
+              className={`text-black h-5 w-5  group-hover:text-black dark:text-white dark:group-hover:text-white`}
+            />
+            <Switch
+              id="dark-mode"
+              name="dark-mode"
+              checked={state.darkMode}
+              onChange={(event) => {
+                setState({ ...state, darkMode: event.target.checked });
+              }}
+              crossOrigin={undefined}
+            />
+            <MoonIcon
+              opacity={state.darkMode ? "1" : "0.3"}
+              className={`text-black h-5 w-5 group-hover:text-black dark:text-white dark:group-hover:text-white`}
+            />
+          </div>
         </MenuList>
         <Accordion
           className="lg:hidden w-full   justify-center items-center border-b border-gray-200"
