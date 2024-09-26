@@ -12,7 +12,6 @@ import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import Image from "next/image";
 import Link from "next/link";
-import { trajanLight, trajanRegular } from "@/lib/fonts";
 import { useRouter } from "next/navigation";
 
 type Product = {
@@ -209,7 +208,7 @@ export default function Cart() {
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
                         <DialogTitle
-                          className={`${trajanRegular.className} text-lg font-medium text-gray-900 dark:text-white`}>
+                          className={`!font-['trajan'] text-lg font-medium text-gray-900 dark:text-white`}>
                           Shopping cart
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
@@ -268,7 +267,7 @@ export default function Cart() {
                                         <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
                                           <h3>
                                             <Link
-                                              className={`hover:text-cypress-green ${trajanRegular.className}`}
+                                              className={`hover:text-cypress-green !font-['trajan']`}
                                               href={`/shop/${product.handle}`}>
                                               {product.title}
                                             </Link>
@@ -293,10 +292,10 @@ export default function Cart() {
                                                 quantity - 1
                                               )
                                             }
-                                            className="px-2">
+                                            className="px-2 dark:text-white">
                                             -
                                           </button>
-                                          <p className="w-12 text-center outline-none border-none">
+                                          <p className="w-12 text-center outline-none border-none dark:text-white">
                                             {quantity}
                                           </p>
                                           <button
@@ -306,7 +305,7 @@ export default function Cart() {
                                                 quantity + 1
                                               )
                                             }
-                                            className="px-2">
+                                            className="px-2 dark:text-white">
                                             +
                                           </button>
                                         </div>
@@ -317,7 +316,7 @@ export default function Cart() {
                                             onClick={() =>
                                               removeFromCart(lineId)
                                             }
-                                            className={`font-bold ${trajanRegular.className} text-cypress-green hover:text-cypress-green-light`}>
+                                            className={`font-bold !font-['trajan'] text-cypress-green hover:text-cypress-green-light`}>
                                             Remove
                                           </button>
                                         </div>
@@ -330,11 +329,11 @@ export default function Cart() {
                           ) : (
                             <div className="flex-1 mt-10 my-auto flex flex-col items-center justify-center">
                               <h2
-                                className={`${trajanRegular.className} text-2xl font-bold text-gray-900 dark:text-white`}>
+                                className={`!font-['trajan'] text-2xl font-bold text-gray-900 dark:text-white`}>
                                 Your cart is empty
                               </h2>
                               <p
-                                className={`${trajanLight.className} text-center text-lg text-gray-600 dark:text-white`}>
+                                className={`!font-['trajan'] text-center text-lg text-gray-600 dark:text-white`}>
                                 Looks like you haven&lsquo;t added any items to
                                 your cart yet.
                               </p>

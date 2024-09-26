@@ -4,7 +4,6 @@ import { Navigation } from "@/components/Navigation/Navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { arpona, trajan, trajanRegular, trajanLight } from "../lib/fonts";
 import Footer from "@/components/Footer";
 import HotjarInit from "@/utils/HotJarInit";
 import Cart from "@/components/shop/Cart";
@@ -35,9 +34,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`dark !${trajan.className} overflow-x-hidden w-screen`}>
+    <html lang="en" className={`dark  overflow-x-hidden w-screen`}>
       <body className="bg-white  dark:bg-[#02140a] ">
         <AuthProvider>
           <div className="main-container relative w-screen">

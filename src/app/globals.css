@@ -4,38 +4,74 @@
 
 /* add trajan-regular font */
 @font-face {
-  font-family: "trajan-extralight";
+  font-family: "trajan";
   src: url("../../public/fonts/trajan-extralight.ttf") format("truetype");
+  font-weight: 100;
 }
 @font-face {
-  font-family: "trajan-regular";
+  font-family: "trajan";
   src: url("../../public/fonts/trajan-regular.otf") format("opentype");
+  font-weight: 500;
 }
 
 @font-face {
-  font-family: "trajan-light";
+  font-family: "trajan";
   src: url("../../public/fonts/trajan-light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+/* Define font faces for different weights */
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-thin.otf") format("opentype");
+  font-weight: 100;
 }
 
 @font-face {
   font-family: "arpona";
-  src: url("../../public/fonts/arpona-thin.otf") format("opentype");
+  src: url("../../public/fonts/arpona-light.otf") format("opentype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-regular.otf") format("opentype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-medium.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-bold.otf") format("opentype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "arpona";
+  src: url("../../public/fonts/arpona-extrabold.otf") format("opentype");
+  font-weight: 900;
 }
 
 html {
   scroll-behavior: smooth;
+  font-family: "arpona";
 }
 
 .cart * {
-  font-family: "arpona", sans-serif;
+  font-family: "arpona";
 }
 
 .main-container * {
-  font-family: "aprona", sans-serif;
+  font-family: "arpona";
 }
 
 #about-paragraph {
-  font-family: "arpona", sans-serif;
+  font-family: "arpona";
 }
 
 .glow-circle {

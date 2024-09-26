@@ -22,7 +22,6 @@ import {
   Square3Stack3DIcon,
 } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
-import { trajanLight, trajanRegular } from "@/lib/fonts";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
@@ -130,7 +129,7 @@ const NavItem = ({
                 <Link href={url} key={title}>
                   <MenuItem className="flex px-2 rounded-none hover:bg-opacity-60 justify-left items-center ">
                     <li
-                      className={`${trajanRegular.className} text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                      className={`!font-['trajan'] text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
                       {title}
                     </li>
                   </MenuItem>
@@ -182,9 +181,7 @@ const NavItem = ({
                           path == "/"
                             ? "lg:text-white text-black"
                             : "text-black"
-                        } ${
-                          trajanRegular.className
-                        } underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                        } !font-['trajan'] underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                         {title}
                       </li>
                     </Link>

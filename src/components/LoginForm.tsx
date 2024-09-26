@@ -92,12 +92,12 @@ const LoginForm = () => {
   };
 
   return (
-    <section className="grid text-center h-screen items-center p-8">
+    <section className="grid text-center min-h-[calc(100vh-264px)] items-center p-8">
       <div>
-        <Typography variant="h3" color="blue-gray" className="mb-2">
+        <Typography variant="h3" className="mb-2 font-bold dark:text-white">
           Sign In
         </Typography>
-        <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
+        <Typography className="mb-16 text-black font-normal text-[18px] dark:text-white">
           Enter your email and password to sign in
         </Typography>
         <form
@@ -107,21 +107,20 @@ const LoginForm = () => {
             <label htmlFor="email">
               <Typography
                 variant="small"
-                className="mb-2 block font-medium text-gray-900">
+                className="mb-2 block font-medium text-gray-900 dark:text-white">
                 Your Email
               </Typography>
             </label>
             <Input
               crossOrigin={null}
               id="email"
-              color="gray"
               size="lg"
               type="email"
               name="email"
               placeholder="name@mail.com"
               value={form.email}
               onChange={handleChange}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full !text-black dark:!text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               labelProps={{
                 className: "hidden",
               }}
@@ -131,7 +130,7 @@ const LoginForm = () => {
             <label htmlFor="password">
               <Typography
                 variant="small"
-                className="mb-2 block font-medium text-gray-900">
+                className="mb-2 block font-medium text-gray-900 dark:text-white">
                 Password
               </Typography>
             </label>
@@ -145,7 +144,7 @@ const LoginForm = () => {
               labelProps={{
                 className: "hidden",
               }}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               type={passwordShown ? "text" : "password"}
               icon={
                 <i onClick={togglePasswordVisibility}>
@@ -171,9 +170,11 @@ const LoginForm = () => {
             <Typography
               variant="small"
               color="gray"
-              className="text-center font-normal">
+              className="text-center font-normal dark:text-white">
               Not registered?{" "}
-              <Link href="/signup" className="font-medium text-gray-900">
+              <Link
+                href="/signup"
+                className="font-medium text-gray-900 dark:text-white">
                 Create account
               </Link>
             </Typography>
@@ -182,7 +183,7 @@ const LoginForm = () => {
               href="#"
               color="blue-gray"
               variant="small"
-              className="font-medium">
+              className="font-medium dark:text-white">
               Forgot password
             </Typography>
           </div>

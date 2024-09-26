@@ -1,5 +1,4 @@
 import ImgWithSkeleton from "@/components/ImgWithSkeleton";
-import { arpona } from "@/lib/fonts";
 import Image from "next/image";
 import React from "react";
 

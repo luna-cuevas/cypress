@@ -3,7 +3,6 @@ import TickerCategories from "@/components/Home/TickerCategories";
 import Gallery from "@/components/Home/Gallery";
 import FadeCarousel from "@/components/Home/FadeCarousel";
 import Link from "next/link";
-import { arpona, trajan, trajanRegular, trajanLight } from "@/lib/fonts";
 import { Motion } from "@/utils/Motion";
 import ParallaxSection from "@/components/Home/ParallaxSection";
 import { stagger } from "framer-motion";
@@ -67,7 +66,7 @@ export default async function Home({ params }: { params: any }) {
               opacity: 0,
             }}
             transition={{ duration: 0.5 }}
-            className={`md:text-5xl text-3xl  ${trajanRegular.className} text-white font-bold tracking-widest leading-tight  uppercase`}>
+            className={`md:text-5xl text-3xl !font-['trajan'] text-white font-bold tracking-widest leading-tight  uppercase`}>
             Quality Designs
           </Motion>
           <div className="grid grid-cols-2 justify-center md:grid-cols-3  gap-4 ">
@@ -183,7 +182,7 @@ export default async function Home({ params }: { params: any }) {
 
       <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center dark:text-white">
         <h2
-          className={`${trajanRegular.className} tracking-widest text-center sm:text-left text-lg sm:text-2xl w-fit font-bold mx-auto`}>
+          className={`!font-['trajan'] tracking-widest text-center sm:text-left text-lg sm:text-3xl w-fit font-bold mx-auto`}>
           Crafting Elegance, Curating Excellence
         </h2>
         <p className="sm:text-xl text-center sm:text-left text-base w-fit mx-auto">
@@ -234,7 +233,7 @@ export default async function Home({ params }: { params: any }) {
             }}
             className="font-light text-left mx-auto sm:w-2/3 text-gray-800 sm:text-lg dark:text-gray-400">
             <h2
-              className={`${trajanRegular.className} mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-white`}>
+              className={`!font-['trajan'] mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-white`}>
               Who We Are
             </h2>
             <p className="mb-4">

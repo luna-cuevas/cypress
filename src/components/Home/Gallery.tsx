@@ -1,4 +1,3 @@
-import { trajanRegular } from "@/lib/fonts";
 import { Motion } from "@/utils/Motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -80,9 +79,8 @@ const Gallery: React.FC<Props> = ({ products }) => {
                   alt={"Product image"}
                 />
               </Link>
-              <div className="absolute top-6 left-6 ">
-                <h3
-                  className={`text-black tracking-widest text-xl font-bold ${trajanRegular.className} `}>
+              <div className="absolute bottom-0 w-full text-white font-bold backdrop-blur-sm left-0 px-6 pt-1 pb-3 ">
+                <h3 className={` tracking-widest text-xl font-medium  `}>
                   {product.title}
                 </h3>
                 {/* <p className="text-white text-xs">{product.productType}</p> */}

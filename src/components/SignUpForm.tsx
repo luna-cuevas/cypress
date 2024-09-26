@@ -76,7 +76,7 @@ export function SignUp() {
 
   if (isSignedUp) {
     return (
-      <div className="h-screen p-4 flex items-center  rounded-md">
+      <div className="min-h-[calc(100vh-264px)] p-4 flex items-center  rounded-md">
         <p className="max-w-2xl mx-auto text-xl text-center">
           Thank you for signing up! You will be redirected to the login page in
           a few seconds.
@@ -86,9 +86,10 @@ export function SignUp() {
   }
 
   return (
-    <section className="grid text-center h-screen items-center p-8">
+    <section
+      className={`!font-['trajan'] grid text-center min-h-[calc(100vh-264px)] items-center p-8`}>
       <div>
-        <Typography variant="h3" color="blue-gray" className="mb-2">
+        <Typography variant="h3" className="mb-2">
           Sign Up
         </Typography>
         <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
@@ -96,8 +97,8 @@ export function SignUp() {
         </Typography>
         <form
           onSubmit={handleSignUp}
-          className="mx-auto max-w-[24rem] text-left">
-          <div className="mb-6">
+          className="mx-auto grid grid-cols-2 gap-2 max-w-[24rem] text-left">
+          <div className="mb-3 w-full">
             <label htmlFor="firstName">
               <Typography
                 variant="small"
@@ -106,22 +107,24 @@ export function SignUp() {
               </Typography>
             </label>
             <Input
+              containerProps={{
+                className: "min-w-[0px]",
+              }}
               id="firstName"
-              color="gray"
               size="lg"
               type="text"
               name="firstName"
               placeholder="First Name"
               value={form.firstName}
               onChange={handleChange}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               labelProps={{
                 className: "hidden",
               }}
               crossOrigin={undefined}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-3 ">
             <label htmlFor="lastName">
               <Typography
                 variant="small"
@@ -130,22 +133,24 @@ export function SignUp() {
               </Typography>
             </label>
             <Input
+              containerProps={{
+                className: "min-w-[0px]",
+              }}
               id="lastName"
-              color="gray"
               size="lg"
               type="text"
               name="lastName"
               placeholder="Last Name"
               value={form.lastName}
               onChange={handleChange}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               labelProps={{
                 className: "hidden",
               }}
               crossOrigin={undefined}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-3 col-span-2">
             <label htmlFor="email">
               <Typography
                 variant="small"
@@ -154,22 +159,24 @@ export function SignUp() {
               </Typography>
             </label>
             <Input
+              containerProps={{
+                className: "min-w-[0px]",
+              }}
               id="email"
-              color="gray"
               size="lg"
               type="email"
               name="email"
               placeholder="name@mail.com"
               value={form.email}
               onChange={handleChange}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               labelProps={{
                 className: "hidden",
               }}
               crossOrigin={undefined}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-3 col-span-2">
             <label htmlFor="password">
               <Typography
                 variant="small"
@@ -178,6 +185,9 @@ export function SignUp() {
               </Typography>
             </label>
             <Input
+              containerProps={{
+                className: "min-w-[0px]",
+              }}
               size="lg"
               placeholder="********"
               name="password"
@@ -186,7 +196,7 @@ export function SignUp() {
               labelProps={{
                 className: "hidden",
               }}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               type={passwordShown ? "text" : "password"}
               icon={
                 <i onClick={togglePasswordVisibility}>
@@ -204,14 +214,14 @@ export function SignUp() {
             type="submit"
             color="gray"
             size="lg"
-            className="mt-6"
+            className="mt-3 col-span-2 dark:bg-white dark:text-black dark:hover:bg-gray-300"
             fullWidth>
             Sign Up
           </Button>
           <Typography
             variant="small"
             color="gray"
-            className="!mt-4 text-center font-normal">
+            className="!mt-3 text-center font-normal col-span-2">
             Already registered?{" "}
             <Link href="/login" className="font-medium text-gray-900">
               Login

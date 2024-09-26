@@ -29,7 +29,6 @@ import {
   usePathname,
 } from "next/navigation";
 import { Accordion } from "../Accordion";
-import { trajanRegular } from "@/lib/fonts";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Option, Select } from "@material-tailwind/react";
@@ -242,7 +241,7 @@ export default function ProductFilters({
       <main className="mx-auto max-w-screen   h-full w-full">
         <div className="flex flex-col  justify-between   mx-auto">
           <h1
-            className={`${trajanRegular.className} px-[2%] lg:w-full lg:text-xl font-bold text-2xl tracking-widest text-black dark:text-white`}>
+            className={`!font-['trajan'] px-[2%] lg:w-full lg:text-xl font-bold text-2xl tracking-widest text-black dark:text-white`}>
             {title}
           </h1>
 

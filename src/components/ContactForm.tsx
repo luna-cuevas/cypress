@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { arpona, trajan, trajanRegular, trajanLight } from "../lib/fonts";
 import { toast } from "react-toastify";
 
 type Props = {};

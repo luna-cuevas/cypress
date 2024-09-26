@@ -25,7 +25,6 @@ import {
   SunIcon,
   MoonIcon,
 } from "@heroicons/react/24/solid";
-import { arpona, trajanLight, trajanRegular } from "@/lib/fonts";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import { useSupabase } from "@/lib/supabase";
@@ -129,9 +128,9 @@ function ProfileMenu() {
                 <Typography
                   as="span"
                   variant="small"
-                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 ${
-                    trajanLight.className
-                  } ${state.darkMode ? "text-white" : "text-black"}`}>
+                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 !font-['trajan'] ${
+                    state.darkMode ? "text-white" : "text-black"
+                  }`}>
                   Login
                 </Typography>
               </Link>
@@ -140,9 +139,9 @@ function ProfileMenu() {
                 <Typography
                   as="span"
                   variant="small"
-                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 ${
-                    trajanLight.className
-                  } ${state.darkMode ? "text-white" : "text-black"}`}>
+                  className={`font-bold border-b py-1 border-gray-300 hover:bg-gray-200 !font-['trajan'] ${
+                    state.darkMode ? "text-white" : "text-black"
+                  }`}>
                   Sign Up
                 </Typography>
               </Link>
@@ -190,7 +189,7 @@ function ProfileMenu() {
                       <Typography
                         as="span"
                         variant="small"
-                        className={`font-bold ${trajanLight.className} ${
+                        className={`font-bold !font-['trajan'] ${
                           state.darkMode ? "text-white" : "text-black"
                         }`}>
                         {label}
@@ -280,9 +279,7 @@ function ProfileMenu() {
                     }}
                     className={`${
                       path == "/" ? "lg:text-white text-black" : "text-black"
-                    } ${
-                      trajanRegular.className
-                    } lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                    } !font-['trajan'] lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                     Sign In
                   </ListItem>
                 </MenuItem>
@@ -298,9 +295,7 @@ function ProfileMenu() {
                           path == "/"
                             ? "lg:text-white text-black"
                             : "text-black"
-                        } ${
-                          trajanRegular.className
-                        } lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                        } !font-['trajan'] lg:underline-animation focus:bg-transparent hover:bg-transparent relative py-0 group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                         {label}
                       </ListItem>
                     ) : (
@@ -310,9 +305,7 @@ function ProfileMenu() {
                             path == "/"
                               ? "lg:text-white text-black"
                               : "text-black"
-                          } ${
-                            trajanRegular.className
-                          } lg:underline-animation focus:bg-transparent hover:bg-transparent py-0 relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
+                          } !font-['trajan'] lg:underline-animation focus:bg-transparent hover:bg-transparent py-0 relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-xs box-content`}>
                           {label}
                         </ListItem>
                       </Link>
