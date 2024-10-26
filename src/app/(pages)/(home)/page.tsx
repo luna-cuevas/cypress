@@ -67,7 +67,7 @@ export default async function Home({ params }: { params: any }) {
               opacity: 0,
             }}
             transition={{ duration: 0.5 }}
-            className={`md:text-5xl text-3xl !font-['trajan'] text-white font-bold tracking-widest leading-tight  uppercase`}>
+            className={`md:text-5xl text-3xl !font-['trajan'] text-white tracking-widest leading-tight  uppercase`}>
             Quality Designs
           </Motion>
           <div className="grid grid-cols-2 justify-center md:grid-cols-3  gap-4 ">
@@ -86,11 +86,11 @@ export default async function Home({ params }: { params: any }) {
                 opacity: 0,
               }}
               transition={{ duration: 0.5 }}
-              className=" flex-col sm:flex-row sm:gap-2 col-span-2  md:col-span-1 font-bold order-1 flex md:block w-fit mx-auto md:mr-0 md:gap-2 text-center md:text-right">
-              <h2 className={`uppercase text-xl text-white `}>
+              className=" flex-col sm:flex-row sm:gap-2 col-span-2  md:col-span-1 order-1 flex md:block w-fit mx-auto md:mr-0 md:gap-2 text-center md:text-right">
+              <h2 className={`uppercase !font-['trajan'] text-xl text-white `}>
                 {"Stylish men's wear "}
               </h2>
-              <h3 className="uppercase text-xl text-white">
+              <h3 className="uppercase !font-['trajan'] text-xl text-white">
                 {"Designed to last"}
               </h3>
             </Motion>{" "}
@@ -112,7 +112,7 @@ export default async function Home({ params }: { params: any }) {
                   opacity: 0,
                 }}
                 transition={{ duration: 0.5 }}
-                className="hover:bg-cypress-green hover:bg-opacity-60 font-bold bg-transparent backdrop-blur-sm border-cypress-green border-2 text-lg text-white px-6 py-3 rounded-lg">
+                className="hover:bg-cypress-green !font-['trajan'] hover:bg-opacity-60 bg-transparent backdrop-blur-sm border-cypress-green border-2 text-lg text-white px-6 py-3 rounded-lg">
                 Shop Now
               </Motion>
             </Link>
@@ -131,12 +131,12 @@ export default async function Home({ params }: { params: any }) {
                 opacity: 0,
               }}
               transition={{ duration: 0.5 }}
-              className="text-white hover:underline cursor-pointer font-bold col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
+              className="text-white hover:underline cursor-pointer col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
               <a
                 target="_blank"
                 href="https://maps.app.goo.gl/fmgy5j3BDaSrKZzv6">
-                <p>{"Visit our store in "}</p>
-                <p className="">{"Dallas, Texas"}</p>
+                <p className="!font-['trajan']">{"Visit our store in "}</p>
+                <p className="!font-['trajan']">{"Dallas, Texas"}</p>
               </a>
             </Motion>
           </div>
@@ -175,13 +175,13 @@ export default async function Home({ params }: { params: any }) {
         </div>
       </section>
 
-      <section
+      {/* <section
         id="featured"
         className="w-full flex h-[80vmax]  sm:h-[40vmax]  transition-all duration-500  mt-4  mx-auto">
         <Gallery products={featuredData.collections.slice(0, 3)} />
-      </section>
+      </section> */}
 
-      <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center dark:text-white">
+      {/* <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center dark:text-white">
         <h2
           className={`!font-['trajan'] tracking-widest text-center sm:text-left text-lg sm:text-3xl w-fit font-bold mx-auto`}>
           Crafting Elegance, Curating Excellence
@@ -201,19 +201,19 @@ export default async function Home({ params }: { params: any }) {
             </button>
           </Link>
         </div>
-      </section>
+      </section> */}
 
-      <section
+      {/* <section
         id="featured"
         className="w-full flex h-[80vmax]  sm:h-[40vmax]  transition-all duration-500  mt-4  mx-auto">
         <Gallery products={featuredData.collections.slice(3, 6)} />
-      </section>
+      </section> */}
 
       <section className="w-full flex gap-4 border-y-2  my-16 py-2 border-cypress-green dark:border-cypress-green-light">
         <TickerCategories />
       </section>
 
-      <section className=" mb-16">
+      {/* <section className=" mb-16">
         <div className="gap-8 items-center py-0 px-4 mx-auto  lg:grid lg:grid-cols-2 ">
           <Motion
             type="div"
@@ -294,11 +294,11 @@ export default async function Home({ params }: { params: any }) {
             </div>
           </Motion>
         </div>
-      </section>
+      </section> */}
 
       {/* <LoadingSkeleton /> */}
 
-      <Motion
+      {/* <Motion
         type="div"
         initial={{
           scale: 0.9,
@@ -317,7 +317,7 @@ export default async function Home({ params }: { params: any }) {
         }}
         className="">
         <NewsLetterSignUp />
-      </Motion>
+      </Motion> */}
     </main>
   );
 }

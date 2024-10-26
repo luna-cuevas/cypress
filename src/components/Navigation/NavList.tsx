@@ -51,8 +51,7 @@ const shopCategories = [
 const navListItems = [
   {
     label: "Shop",
-    isDropdown: true,
-    shopCategories,
+    url: "/shop",
   },
   {
     label: "About",
@@ -99,13 +98,13 @@ const NavList = (collections: any) => {
             duration: 0.5,
           }}
           className="lg:w-fit ju  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
-          {navListItems.map(({ label, url, isDropdown, icon }, key) => (
+          {navListItems.map(({ label, url, icon }, key) => (
             <NavItem
               key={key}
               label={label}
               url={url}
               isCart={label === "Cart"}
-              isDropdown={isDropdown}
+              // isDropdown={isDropdown}
               shopCategories={shopCategories}
               state={state}
               icon={icon}

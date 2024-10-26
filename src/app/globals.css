@@ -194,3 +194,15 @@ span.absolute.top-2\/4.-translate-y-2\/4.left-0.pt-3 {
     opacity: 0;
   }
 }
+
+.accordion-header span {
+  margin-left: 0.5rem;
+}
+
+.accordion-header span svg {
+  width: 1rem;
+}
+
+button.peer.w-full.h-full.bg-transparent.text-blue-gray-700.font-sans.font-normal.text-left.outline.outline-0.focus\:outline-0.disabled\:bg-blue-gray-50.disabled\:border-0.disabled\:cursor-not-allowed.transition-all.border-b.text-sm.pt-4.pb-1\.5.border-blue-gray-200 {
+  color: black;
+}

@@ -91,7 +91,7 @@ export function Accordion({
       open={open}
       icon={<Icon id={1} open={open} />}>
       <AccordionHeader
-        className="w-full border-0  lg:border lg:border-gray-300 rounded-full py-0 lg:px-2 px-4 "
+        className="w-full border-0 accordion-header lg:border-0 lg:border-gray-300 rounded-full py-0 lg:px-0 px-4 "
         onClick={() => setOpen((prev) => !prev)}>
         <div className={`${buttonStyles}   w-full`}>
           <h2 className="text-sm  text-black dark:text-white font-medium">
@@ -117,7 +117,7 @@ export function Accordion({
             return checked ? (
               <div
                 key={optionIdx}
-                className="flex lg:px-4 px-8  border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
+                className="flex lg:px-2 px-8  border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
                 <input
                   id={`filter-${option.value}-${optionIdx}`}
                   name={`${option.value}[]`}
@@ -133,7 +133,7 @@ export function Accordion({
                         [option.value as string]: !prev[option.value as string],
                       }));
                   }}
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="h-4 w-4 align-middle m-auto rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                 />
                 <label
                   htmlFor={`filter-${option.value}-${optionIdx}`}
@@ -144,7 +144,7 @@ export function Accordion({
             ) : (
               <div
                 key={optionIdx}
-                className="flex lg:px-4 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
+                className="flex lg:px-2 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
                 <Link
                   href={option.href || "#"}
                   className=" text-sm  text-black dark:text-white w-full cursor-pointer">
@@ -156,7 +156,7 @@ export function Accordion({
         ) : (
           <div
             key={title}
-            className="flex lg:px-4 px-8 w-full bg-white gap-0 py-0 ">
+            className="flex lg:px-2 px-8 w-full bg-white gap-0 py-0 ">
             <Slider
               onChange={(e) => {
                 setSliderValue(Number(e.target.value));

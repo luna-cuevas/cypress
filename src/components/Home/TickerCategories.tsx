@@ -25,7 +25,7 @@ const TickerCategories: React.FC<Props> = ({}) => {
             className="inline-block  justify-center text-center px-2 mx-5 md:mx-16">
             <Link
               href={`/shop/${item?.toLowerCase() || "default"}`}
-              className={`!text-['arpona'] text-black dark:text-white text-lg w-full font-medium text-center uppercase`}>
+              className={`!font-['trajan'] text-black dark:text-white text-lg w-full font-medium text-center uppercase`}>
               {item}
             </Link>
           </div>

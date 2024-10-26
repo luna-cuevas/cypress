@@ -238,14 +238,14 @@ export default function ProductFilters({
       </Dialog>
 
       {/* Desktop View */}
-      <main className="mx-auto max-w-screen   h-full w-full">
+      <main className="mx-auto max-w-screen mt-4  h-full w-full">
         <div className="flex flex-col  justify-between   mx-auto">
           <h1
             className={`!font-['trajan'] px-[2%] lg:w-full lg:text-xl font-bold text-2xl tracking-widest text-black dark:text-white`}>
             {title}
           </h1>
 
-          {sortFilter == "created_at" ? (
+          {/* {sortFilter == "created_at" ? (
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -307,7 +307,7 @@ export default function ProductFilters({
               </div>
             </motion.div>
           ) : (
-            <div className="w-full h-full my-4 flex  overflow-x-scroll px-[2%] py-0 lg:grid lg:grid-cols-5 gap-2">
+            <div className="w-full h-full my-4 flex  overflow-x-scroll overflow-y-hidden px-[2%] py-0 lg:grid lg:grid-cols-5 gap-2">
               {subCategories.map((category, index) => {
                 return (
                   <motion.div
@@ -340,12 +340,12 @@ export default function ProductFilters({
                 );
               })}
             </div>
-          )}
+          )} */}
 
-          <div className="flex items-center  lg:w-full px-[2%]">
+          <div className="flex items-center mt-2 lg:w-full px-[2%]">
             <div className=" w-full justify-between hidden lg:flex gap-2">
               <div className="w-full flex gap-4 items-center">
-                <div className="hidden lg:block">
+                <div className="hidden lg:block border-b border-gray-300">
                   <Accordion
                     title="Categories"
                     buttonStyles="flex w-full items-center justify-between py-3 lg:py-1 text-base font-medium text-gray-400 hover:text-gray-500"
@@ -359,7 +359,7 @@ export default function ProductFilters({
                   />
                 </div>
 
-                <div className="hidden lg:block">
+                <div className="hidden lg:block border-b border-gray-300">
                   {filters.map((section) => (
                     <Accordion
                       key={section.id}
@@ -413,7 +413,7 @@ export default function ProductFilters({
                         value={option.value}
                         key={index}
                         className={classNames(
-                          "block w-full px-1 text-sm text-black"
+                          "block w-full px-1 text-sm !text-black"
                         )}>
                         {option.name}
                       </Option>
