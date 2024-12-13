@@ -1,29 +1,26 @@
 // /app/api/getCustomer/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     // Retrieve access token from cookies
-    const cookieStore = cookies();
-    const accessToken = cookieStore.get("shopifyAccessToken")?.value;
+    const accessToken = req.cookies.get("shopifyAccessToken")?.value;
 
     if (!accessToken) {
-      return NextResponse.json(
-        { error: "No access token found" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const query = `
-      query customer($customerAccessToken: String!) {
+      query getCustomer($customerAccessToken: String!) {
         customer(customerAccessToken: $customerAccessToken) {
           id
-          email
           firstName
           lastName
-          addresses(first: 10) {
+          email
+          phone
+          addresses(first: 5) {
             edges {
               node {
                 id
@@ -31,8 +28,8 @@ export async function POST(req: NextRequest) {
                 address2
                 city
                 province
-                country
                 zip
+                country
               }
             }
           }
@@ -44,41 +41,38 @@ export async function POST(req: NextRequest) {
       customerAccessToken: accessToken,
     };
 
-    const response = await fetch(
-      `${process.env.SHOPIFY_STOREFRONT_API_URL}/api/2023-07/graphql.json`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Shopify-Storefront-Access-Token":
-            process.env.SHOPIFY_STOREFRONT_API_TOKEN!,
-        },
-        body: JSON.stringify({ query, variables }),
-      }
-    );
+    const response = await fetch(process.env.SHOPIFY_STOREFRONT_API_URL!, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token":
+          process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
+      },
+      body: JSON.stringify({ query, variables }),
+    });
 
-    const responseData = await response.json();
+    const data = await response.json();
 
-    console.log("getCustomer response:", responseData);
+    if (data.data && data.data.customer) {
+      const customer = data.data.customer;
 
-    if (
-      responseData.data &&
-      responseData.data.customer &&
-      responseData.data.customer.email
-    ) {
-      return NextResponse.json({
-        customer: responseData.data.customer,
-      });
+      // Transform addresses
+      const addresses = customer.addresses.edges.map((edge: any) => edge.node);
+
+      return NextResponse.json(
+        { customer: { ...customer, addresses } },
+        { status: 200 }
+      );
     } else {
       return NextResponse.json(
-        { error: "Failed to fetch customer", details: responseData },
+        { error: "Failed to fetch customer data." },
         { status: 400 }
       );
     }
   } catch (error: any) {
     console.error("Error fetching customer data:", error);
     return NextResponse.json(
-      { error: "Failed to fetch customer", details: error.message },
+      { error: "Internal server error", details: error.message },
       { status: 500 }
     );
   }

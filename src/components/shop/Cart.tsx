@@ -96,7 +96,7 @@ export default function Cart() {
 
   // Fetch the cart when the component mounts
   useEffect(() => {
-    if (state.cartId != "") {
+    if (state.cartId) {
       fetchCart(state.cartId);
     }
   }, [state.cartId]);
@@ -149,10 +149,13 @@ export default function Cart() {
     const data = await response.json();
 
     if (response.ok && data.cart) {
+      const updatedCartItems = data.cart.lines.edges.map(mapCartLine);
+
       setState({
         ...state,
         cartItems: data.cart.lines.edges.map(mapCartLine),
         cartCost: data.cart.cost,
+        cartId: updatedCartItems.length === 0 ? null : state.cartId,
       });
     } else {
       console.error("Failed to remove item from cart:", data);
