@@ -17,7 +17,7 @@ export default function TabContent({ product }: { product: any }) {
               className={classNames(
                 activeTab === tab
                   ? "border-cypress-green text-cypress-green dark:text-cypress-green-light"
-                  : "border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300",
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600",
                 "whitespace-nowrap w-full py-4 px-1 border-b-2 font-medium text-base"
               )}
               onClick={() => setActiveTab(tab)}>

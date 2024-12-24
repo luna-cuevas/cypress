@@ -138,8 +138,11 @@ const AddToCartButton = (props: Props) => {
       <select
         id="quantity"
         name="quantity"
-        autoComplete="quantity"
-        className="block w-fit px-6 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-cypress-green focus:border-cypress-green sm:text-sm"
+        autoComplete="off"
+        className="block w-fit px-6 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 
+        dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-cypress-green 
+        focus:border-cypress-green dark:focus:ring-cypress-green-light 
+        dark:focus:border-cypress-green-light sm:text-sm"
         defaultValue="1">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -150,7 +153,11 @@ const AddToCartButton = (props: Props) => {
 
       <button
         type="submit"
-        className="flex w-full items-center justify-center border border-transparent bg-cypress-green px-6 py-2 text-base font-medium text-white hover:bg-cypress-green-light focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        className="flex w-full items-center justify-center border border-transparent 
+        bg-cypress-green px-6 py-2 text-base font-medium text-white 
+        hover:bg-cypress-green-light focus:outline-none focus:ring-2 
+        focus:ring-cypress-green dark:focus:ring-cypress-green-light focus:ring-offset-2 
+        dark:focus:ring-offset-black">
         Add to cart
       </button>
     </form>

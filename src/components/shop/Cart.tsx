@@ -180,12 +180,7 @@ export default function Cart() {
     <Transition show={state.cartOpen}>
       <Dialog
         className="relative !z-[200000000] cart"
-        onClose={() =>
-          setState({
-            ...state,
-            cartOpen: false,
-          })
-        }>
+        onClose={() => setState({ ...state, cartOpen: false })}>
         <TransitionChild
           enter="ease-in-out duration-500"
           enterFrom="opacity-0"
@@ -196,7 +191,7 @@ export default function Cart() {
           <div className="fixed inset-0 bg-gray-500 dark:bg-gray-800 !bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
-        <div className="fixed inset-0 overflow-hidden ">
+        <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none z-[10000000] fixed inset-y-0 right-0 flex max-w-full pl-10">
               <TransitionChild
@@ -206,23 +201,19 @@ export default function Cart() {
                 leave="transform transition ease-in-out duration-500 sm:duration-700"
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full">
-                <DialogPanel className="pointer-events-auto w-screen max-w-lg">
-                  <div className="flex h-full flex-col overflow-y-scroll dark:bg-gray-900 bg-white shadow-xl">
-                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-                      <div className="flex items-start justify-between">
-                        <DialogTitle
-                          className={`!font-['trajan'] text-lg font-medium text-gray-900 dark:text-white`}>
+                <DialogPanel className="pointer-events-auto w-screen max-w-md">
+                  <div className="flex flex-col h-full flex- px-0 overflow-y-scroll bg-white dark:bg-black shadow-xl">
+                    <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-4">
+                      <div className="flex items-start justify-between border-b">
+                        <DialogTitle className="text-xl font-medium text-gray-900 dark:text-white !font-['trajan']">
                           Shopping cart
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="relative -m-2 p-2 text-gray-400 dark:text-white hover:text-gray-500"
+                            className="relative -m-2 p-2 text-gray-400 hover:text-gray-500 dark:text-white dark:hover:text-gray-300 transition-all duration-200 focus:outline-none"
                             onClick={() =>
-                              setState({
-                                ...state,
-                                cartOpen: false,
-                              })
+                              setState({ ...state, cartOpen: false })
                             }>
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
@@ -236,58 +227,57 @@ export default function Cart() {
                           {state.cartItems.length > 0 ? (
                             <ul
                               role="list"
-                              className="-my-6 divide-y divide-gray-200">
+                              className="-my-6 divide-y divide-gray-200 dark:divide-gray-700">
                               {state.cartItems.map((item: Product) => {
                                 const { product, variant, quantity, lineId } =
                                   item;
                                 return (
                                   <li key={lineId} className="flex py-6">
-                                    <Link href={`/shop/${product.handle}`}>
-                                      {product.images[0]?.src ? (
-                                        <div className="h-24 w-24 relative flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
+                                      <Link href={`/shop/${product.handle}`}>
+                                        <div className="relative h-full w-full">
                                           <Image
                                             priority
                                             fill
-                                            sizes="(max-width: 640px) 100vw,(max-width: 1024px) 50vw,33vw"
-                                            blurDataURL="data:image/png;base64,..."
-                                            placeholder="blur"
-                                            src={product.images[0].src}
-                                            alt={product.images[0].altText}
+                                            sizes="96px"
+                                            src={
+                                              product.images[0]?.src ||
+                                              "/placeholder.jpg"
+                                            }
+                                            alt={
+                                              product.images[0]?.altText ||
+                                              product.title
+                                            }
                                             className="h-full w-full object-cover object-center"
                                           />
                                         </div>
-                                      ) : (
-                                        <div className="h-full w-full bg-gray-200 flex items-center justify-center">
-                                          <span className="text-gray-500">
-                                            No Image Available
-                                          </span>
-                                        </div>
-                                      )}
-                                    </Link>
+                                      </Link>
+                                    </div>
 
                                     <div className="ml-4 flex flex-1 flex-col">
                                       <div>
-                                        <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
-                                          <h3>
+                                        <div className="flex justify-between">
+                                          <h3 className="text-base font-medium text-gray-900 dark:text-white">
                                             <Link
-                                              className={`hover:text-cypress-green !font-['trajan']`}
-                                              href={`/shop/${product.handle}`}>
+                                              href={`/shop/${product.handle}`}
+                                              className="!font-['trajan'] hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200">
                                               {product.title}
                                             </Link>
                                           </h3>
-                                          <p className="ml-4 font-bold">
+                                          <p className="ml-4 text-base font-medium text-gray-900 dark:text-white">
                                             $
                                             {parseFloat(
                                               variant.variantPrice
                                             ).toFixed(2)}
                                           </p>
                                         </div>
-                                        <p className="mt-1 text-sm text-gray-500 dark:text-white">
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                           {variant.variantTitle}
                                         </p>
                                       </div>
+
                                       <div className="flex flex-1 items-end justify-between text-sm">
-                                        <div className="flex items-center">
+                                        <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-md">
                                           <button
                                             onClick={() =>
                                               updateCartLineQuantity(
@@ -295,12 +285,12 @@ export default function Cart() {
                                                 quantity - 1
                                               )
                                             }
-                                            className="px-2 dark:text-white">
+                                            className="px-3 py-1 text-gray-600 dark:text-gray-400 hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200 focus:outline-none">
                                             -
                                           </button>
-                                          <p className="w-12 text-center outline-none border-none dark:text-white">
+                                          <span className="px-3 py-1 text-gray-900 dark:text-white border-x border-gray-200 dark:border-gray-700">
                                             {quantity}
-                                          </p>
+                                          </span>
                                           <button
                                             onClick={() =>
                                               updateCartLineQuantity(
@@ -308,21 +298,17 @@ export default function Cart() {
                                                 quantity + 1
                                               )
                                             }
-                                            className="px-2 dark:text-white">
+                                            className="px-3 py-1 text-gray-600 dark:text-gray-400 hover:text-cypress-green dark:hover:text-cypress-green-light">
                                             +
                                           </button>
                                         </div>
 
-                                        <div className="flex">
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              removeFromCart(lineId)
-                                            }
-                                            className={`font-bold !font-['trajan'] text-cypress-green hover:text-cypress-green-light`}>
-                                            Remove
-                                          </button>
-                                        </div>
+                                        <button
+                                          type="button"
+                                          onClick={() => removeFromCart(lineId)}
+                                          className="font-medium text-red-500 hover:text-red-600 transition-all duration-200 focus:outline-none">
+                                          Remove
+                                        </button>
                                       </div>
                                     </div>
                                   </li>
@@ -330,15 +316,13 @@ export default function Cart() {
                               })}
                             </ul>
                           ) : (
-                            <div className="flex-1 mt-10 my-auto flex flex-col items-center justify-center">
-                              <h2
-                                className={`!font-['trajan'] text-2xl font-bold text-gray-900 dark:text-white`}>
+                            <div className="flex flex-col items-center justify-center py-12">
+                              <h2 className="!font-['trajan'] text-xl font-medium text-gray-900 dark:text-white">
                                 Your cart is empty
                               </h2>
-                              <p
-                                className={`!font-['trajan'] text-center text-lg text-gray-600 dark:text-white`}>
-                                Looks like you haven&lsquo;t added any items to
-                                your cart yet.
+                              <p className="mt-2 text-center text-gray-500 dark:text-gray-400">
+                                Looks like you have not added any items to your
+                                cart yet.
                               </p>
                             </div>
                           )}
@@ -347,8 +331,8 @@ export default function Cart() {
                     </div>
 
                     {state.cartItems.length > 0 && (
-                      <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                        <div className="flex justify-between text-base font-bold text-gray-900">
+                      <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-6 sm:px-6">
+                        <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
                           <p>Subtotal</p>
                           <p>
                             $
@@ -357,33 +341,27 @@ export default function Cart() {
                             ).toFixed(2)}
                           </p>
                         </div>
-                        <p className="mt-0.5 text-sm text-gray-500 dark:text-white">
+                        <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
                           Shipping and taxes calculated at checkout.
                         </p>
-                        <div className="mt-6 w-full">
+                        <div className="mt-6">
                           <button
                             type="button"
                             onClick={createCheckout}
-                            className="flex items-center w-full justify-center rounded-md border border-transparent bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light">
+                            className="w-full rounded-md bg-cypress-green px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-cypress-green-light transition-all duration-200 focus:outline-none backdrop-blur-sm">
                             Checkout
                           </button>
                         </div>
-                        <div className="mt-6 flex justify-center text-center text-sm text-gray-500 dark:text-white">
-                          <p>
-                            or{" "}
-                            <button
-                              type="button"
-                              className="font-bold text-cypress-green hover:text-cypress-green-light"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  cartOpen: false,
-                                })
-                              }>
-                              Continue Shopping
-                              <span aria-hidden="true"> &rarr;</span>
-                            </button>
-                          </p>
+                        <div className="mt-6 flex justify-center text-center text-sm text-gray-500 dark:text-gray-400">
+                          <button
+                            type="button"
+                            className="font-medium text-cypress-green hover:text-cypress-green-light transition-all duration-200 focus:outline-none"
+                            onClick={() =>
+                              setState({ ...state, cartOpen: false })
+                            }>
+                            Continue Shopping
+                            <span aria-hidden="true"> →</span>
+                          </button>
                         </div>
                       </div>
                     )}

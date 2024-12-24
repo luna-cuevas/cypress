@@ -120,7 +120,7 @@ const LoginForm = () => {
               placeholder="name@mail.com"
               value={form.email}
               onChange={handleChange}
-              className="w-full !text-black dark:!text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
+              className="w-full text-black dark:text-white placeholder:opacity-100 focus:ring-0 border-black dark:border-white focus:!border-cypress-green focus:ring-transparent border-1"
               labelProps={{
                 className: "hidden",
               }}
@@ -161,7 +161,7 @@ const LoginForm = () => {
             type="submit"
             color="gray"
             size="lg"
-            className="mt-6"
+            className="mt-6 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
             fullWidth
             disabled={loading}>
             {loading ? "Logging in..." : "Sign In"}

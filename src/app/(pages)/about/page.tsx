@@ -30,14 +30,14 @@ const page = (props: Props) => {
               backgroundPosition: "100% 100%",
             }}></div>{" "}
         </div>
-        <div className="lg:w-1/2 lg:h-[85%]  my-auto dark:text-white px-1  flex flex-col lg:order-2">
+        <div className="lg:w-1/2 lg:h-[85%]  my-auto text-black dark:text-white px-1  flex flex-col lg:order-2">
           <div className="mx-auto w-full gap-6 pl-4 flex flex-col">
             <h1 className="text-4xl lg:text-left text-center uppercase">
               Who we are
             </h1>
             <p
               id="about-paragraph"
-              className={`lg:text-xl !leading-relaxed text-center lg:text-left text-lg`}>
+              className="lg:text-xl !leading-relaxed text-center lg:text-left text-lg dark:text-gray-200">
               Cypress is a multi-brand space championing thoughtful elegance in
               the Dallas menswear scene. Inspired by the beauty of the natural
               world, we aim to curate a moment in time defined by calm and

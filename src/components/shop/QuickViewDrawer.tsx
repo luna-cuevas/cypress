@@ -116,11 +116,11 @@ export function QuickViewDrawer(props: Props) {
         open={selectedProduct ? true : false}
         onClose={closeBox}
         placement="right"
-        className="pt-2 px-8 ">
+        className="pt-2 px-8 dark:bg-black">
         <div className="w-full h-full flex flex-col">
           <button
             onClick={closeBox}
-            className="w-fit mb-2 ml-auto text-xl  shadow-md rounded-full px-2 text-gray-800 dark:text-white">
+            className="w-fit mb-2 ml-auto text-xl shadow-md rounded-full px-2 text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300">
             x
           </button>
           <div className="h-[450px]">
@@ -128,16 +128,20 @@ export function QuickViewDrawer(props: Props) {
           </div>
 
           <div className="flex overflow-y-scroll flex-col gap-2 my-2">
-            <h2 className=" text-xl font-semibold">{selectedProduct?.title}</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {selectedProduct?.title}
+            </h2>
 
-            <p className="">${selectedProduct?.variants[0].variantPrice}0</p>
+            <p className="text-gray-900 dark:text-white">
+              ${selectedProduct?.variants[0].variantPrice}0
+            </p>
             <div className="mt-2">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-600">
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
                   {selectedVariant?.variantTitle ? (
                     <span className="gap-1 flex">
                       Size
-                      <span className=" text-black">
+                      <span className="text-black dark:text-white">
                         {selectedVariant.variantTitle}
                       </span>
                     </span>
@@ -147,14 +151,14 @@ export function QuickViewDrawer(props: Props) {
                 </h3>
                 <Link
                   href="#"
-                  className="text-sm underline font-medium text-gray-800 hover:text-cypress-green-light">
+                  className="text-sm underline font-medium text-gray-800 hover:text-cypress-green dark:text-gray-300 dark:hover:text-cypress-green-light">
                   Size guide
                 </Link>
               </div>
               <fieldset aria-label="Choose a size" className="mt-4">
                 <RadioGroup
                   value={selectedVariant?.variantTitle}
-                  className="grid grid-cols-3 gap-2 ">
+                  className="grid grid-cols-3 gap-2">
                   {product?.variants.map(
                     (
                       variant: {
@@ -172,10 +176,12 @@ export function QuickViewDrawer(props: Props) {
                         className={({ focus }) =>
                           classNames(
                             variant.variantQuantityAvailable
-                              ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                              : "cursor-not-allowed bg-gray-50 text-gray-200",
-                            focus ? "ring-2 ring-indigo-500" : "",
-                            "group relative flex items-center justify-center  border py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 "
+                              ? "cursor-pointer bg-white dark:bg-black text-gray-900 dark:text-white shadow-sm"
+                              : "cursor-not-allowed bg-gray-50 dark:bg-gray-900 text-gray-200 dark:text-gray-700",
+                            focus
+                              ? "ring-2 ring-indigo-500 dark:ring-indigo-400"
+                              : "",
+                            "group relative flex items-center justify-center border dark:border-gray-700 py-3 text-sm font-medium uppercase hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
                           )
                         }>
                         {({ checked, focus }) => (
@@ -186,19 +192,19 @@ export function QuickViewDrawer(props: Props) {
                                 className={classNames(
                                   selectedVariant?.variantTitle ==
                                     variant.variantTitle
-                                    ? "border-cypress-green"
+                                    ? "border-cypress-green dark:border-cypress-green-light"
                                     : "border-transparent",
                                   focus ? "border" : "border-2",
-                                  "pointer-events-none absolute -inset-px "
+                                  "pointer-events-none absolute -inset-px dark:ring-offset-2"
                                 )}
                                 aria-hidden="true"
                               />
                             ) : (
                               <span
                                 aria-hidden="true"
-                                className="pointer-events-none absolute -inset-px  border-2 border-gray-200">
+                                className="pointer-events-none absolute -inset-px border-2 border-gray-200 dark:border-gray-700">
                                 <svg
-                                  className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
+                                  className="absolute inset-0 h-full w-full stroke-2 text-gray-200 dark:text-gray-700"
                                   viewBox="0 0 100 100"
                                   preserveAspectRatio="none"
                                   stroke="currentColor">
@@ -222,8 +228,8 @@ export function QuickViewDrawer(props: Props) {
             </div>
           </div>
 
-          <div className="h-full  flex-1 justify-end gap-4 mb-6 flex flex-col">
-            <div className="flex gap-2  items-center">
+          <div className="h-full flex-1 justify-end gap-4 mb-6 flex flex-col">
+            <div className="flex gap-2 items-center">
               <AddToCartButton
                 closeBox={closeBox}
                 product={product}
@@ -236,7 +242,7 @@ export function QuickViewDrawer(props: Props) {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-8">
+                  className="size-8 text-gray-900 dark:text-white hover:text-cypress-green dark:hover:text-cypress-green-light">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -246,7 +252,7 @@ export function QuickViewDrawer(props: Props) {
               </button>
             </div>
             <Link
-              className="text-sm underline mx-auto font-medium text-gray-800 hover:text-cypress-green-light"
+              className="text-sm underline mx-auto font-medium text-gray-800 hover:text-cypress-green dark:text-gray-300 dark:hover:text-cypress-green-light"
               href={`shop/${selectedProduct?.productType}/${selectedProduct?.handle}`}>
               View product details
             </Link>

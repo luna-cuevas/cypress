@@ -27,6 +27,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^11.3.24",
     "framer-motion-ticker": "^1.0.19",
+    "fullpage.js": "^4.0.31",
     "googleapis": "^140.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jotai": "^2.8.2",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@types/fullpage.js": "^2.9.6",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18.2.42",

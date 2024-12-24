@@ -23,45 +23,51 @@ export const Navigation = (props: Props) => {
   return (
     <nav
       className={`${
-        pathName == "/" ? "absolute z-50  " : " z-[0] "
-      } h-[50px]  w-screen lg:px-[2%] backdrop-blur-[1px]  block  justify-between transition-background-color duration-1000 group   top-0  items-center lg:flex rounded-none hover:bg-white dark:hover:bg-cypress-green bg-transparent  max-w-none dark:bg-cypress-green dark:bg-opacity-75 lg:py-4 p-0`}>
+        pathName == "/"
+          ? "absolute z-50 grid grid-cols-3 grid-flow-col"
+          : "z-[0] border-b hover:bg-white group flex"
+      } h-fit w-screen  lg:px-[2%] backdrop-blur-[1px]  justify-between transition-background-color duration-1000  top-0 items-center rounded-none  dark:hover:bg-gray-900/50 bg-transparent max-w-none dark:bg-black dark:border-gray-800 lg:py-2 p-0`}>
+      <span className="col-span-1"></span>
       <Motion
         type="div"
-        initial={{
-          x: -50,
-          opacity: 0,
-        }}
-        whileInView={{
-          x: 0,
-          opacity: 1,
-        }}
-        exit={{
-          x: -50,
-          opacity: 0,
-        }}
+        initial={{ x: -50, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        exit={{ x: -50, opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="mx-auto lg:ml-0 w-fit justify-center flex">
+        className={`${
+          pathName == "/" ? "" : "lg:ml-0"
+        } w-fit justify-center flex m-auto`}>
         <Link
           href="/"
-          className={`z-[0]  h-[50px] w-[150px] lg:w-[200px] relative left-0 right-0 flex m-auto top-0 bottom-0`}>
+          className="z-[0] h-[50px] w-[150px] lg:w-[200px] relative left-0 right-0 flex m-auto top-0 bottom-0">
           <Image
             src="/cypress-text-logo.svg"
             alt="Cypress Logo"
             fill
             className={`${
               pathName == "/" ? "invert" : "invert-0"
-            } w-full h-full !object-contain group-hover:invert-0  dark:invert dark:group-hover:invert pt-2`}
+            } w-full h-full !object-contain group-hover:invert-0 dark:invert dark:group-hover:invert pt-2`}
           />
         </Link>
       </Motion>
 
-      <div className=" my-auto  hidden  w-fit  h-full lg:flex items-center justify-between text-blue-gray-900">
-        <NavList />
-      </div>
-      <div className="w-fit absolute right-0  top-2 flex justify-end">
-        <DropDownButton />
-      </div>
-
+      {pathName === "/" ? (
+        <div className="flex items-center gap-4 justify-end">
+          <NavList homePageNav={true} />
+          <div className="w-fit flex justify-end">
+            <DropDownButton />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="my-auto hidden w-fit h-full lg:flex items-center justify-between text-blue-gray-900">
+            <NavList homePageNav={false} />
+          </div>
+          <div className="w-fit absolute right-0 top-2 flex justify-end">
+            <DropDownButton />
+          </div>
+        </>
+      )}
       <NavDrawer />
     </nav>
   );

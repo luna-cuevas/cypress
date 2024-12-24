@@ -69,7 +69,7 @@ const navListItems = [
   },
 ];
 
-const NavList = (collections: any) => {
+const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
   const [state, setState] = useAtom(globalStateAtom);
   const path = usePathname();
 
@@ -77,42 +77,94 @@ const NavList = (collections: any) => {
     document.documentElement.classList.toggle("dark", state.darkMode);
   }, [state.darkMode]);
 
+  // If on home page, only show cart and dark mode
+  if (homePageNav) {
+    return (
+      <ul className="flex items-center gap-4">
+        <NavItem
+          label="Cart"
+          isCart={true}
+          state={state}
+          icon={null}
+          setState={setState}
+        />
+        <div className="flex gap-1 w-fit justify-center items-center">
+          <button
+            onClick={() => setState({ ...state, darkMode: !state.darkMode })}
+            className={`${
+              path == "/" ? "text-white" : "text-black dark:text-white"
+            } hover:opacity-60 transition-opacity p-1`}
+            aria-label="Toggle dark mode">
+            {state.darkMode ? (
+              <SunIcon className="h-4 w-4" />
+            ) : (
+              <MoonIcon className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+      </ul>
+    );
+  }
+
   return (
-    <ul className="  relative border-t border-gray-200 lg:border-t-0 flex   justify-between flex-col gap-2 lg:flex-row lg:items-center">
-      <div className="  w-full mx-auto mt-auto h-full flex justify-between">
-        <Motion
-          type="div"
-          initial={{
-            x: 100,
-            opacity: 0,
-          }}
-          whileInView={{
-            x: 0,
-            opacity: 1,
-          }}
-          exit={{
-            x: 100,
-            opacity: 0,
-          }}
-          transition={{
-            duration: 0.5,
-          }}
-          className="lg:w-fit ju  items-end py-3 lg:py-0 bg-white dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 lg:flex-row flex-col">
-          {navListItems.map(({ label, url, icon }, key) => (
-            <NavItem
-              key={key}
-              label={label}
-              url={url}
-              isCart={label === "Cart"}
-              // isDropdown={isDropdown}
-              shopCategories={shopCategories}
-              state={state}
-              icon={icon}
-              setState={setState}></NavItem>
-          ))}
-          <ProfileMenu />
-        </Motion>
-      </div>
+    <ul className="relative border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
+      <li className="w-full">
+        <div className="w-full mx-auto mt-auto h-full flex justify-between">
+          <Motion
+            type="div"
+            animate={{
+              opacity: 1,
+              transition: {
+                staggerChildren: 2,
+                delayChildren: 2,
+                staggerDirection: 1,
+              },
+            }}
+            className={`lg:w-fit items-end py-3 lg:py-0 bg-transparent dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 ${
+              path != "/" && "lg:flex-row"
+            } flex-col`}>
+            {navListItems.map(({ label, url, icon }, key) => {
+              if (label === "Cart" && path === "/") {
+                return null;
+              }
+              return (
+                <NavItem
+                  key={key}
+                  label={label}
+                  url={url}
+                  isCart={label === "Cart"}
+                  shopCategories={shopCategories}
+                  state={state}
+                  icon={icon}
+                  setState={setState}
+                />
+              );
+            })}
+            <ProfileMenu />
+            <div
+              className={`${
+                path == "/" ? "lg:hidden" : "lg:flex"
+              } flex gap-1 w-fit justify-center items-center m-auto`}>
+              <button
+                onClick={(event) => {
+                  setState({ ...state, darkMode: !state.darkMode });
+                }}
+                className={`${
+                  path == "/"
+                    ? "lg:text-white text-black"
+                    : "text-black dark:text-white"
+                } hover:opacity-60 transition-opacity p-1`}
+                aria-label="Toggle dark mode">
+                {state.darkMode ? (
+                  <SunIcon className="h-4 w-4" />
+                ) : (
+                  <MoonIcon className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+          </Motion>
+        </div>
+      </li>
     </ul>
   );
 };

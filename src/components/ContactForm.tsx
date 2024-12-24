@@ -115,10 +115,10 @@ const ContactForm = (props: Props) => {
               <Button
                 onClick={() => setSelectedSupport("General Inquiry")}
                 variant="outlined"
-                className={`max-w-fit bg-transparent dark:bg-white ${
+                className={`max-w-fit bg-transparent dark:bg-transparent ${
                   selectedSupport !== "General Inquiry"
-                    ? "dark:bg-gray-700 "
-                    : "bg-gray-400"
+                    ? "dark:text-white dark:border-white"
+                    : "bg-gray-400 dark:bg-white/20"
                 }`}>
                 <input
                   type="radio"
@@ -132,10 +132,10 @@ const ContactForm = (props: Props) => {
               <Button
                 onClick={() => setSelectedSupport("Product Support")}
                 variant="outlined"
-                className={`max-w-fit bg-transparent dark:bg-white ${
+                className={`max-w-fit bg-transparent dark:bg-transparent ${
                   selectedSupport !== "Product Support"
-                    ? "dark:bg-gray-700"
-                    : "bg-gray-400"
+                    ? "dark:text-white dark:border-white"
+                    : "bg-gray-400 dark:bg-white/20"
                 }`}>
                 <input
                   type="radio"
@@ -158,7 +158,7 @@ const ContactForm = (props: Props) => {
                   size="lg"
                   placeholder="First Name"
                   name="firstName"
-                  className="dark:focus:border-gray-100 dark:text-white"
+                  className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
                   containerProps={{
                     className: "min-w-full",
                   }}
@@ -178,7 +178,7 @@ const ContactForm = (props: Props) => {
                   size="lg"
                   placeholder="Last Name"
                   name="lastName"
-                  className="dark:focus:border-gray-100 dark:text-white"
+                  className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
                   containerProps={{
                     className: "!min-w-full",
                   }}
@@ -199,7 +199,7 @@ const ContactForm = (props: Props) => {
                 size="lg"
                 placeholder="name@email.com"
                 name="email"
-                className="dark:focus:border-gray-100 dark:text-white"
+                className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
                 containerProps={{
                   className: "!min-w-full",
                 }}
@@ -219,7 +219,7 @@ const ContactForm = (props: Props) => {
                 rows={6}
                 placeholder="Message"
                 name="message"
-                className="dark:focus:border-gray-100 dark:text-white"
+                className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
                 containerProps={{
                   className: "!min-w-full",
                 }}

@@ -72,10 +72,12 @@ export default function SizeSelection({
               className={({ focus }) =>
                 classNames(
                   variant.variantQuantityAvailable
-                    ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                    : "cursor-not-allowed bg-gray-50 text-gray-200",
-                  focus ? "ring-2 ring-indigo-500" : "",
-                  "group relative flex items-center justify-center  border p-2 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 "
+                    ? "cursor-pointer bg-white dark:bg-black text-gray-900 dark:text-white shadow-sm"
+                    : "cursor-not-allowed bg-gray-50 dark:bg-gray-900 text-gray-200 dark:text-gray-700",
+                  focus
+                    ? "ring-2 ring-cypress-green dark:ring-cypress-green-light"
+                    : "",
+                  "group relative flex items-center justify-center border dark:border-gray-700 p-2 text-sm font-medium uppercase hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
                 )
               }>
               {({ checked, focus }) => (
@@ -85,19 +87,19 @@ export default function SizeSelection({
                     <span
                       className={classNames(
                         selectedVariant?.variantTitle == variant.variantTitle
-                          ? "border-cypress-green"
+                          ? "border-cypress-green dark:border-cypress-green-light bg-cypress-green/10 dark:bg-cypress-green-light/10"
                           : "border-transparent",
                         focus ? "border" : "border-2",
-                        "pointer-events-none absolute -inset-px "
+                        "pointer-events-none absolute -inset-px dark:ring-offset-black"
                       )}
                       aria-hidden="true"
                     />
                   ) : (
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -inset-px  border-2 border-gray-200">
+                      className="pointer-events-none absolute -inset-px border-2 border-gray-200 dark:border-gray-700">
                       <svg
-                        className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
+                        className="absolute inset-0 h-full w-full stroke-2 text-gray-200 dark:text-gray-700"
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
                         stroke="currentColor">

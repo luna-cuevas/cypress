@@ -376,7 +376,7 @@ export default function ProductFilters({
               </div>
 
               <div className="lg:w-full hidden gap-2 lg:flex justify-end">
-                <div className="text-sm w-fit items-center gap-2 flex text-gray-600">
+                <div className="text-sm w-fit items-center gap-2 flex text-gray-600 dark:text-gray-400">
                   <h3 className="w-fit flex h-fit my-auto">
                     {productCount} items
                   </h3>
@@ -384,6 +384,7 @@ export default function ProductFilters({
                 </div>
                 <div className="flex ">
                   <Select
+                    className="text-black dark:text-white"
                     label="Sort"
                     variant="static"
                     value={value}
@@ -394,11 +395,13 @@ export default function ProductFilters({
                         height: "40px",
                         padding: "0px",
                         margin: "auto 0",
+                        // color: "white",
                       },
                     }}
                     labelProps={{
                       style: {
                         display: "none",
+                        color: "white",
                       },
                     }}
                     onChange={(val: any) => {
@@ -412,9 +415,7 @@ export default function ProductFilters({
                       <Option
                         value={option.value}
                         key={index}
-                        className={classNames(
-                          "block w-full px-1 text-sm !text-black"
-                        )}>
+                        className="block placeholder:text-white w-full px-1 text-sm text-black ">
                         {option.name}
                       </Option>
                     ))}

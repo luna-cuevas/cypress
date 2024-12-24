@@ -96,19 +96,17 @@ const NewsLetterSignUp = (props: Props) => {
                       <div>
                         <button
                           type="submit"
-                          className="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-primary-700 border-primary-600 sm:rounded-none sm:rounded-r-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                          className="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-primary-700 dark:bg-primary-600 border-primary-600 dark:border-primary-500 hover:bg-primary-800 dark:hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
                           Subscribe
                         </button>
                       </div>
                     </div>
                     <div className="mx-auto max-w-screen-sm text-sm text-left text-white">
-                      We care about the protection of your data.{" "}
                       <a
                         href="#"
-                        className="font-medium text-blue-200 hover:underline">
+                        className="font-medium text-blue-200 hover:underline dark:text-blue-300">
                         Read our Privacy Policy
                       </a>
-                      .
                     </div>
                   </div>
                 </div>

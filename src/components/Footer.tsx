@@ -5,12 +5,15 @@ import { Motion } from "@/utils/Motion";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type Props = {};
 
 const Footer = (props: Props) => {
+  const path = usePathname();
+
   const [signUpStatus, setSignUpStatus] = useState({
     message: "",
     status: "",
@@ -30,6 +33,10 @@ const Footer = (props: Props) => {
       }, 3000);
     }
   }, [signUpStatus]);
+
+  if (path === "/") {
+    return null;
+  }
 
   const shopCategories = [
     {
@@ -132,15 +139,16 @@ const Footer = (props: Props) => {
             </p>
           )}
         </div>
-        <div className="border-b md:border-b-0 md:border-r border-gray-400 dark:border-white flex flex-col gap-4 lg:p-8 p-4">
-          <h1 className="text-xl font-bold  decoration-1 underline-offset-4">
+        <div className="border-b md:border-b-0 md:border-r border-gray-400 dark:border-gray-600 flex flex-col gap-4 lg:p-8 p-4">
+          <h1 className="text-xl font-bold decoration-1 underline-offset-4 dark:text-white">
             Shop
           </h1>
-          <ul className="grid lg:grid-cols-3 grid-cols-2 gap-y-2 ">
+          <ul className="grid lg:grid-cols-3 grid-cols-2 gap-y-2">
             {shopCategories.map(({ title, url }) => (
-              <li className="text-sm" key={title}>
-                <Link href={url} className="inline-block text-left ">
-                  {" "}
+              <li className="text-sm dark:text-gray-200" key={title}>
+                <Link
+                  href={url}
+                  className="inline-block text-left hover:text-gray-600 dark:hover:text-white">
                   {title}
                 </Link>
               </li>

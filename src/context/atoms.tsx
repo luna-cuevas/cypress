@@ -41,6 +41,7 @@ type State = {
   } | null;
   checkoutUrl: string | null;
   productViewSize: string;
+  favorites: any[];
 };
 
 // A helper function to work with localStorage and JSON serialization for the entire application state
@@ -97,6 +98,7 @@ const initialState: State = {
   },
   checkoutUrl: null,
   productViewSize: "small",
+  favorites: [],
 };
 
 // Create an atom with local storage persistence for the entire application state

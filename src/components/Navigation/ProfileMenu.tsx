@@ -83,21 +83,14 @@ function ProfileMenu() {
   const closeMenu = () => setIsProfileMenuOpen(false);
 
   return (
-    <Button
-      variant="text"
-      color="white"
-      className="lg:flex w-full hidden justify-center items-center gap-1 rounded-full py-[0.35rem] px-2 lg:ml-auto"
-      onClick={() =>
-        (window.location.href = "https://shopify.com/69307498727/account")
-      }>
-      <li
-        className={`${
-          path == "/" ? "lg:text-white text-black" : "text-black"
-        } relative font-normal justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 uppercase text-sm box-content`}>
-        {/* <UserCircleIcon className="w-6 h-6" /> */}
-        Account
-      </li>
-    </Button>
+    <Link
+      href="https://shopify.com/69307498727/account"
+      className={`${
+        path == "/" ? "lg:text-white text-black" : "text-black"
+      } underline-animation mx-2 py-2 my-auto relative font-normal justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2 uppercase text-sm box-content`}>
+      {/* <UserCircleIcon className="w-6 h-6" /> */}
+      Account
+    </Link>
     // isLoaded && (
     //   <Menu
     //     allowHover

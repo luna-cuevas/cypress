@@ -1,323 +1,187 @@
-import NewsLetterSignUp from "@/components/NewsLetterSignUp";
-import TickerCategories from "@/components/Home/TickerCategories";
-import Gallery from "@/components/Home/Gallery";
-import FadeCarousel from "@/components/Home/FadeCarousel";
-import Link from "next/link";
-import { Motion } from "@/utils/Motion";
-import ParallaxSection from "@/components/Home/ParallaxSection";
-import { stagger } from "framer-motion";
-import Image from "next/image";
+"use client";
+import NavList from "@/components/Navigation/NavList";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default async function Home({ params }: { params: any }) {
-  const featuredProducts = await fetch(
-    `${process.env.BASE_URL}/api/fetchCollections`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-store",
-      },
-    }
-  );
+const heroImages = [
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4501.jpg?v=1734678057",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4500.jpg?v=1734678057",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4515.jpg?v=1734678057",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4488.jpg?v=1734678057",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4490.jpg?v=1734678057",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4503.jpg?v=1734678057",
+];
 
-  if (!featuredProducts.ok) {
-    console.error(`HTTP error! status: ${featuredProducts.status}`);
-    console.error(`HTTP error! status: ${featuredProducts.statusText}`);
+const heroTitles = [
+  "Look 1: Bold Beginnings",
+  "Look 2: Subtle Elegance",
+  "Look 3: Modern Aesthetics",
+  "Look 4: Refined Classics",
+  "Look 5: Urban Statement",
+  "Look 6: Timeless Allure",
+];
 
-    // throw new Error(`HTTP error! status: ${featuredProducts.status}`);
+export default function Home() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [prevSlideIndex, setPrevSlideIndex] = useState(0);
+  const [direction, setDirection] = useState<"down" | "up">("down");
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionKey, setTransitionKey] = useState(0);
+
+  const bannerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (isTransitioning) return;
+
+      if (e.deltaY < 0) {
+        goPrev();
+      } else {
+        goNext();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [isTransitioning]);
+
+  function goNext() {
+    const newIndex = (currentIndex + 1) % heroImages.length;
+    setPrevSlideIndex(currentIndex);
+    setCurrentIndex(newIndex);
+    setDirection("down");
+    triggerTransition();
   }
 
-  const featuredData = await featuredProducts.json();
+  function goPrev() {
+    const newIndex = (currentIndex - 1 + heroImages.length) % heroImages.length;
+    setPrevSlideIndex(currentIndex);
+    setCurrentIndex(newIndex);
+    setDirection("up");
+    triggerTransition();
+  }
 
-  const heroImages = [
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-1.webp?v=1719512582&width=1600&height=1600format=webp&quality=70&scale=1",
-    // "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-2.webp?v=1719512818&width=1600&height=1600format=webp&quality=100&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-3.webp?v=1719512582&width=1600&height=1600format=webp&quality=70&scale=1",
-    "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/hero-img-4.webp?v=1719512862&width=1600&height=1600format=webp&quality=70&scale=1",
-  ];
+  function triggerTransition() {
+    setTransitionKey((prev) => prev + 1);
+    setIsTransitioning(true);
+  }
+
+  const oldImage = heroImages[prevSlideIndex];
+  const newImage = heroImages[currentIndex];
+
+  const isReverse = direction === "up";
+  const oldClass = isReverse ? "home-banner-old-reverse" : "home-banner-old";
+  const newClass = isReverse ? "home-banner-new-reverse" : "home-banner-new";
+
+  // More dramatic "rolodex" style variants
+  // Down: old flips from 0 to -180, new from +180 to 0
+  // Up: old flips from 0 to +180, new from -180 to 0
+  const variants = {
+    initial: (dir: "down" | "up") => ({
+      rotateX: dir === "down" ? 180 : -180,
+      opacity: 0,
+    }),
+    enter: {
+      rotateX: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.4, 0.0, 0.2, 1],
+      },
+    },
+    exit: (dir: "down" | "up") => ({
+      rotateX: dir === "down" ? -180 : 180,
+      opacity: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.4, 0.0, 0.2, 1],
+      },
+    }),
+  };
+
+  useEffect(() => {
+    const bannerEl = bannerRef.current;
+    if (!bannerEl) return;
+
+    // Re-trigger image transitions by toggling class
+    bannerEl.classList.remove("home-banner-slide");
+    void bannerEl.offsetWidth; // Trigger reflow
+    bannerEl.classList.add("home-banner-slide");
+  }, [transitionKey]);
+
+  useEffect(() => {
+    const bannerEl = bannerRef.current;
+    if (!bannerEl) return;
+
+    const handleTransitionEnd = (e: TransitionEvent) => {
+      if (
+        e.target instanceof Element &&
+        e.target.id === "t-01-banner-new" &&
+        e.propertyName === "transform"
+      ) {
+        setIsTransitioning(false);
+      }
+    };
+
+    bannerEl.addEventListener("transitionend", handleTransitionEnd);
+    return () => {
+      bannerEl.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, []);
 
   return (
-    <main className="flex flex-col relative justify-center w-screen :min-h-[calc(100vh-70px)]">
-      {/* Hero Section */}
-      <div className="w-screen h-screen bg-black absolute top-0">
-        {/* <TracedHalfLogo
-          color="white"
-          classes="md:w-1/2 w-[65%] z-50 absolute h-full object-contain -top-[15%] md:-top-[10%] -right-[20%] z-10"
-        />
-        <TracedHalfLogo
-          color="white"
-          classes="md:w-1/2 w-[65%] z-50 hidden md:block absolute h-full -rotate-[10deg] object-contain  top-[30%] md:top-1/3 -left-[20%] z-10 scale-x-[-1]"
-        /> */}
-        <FadeCarousel images={heroImages} />
+    <main className="w-screen justify-start flex h-screen overflow-hidden relative bg-black">
+      <div className=" right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-blue-gray-900">
+        <NavList />
       </div>
-      <section className="w-full h-screen  bg-opacity-20 bg-black  z-0 flex items-end justify-start ">
-        <div className="text-center h-fit flex flex-col gap-8 w-full  max-w-[1000px] mx-auto mb-[5%]">
-          <Motion
-            type="h1"
-            initial={{
-              y: -100,
-              opacity: 0,
-            }}
-            whileInView={{
-              y: 0,
-              opacity: 1,
-            }}
-            exit={{
-              y: -100,
-              opacity: 0,
-            }}
-            transition={{ duration: 0.5 }}
-            className={`md:text-5xl text-3xl !font-['trajan'] text-white tracking-widest leading-tight  uppercase`}>
-            Quality Designs
-          </Motion>
-          <div className="grid grid-cols-2 justify-center md:grid-cols-3  gap-4 ">
-            <Motion
-              type="div"
-              initial={{
-                x: -50,
-                opacity: 0,
-              }}
-              whileInView={{
-                x: 0,
-                opacity: 1,
-              }}
-              exit={{
-                x: -50,
-                opacity: 0,
-              }}
-              transition={{ duration: 0.5 }}
-              className=" flex-col sm:flex-row sm:gap-2 col-span-2  md:col-span-1 order-1 flex md:block w-fit mx-auto md:mr-0 md:gap-2 text-center md:text-right">
-              <h2 className={`uppercase !font-['trajan'] text-xl text-white `}>
-                {"Stylish men's wear "}
-              </h2>
-              <h3 className="uppercase !font-['trajan'] text-xl text-white">
-                {"Designed to last"}
-              </h3>
-            </Motion>{" "}
-            <Link
-              href="/shop"
-              className="order-3 col-span-2 md:col-span-1 md:order-2 mt-6 md:mt-0">
-              <Motion
-                type="button"
-                initial={{
-                  y: 100,
-                  opacity: 0,
-                }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                }}
-                exit={{
-                  y: -100,
-                  opacity: 0,
-                }}
-                transition={{ duration: 0.5 }}
-                className="hover:bg-cypress-green !font-['trajan'] hover:bg-opacity-60 bg-transparent backdrop-blur-sm border-cypress-green border-2 text-lg text-white px-6 py-3 rounded-lg">
-                Shop Now
-              </Motion>
-            </Link>
-            <Motion
-              type="div"
-              initial={{
-                x: 50,
-                opacity: 0,
-              }}
-              whileInView={{
-                x: 0,
-                opacity: 1,
-              }}
-              exit={{
-                x: 50,
-                opacity: 0,
-              }}
-              transition={{ duration: 0.5 }}
-              className="text-white hover:underline cursor-pointer col-span-2 md:col-span-1 flex md:block w-fit gap-2 mx-auto md:ml-0 text-center md:text-left uppercase text-xl  order-2 md:order-3 ">
-              <a
-                target="_blank"
-                href="https://maps.app.goo.gl/fmgy5j3BDaSrKZzv6">
-                <p className="!font-['trajan']">{"Visit our store in "}</p>
-                <p className="!font-['trajan']">{"Dallas, Texas"}</p>
-              </a>
-            </Motion>
-          </div>
-          <Link href="#featured" className="cursor-pointer">
-            <Motion
-              type="h1"
-              initial={{
-                y: 40,
-                opacity: 0,
-              }}
-              animate={{
-                y: 0,
-                opacity: 1,
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
-              className={`  text-white w-fit mx-auto`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="size-8">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"
-                />
-              </svg>
-            </Motion>
-          </Link>
+
+      <div
+        className="relative w-full text-left z-50 ml-[4%]  my-auto flex justify-start items-center h-[10%] "
+        style={{ perspective: "1000px" }}>
+        <AnimatePresence custom={direction} initial={false}>
+          <motion.div
+            key={currentIndex}
+            className="absolute text-white text-6xl font-bold flex items-center justify-center w-fit"
+            custom={direction}
+            variants={variants}
+            initial="initial"
+            animate="enter"
+            exit="exit">
+            {heroTitles[currentIndex]}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div
+        id="home-banner"
+        ref={bannerRef}
+        className="banner-v w-3/4 max-w-[1000px] opacity-70 m-auto h-[80%] overflow-hidden"
+        style={{ display: "block" }}>
+        <div className="t-box t-01">
+          <div
+            id="t-01-banner-old"
+            className={`home-banner-img ${oldClass}`}
+            style={{ backgroundImage: `url(${oldImage})` }}></div>
+          <div
+            id="t-01-banner-new"
+            className={`home-banner-img ${newClass}`}
+            style={{ backgroundImage: `url(${newImage})` }}></div>
         </div>
-      </section>
 
-      {/* <section
-        id="featured"
-        className="w-full flex h-[80vmax]  sm:h-[40vmax]  transition-all duration-500  mt-4  mx-auto">
-        <Gallery products={featuredData.collections.slice(0, 3)} />
-      </section> */}
-
-      {/* <section className="my-16 mx-auto w-fit gap-2 flex flex-col justify-center dark:text-white">
-        <h2
-          className={`!font-['trajan'] tracking-widest text-center sm:text-left text-lg sm:text-3xl w-fit font-bold mx-auto`}>
-          Crafting Elegance, Curating Excellence
-        </h2>
-        <p className="sm:text-xl text-center sm:text-left text-base w-fit mx-auto">
-          Explore Thoughtful Menswear for the Modern Man at Cypress.
-        </p>
-        <div className="w-fit mx-auto">
-          <Link href="/shop/shirts">
-            <button className=" px-4 py-2 rounded-lg hover:decoration-gray-800 underline underline-offset-8 decoration-gray-400">
-              Shop Shirting
-            </button>
-          </Link>
-          <Link href="/shop/pants">
-            <button className=" px-4 py-2 rounded-lg hover:decoration-gray-800 underline underline-offset-8 decoration-gray-400">
-              Shop Trousers
-            </button>
-          </Link>
+        <div className="t-box t-02">
+          <div
+            id="t-02-banner-old"
+            className={`home-banner-img ${oldClass}`}
+            style={{ backgroundImage: `url(${oldImage})` }}></div>
+          <div
+            id="t-02-banner-new"
+            className={`home-banner-img ${newClass}`}
+            style={{ backgroundImage: `url(${newImage})` }}></div>
         </div>
-      </section> */}
-
-      {/* <section
-        id="featured"
-        className="w-full flex h-[80vmax]  sm:h-[40vmax]  transition-all duration-500  mt-4  mx-auto">
-        <Gallery products={featuredData.collections.slice(3, 6)} />
-      </section> */}
-
-      <section className="w-full flex gap-4 border-y-2  my-16 py-2 border-cypress-green dark:border-cypress-green-light">
-        <TickerCategories />
-      </section>
-
-      {/* <section className=" mb-16">
-        <div className="gap-8 items-center py-0 px-4 mx-auto  lg:grid lg:grid-cols-2 ">
-          <Motion
-            type="div"
-            initial={{
-              x: -50,
-              opacity: 0,
-            }}
-            whileInView={{
-              x: 0,
-              opacity: 1,
-            }}
-            exit={{
-              x: -50,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.5,
-            }}
-            className="font-light text-left mx-auto sm:px-6 2xl:w-5/6 text-gray-800 sm:text-lg dark:text-gray-400">
-            <h2
-              className={`!font-['trajan'] mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-white`}>
-              Who We Are
-            </h2>
-            <p className="mb-4">
-              Cypress is a multi-brand space championing thoughtful elegance in
-              the Dallas menswear scene. Inspired by the beauty of the natural
-              world, we aim to curate a moment in time defined by calm and
-              creativity.
-            </p>
-            <p>
-              Our selections revolve around craftsmanship and experimentation,
-              constructing a playground for self-expression.
-            </p>
-          </Motion>
-          <Motion
-            type="div"
-            initial={{
-              x: 50,
-              opacity: 0,
-            }}
-            whileInView={{
-              x: 0,
-              opacity: 1,
-            }}
-            exit={{
-              x: 50,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.5,
-            }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 lg:mt-0 relative">
-            <div className="w-full h-[250px] sm:h-[350px] relative">
-              <Image
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 640px) 50vw,(min-width: 1024px) 33vw, 33vw"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
-                placeholder="blur"
-                className={`h-full w-full rounded-lg object-cover cursor-pointer`}
-                src="/about-image.jpg"
-                alt="office content 1"
-              />
-            </div>
-            <div className="w-full h-[250px] sm:h-[350px] mt-4 relative">
-              <Image
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 640px) 50vw,(min-width: 1024px) 33vw, 33vw"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
-                placeholder="blur"
-                className={`h-full w-full rounded-lg object-cover cursor-pointer`}
-                alt="office content 1"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png"
-              />
-            </div>
-          </Motion>
-        </div>
-      </section> */}
-
-      {/* <LoadingSkeleton /> */}
-
-      {/* <Motion
-        type="div"
-        initial={{
-          scale: 0.9,
-          opacity: 0,
-        }}
-        whileInView={{
-          scale: 1,
-          opacity: 1,
-        }}
-        exit={{
-          scale: 0.9,
-          opacity: 0,
-        }}
-        transition={{
-          duration: 0.5,
-        }}
-        className="">
-        <NewsLetterSignUp />
-      </Motion> */}
+      </div>
     </main>
   );
 }

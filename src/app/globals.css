@@ -1,3 +1,15 @@
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 0 0 0;
+  }
+
+  .dark {
+    --background: 0 0 0;
+    --foreground: 255 255 255;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -205,4 +217,393 @@ span.absolute.top-2\/4.-translate-y-2\/4.left-0.pt-3 {
 
 button.peer.w-full.h-full.bg-transparent.text-blue-gray-700.font-sans.font-normal.text-left.outline.outline-0.focus\:outline-0.disabled\:bg-blue-gray-50.disabled\:border-0.disabled\:cursor-not-allowed.transition-all.border-b.text-sm.pt-4.pb-1\.5.border-blue-gray-200 {
   color: black;
+}
+
+.banner-v {
+  z-index: 13;
+}
+
+.embed-responsive-21by9 {
+  padding-bottom: 39.2%;
+}
+
+.home-video-logo {
+  position: absolute;
+  z-index: 14;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.home-video-logo img {
+  width: 28%;
+  height: auto;
+}
+
+.home-mouse {
+  position: absolute;
+  z-index: 14;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+}
+
+.home-video-link {
+  position: absolute;
+  bottom: 15px;
+  right: 50px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#home-banner {
+  position: absolute;
+  z-index: 12;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  transition: all 0.3s;
+}
+
+#home-banner .t-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#home-banner .t-01-int {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#home-banner .t-02 {
+  clip-path: polygon(20% 0, 80% 0, 60% 100%, 40% 100%);
+  margin: auto;
+}
+
+#home-banner .t-02-int {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#home-banner .home-banner-img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  will-change: transform;
+}
+
+#home-banner .t-01 .home-banner-new {
+  transform: translateY(100%);
+}
+#home-banner .t-02 .home-banner-new {
+  transform: translateY(100%);
+}
+#home-banner .t-01 .home-banner-old {
+  transform: translateY(0);
+}
+#home-banner .t-02 .home-banner-old {
+  transform: translateY(0);
+}
+
+#home-banner.home-banner-slide .t-01 .home-banner-old {
+  transform: translateY(-100%);
+  transition: transform 1.2s ease-in;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-02 .home-banner-old {
+  transform: translateY(-100%);
+  transition: transform 1.2s ease-out;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-01 .home-banner-new {
+  transform: translateY(0);
+  transition: transform 1.2s ease-in;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-02 .home-banner-new {
+  transform: translateY(0);
+  transition: transform 1.2s ease-out;
+  will-change: transform;
+}
+#home-banner .t-01 .home-banner-new-reverse {
+  transform: translateY(-100%);
+  will-change: transform;
+}
+#home-banner .t-02 .home-banner-new-reverse {
+  transform: translateY(-100%);
+  will-change: transform;
+}
+#home-banner .t-01 .home-banner-old-reverse {
+  transform: translateY(0);
+  will-change: transform;
+}
+#home-banner .t-02 .home-banner-old-reverse {
+  transform: translateY(0);
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-01 .home-banner-old-reverse {
+  transform: translateY(100%);
+  transition: transform 1.2s ease-in;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-02 .home-banner-old-reverse {
+  transform: translateY(100%);
+  transition: transform 1.2s ease-out;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-01 .home-banner-new-reverse {
+  transform: translateY(0);
+  transition: transform 1.2s ease-in;
+  will-change: transform;
+}
+#home-banner.home-banner-slide .t-02 .home-banner-new-reverse {
+  transform: translateY(0);
+  transition: transform 1.2s ease-out;
+  will-change: transform;
+}
+
+@media (orientation: portrait) {
+  #home-banner .t-02 {
+    left: 50%;
+    transform: translateX(-50%);
+    clip-path: polygon(1% 0, 99% 0, 60% 100%, 40% 100%);
+  }
+  #home-banner .home-banner-img {
+    background-size: auto 100%;
+  }
+}
+
+.banner-txt {
+  color: #fff;
+  font-weight: 700;
+  font-size: 140px;
+  line-height: 100px;
+  opacity: 0.8;
+  text-align: center;
+  text-decoration: none;
+}
+.banner-txt a {
+  display: block;
+  transform: translateY(-50%);
+}
+
+.banner-txt-center {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  opacity: 0.9;
+  transition: all 1.5s;
+}
+
+.banner-txt-btm30 {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  right: 0;
+  opacity: 0.3;
+  transition: all 1.5s;
+}
+
+.banner-txt-btm00 {
+  position: absolute;
+  top: 150%;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 1.5s;
+}
+
+.banner-txt-top30 {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  opacity: 0.3;
+  transition: all 1.5s;
+}
+
+.banner-txt-top00 {
+  position: absolute;
+  top: -50%;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 1.5s;
+}
+
+#box-banner-mask {
+  position: absolute;
+  top: 50%;
+  bottom: 50%;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  z-index: 20;
+}
+
+.box-banner-mask-fade {
+  position: absolute;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0;
+  right: 0;
+  transition: all 0.9s;
+}
+
+/* Additional styles from previous example */
+.txt-invisible .banner-txt {
+  opacity: 0;
+}
+
+/* If you want to show txt after load:
+.txt-visible .banner-txt {
+  transition-delay: 0.5s;
+}
+*/
+
+.btn-fashion {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.home-mouse img {
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.text-container {
+  position: relative;
+  height: 100px;
+  width: 100%;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.text-face {
+  position: absolute;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* old text starts visible, new text starts hidden behind (rotated 90deg) */
+.text-old {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotateX(0deg);
+}
+
+.text-new {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotateX(90deg);
+}
+
+/* Scroll down (text-flip-forward):
+   old rotates out upwards (-90deg),
+   new rotates from 90deg to 0deg.
+*/
+.text-flip-forward .text-old {
+  transform: translate(-50%, -50%) rotateX(-90deg);
+  opacity: 0;
+}
+
+.text-flip-forward .text-new {
+  transform: translate(-50%, -50%) rotateX(0deg);
+  opacity: 1;
+}
+
+/* Scroll up (text-flip-backward):
+   old rotates down (+90deg),
+   new rotates from -90deg to 0deg.
+*/
+.text-flip-backward .text-old {
+  transform: translate(-50%, -50%) rotateX(90deg);
+  opacity: 0;
+}
+
+.text-flip-backward .text-new {
+  transform: translate(-50%, -50%) rotateX(0deg);
+  opacity: 1;
+}
+
+@layer utilities {
+  .dark {
+    @apply bg-black text-white;
+  }
+
+  .dark * {
+    @apply border-white/10;
+  }
+
+  .dark input,
+  .dark textarea {
+    @apply bg-black border-white/20 text-white placeholder:text-white/50;
+  }
+
+  .dark button {
+    @apply hover:bg-white/10 focus:bg-white/10;
+  }
+
+  /* Navigation styles */
+  .dark .nav-item {
+    @apply text-white hover:text-white/80;
+  }
+
+  /* Menu and dropdown styles */
+  .dark .menu-list {
+    @apply bg-black border-white/10;
+  }
+
+  /* Form elements */
+  .dark .form-input {
+    @apply bg-black border-white/20 text-white;
+  }
+
+  /* Cards and containers */
+  .dark .card {
+    @apply bg-black border-white/10;
+  }
 }

@@ -144,10 +144,10 @@ export function Accordion({
             ) : (
               <div
                 key={optionIdx}
-                className="flex lg:px-2 px-8 border-b last:border-b-0 last:pb-0  gap-0 py-2 ">
+                className="flex lg:px-2 px-8 border-b dark:border-gray-700 last:border-b-0 last:pb-0 gap-0 py-2">
                 <Link
                   href={option.href || "#"}
-                  className=" text-sm  text-black dark:text-white w-full cursor-pointer">
+                  className="text-sm text-black dark:text-white w-full cursor-pointer hover:text-gray-600 dark:hover:text-gray-300">
                   {option.name}
                 </Link>
               </div>

@@ -10,6 +10,7 @@ import { headers } from "next/headers";
 import RelatedProducts from "@/components/shop/RelatedProducts";
 import { Accordions } from "@/components/shop/Accordions";
 import { Motion } from "@/utils/Motion";
+import FavoriteButton from "@/components/shop/FavoriteButton";
 
 export async function generateMetadata({
   params,
@@ -113,7 +114,7 @@ const ProductPage = async ({
   const pathSegments = ["shop", category, slug];
 
   return (
-    <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-gray-800">
+    <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-black">
       <div className="">
         <Motion
           type="div"
@@ -133,7 +134,7 @@ const ProductPage = async ({
               <li className="flex items-center">
                 <Link
                   href={`/`}
-                  className="font-medium text-xs text-gray-500 hover:text-gray-600">
+                  className="font-medium text-xs text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                   Home
                 </Link>
               </li>
@@ -160,7 +161,7 @@ const ProductPage = async ({
                       className={
                         isLast
                           ? "font-bold text-xs text-gray-900 dark:text-white"
-                          : "font-medium text-xs text-gray-500 hover:text-gray-600"
+                          : "font-medium text-xs text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                       }>
                       {segment}
                     </Link>
@@ -189,7 +190,7 @@ const ProductPage = async ({
                     href={`#image-${index}`}
                     key={index}
                     className="w-full h-full">
-                    <div className="relative w-full h-[50px] cursor-pointer">
+                    <div className="relative w-full h-[50px] cursor-pointer border border-gray-200 dark:border-gray-700">
                       <Image
                         fill
                         priority
@@ -227,12 +228,14 @@ const ProductPage = async ({
                     key={index}
                     className={`relative w-full   cursor-pointer `}
                     id={`image-${index}`}>
-                    <img
+                    <Image
                       // fill
+                      width={100}
+                      height={100}
                       // priority
                       // quality={100}
                       sizes="(max-width: 640px) 75vw,(min-width: 1024px) 100vw, 33vw"
-                      // blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8fPFiCwAH7wL7Pf/IOAAAAABJRU5ErkJggg=="
                       placeholder="blur"
                       src={image.src}
                       alt={image.altText}
@@ -257,11 +260,11 @@ const ProductPage = async ({
                 duration: 0.5,
                 delay: 0.5,
               }}
-              className="!relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4">
+              className="!relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4 bg-white dark:bg-black">
               {/* Product info */}
               <div className="m-auto md:sticky right-0 top-0 pt-4 left-0 max-w-2xl   ">
-                <div className="lg:col-span-2 mb-2  lg:border-gray-200 lg:pr-8">
-                  <h1 className="text-2xl  text-gray-900 dark:text-white sm:text-2xl">
+                <div className="lg:col-span-2 mb-2 lg:pr-8">
+                  <h1 className="text-2xl text-gray-900 dark:text-white sm:text-2xl">
                     {product.title}
                   </h1>
                 </div>
@@ -283,7 +286,7 @@ const ProductPage = async ({
                           {selectedVariant?.variantTitle ? (
                             <span className="gap-1 flex">
                               Size
-                              <span className=" text-black">
+                              <span className="text-black dark:text-white">
                                 {selectedVariant.variantTitle}
                               </span>
                             </span>
@@ -293,7 +296,7 @@ const ProductPage = async ({
                         </h3>
                         <Link
                           href="#"
-                          className="text-sm underline font-medium text-gray-800 dark:text-gray-400 hover:text-cypress-green-light">
+                          className="text-sm underline font-medium text-gray-800 dark:text-gray-400 hover:text-cypress-green dark:hover:text-cypress-green-light">
                           Size guide
                         </Link>
                       </div>
@@ -304,26 +307,12 @@ const ProductPage = async ({
                       />
                     </div>
 
-                    <div className="flex gap-2  items-center">
+                    <div className="flex gap-2 items-center">
                       <AddToCartButton
                         product={product}
                         selectedVariant={selectedVariant}
                       />
-                      <button type="button">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-8">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                          />
-                        </svg>
-                      </button>
+                      <FavoriteButton productId={product.id} className="ml-2" />
                     </div>
                   </div>
                 </div>

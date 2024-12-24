@@ -214,7 +214,7 @@ export function SignUp() {
             type="submit"
             color="gray"
             size="lg"
-            className="mt-3 col-span-2 dark:bg-white dark:text-black dark:hover:bg-gray-300"
+            className="mt-3 col-span-2 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
             fullWidth>
             Sign Up
           </Button>
@@ -223,7 +223,9 @@ export function SignUp() {
             color="gray"
             className="!mt-3 text-center font-normal col-span-2">
             Already registered?{" "}
-            <Link href="/login" className="font-medium text-gray-900">
+            <Link
+              href="/login"
+              className="font-medium text-gray-900 dark:text-white">
               Login
             </Link>
           </Typography>

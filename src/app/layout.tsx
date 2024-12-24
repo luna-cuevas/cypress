@@ -35,7 +35,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark h-full  overflow-x-hidden w-screen`}>
-      <body className="bg-white h-full dark:bg-[#02140a] ">
+      <body className="bg-white h-full dark:bg-black ">
         <AuthProvider>
           <div className="main-container h-full relative w-screen overflow-x-hidden">
             <HotjarInit />

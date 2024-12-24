@@ -95,7 +95,7 @@ const ProductGallery = (props: Props) => {
                   className={`absolute hidden group-hover:flex bottom-1/4 xl:bottom-[20%] left-0 right-0 `}>
                   <button
                     type="button"
-                    className="text-sm py-2 px-4 rounded-3xl w-fit mx-auto hover:bg-cypress-green bg-cypress-green-light text-white"
+                    className="text-sm py-2 px-4 rounded-3xl w-fit mx-auto hover:!bg-gray-800 bg-black text-white"
                     onClick={() => open(product)}>
                     Quick View
                   </button>
