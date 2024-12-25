@@ -9,14 +9,20 @@ export async function GET() {
   try {
     const cookieStore = cookies();
     const shopifyCustomerAccessToken = cookieStore.get("_shopify_y")?.value;
+    const shopifyCustomerToken = cookieStore.get(
+      "_shopify_customer_token"
+    )?.value;
 
-    if (!shopifyCustomerAccessToken) {
+    console.log("shopifyCustomerAccessToken", shopifyCustomerAccessToken);
+    console.log("shopifyCustomerToken", shopifyCustomerToken);
+
+    if (!shopifyCustomerAccessToken || !shopifyCustomerToken) {
       return NextResponse.json({ customer: null });
     }
 
     const query = `
       query {
-        customer {
+        customer(customerAccessToken: "${shopifyCustomerToken}") {
           id
           firstName
           lastName
@@ -51,6 +57,10 @@ export async function GET() {
 
     if (data.errors) {
       throw new Error(data.errors[0].message);
+    }
+
+    if (!data.data.customer) {
+      return NextResponse.json({ customer: null });
     }
 
     return NextResponse.json({ customer: data.data.customer });

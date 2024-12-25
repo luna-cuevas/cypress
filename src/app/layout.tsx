@@ -13,6 +13,7 @@ import "@glidejs/glide/dist/css/glide.core.min.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Template from "./template";
 import { NavDrawer } from "@/components/Navigation/NavDrawer";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -37,26 +38,28 @@ export default async function RootLayout({
     <html lang="en" className={`dark h-full  overflow-x-hidden w-screen`}>
       <body className="bg-white h-full dark:bg-black ">
         <AuthProvider>
-          <div className="main-container h-full relative w-screen overflow-x-hidden">
-            <HotjarInit />
-            <LoadingScreen />
-            <Navigation />
-            <Cart />
-            <Template>{children}</Template>
-            <Footer />
-            <NavDrawer />
-          </div>
-          <ToastContainer
-            position="bottom-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={true}
-            closeOnClick={true}
-            rtl={false}
-            pauseOnFocusLoss={true}
-            draggable={true}
-            pauseOnHover={true}
-          />
+          <SessionProvider>
+            <div className="main-container h-full relative w-screen overflow-x-hidden">
+              <HotjarInit />
+              <LoadingScreen />
+              <Navigation />
+              <Cart />
+              <Template>{children}</Template>
+              <Footer />
+              <NavDrawer />
+            </div>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={true}
+              closeOnClick={true}
+              rtl={false}
+              pauseOnFocusLoss={true}
+              draggable={true}
+              pauseOnHover={true}
+            />
+          </SessionProvider>
         </AuthProvider>
       </body>
     </html>
