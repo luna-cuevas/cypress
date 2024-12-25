@@ -312,7 +312,16 @@ const ProductPage = async ({
                         product={product}
                         selectedVariant={selectedVariant}
                       />
-                      <FavoriteButton productId={product.id} className="ml-2" />
+                      <FavoriteButton
+                        productId={product.id}
+                        productTitle={product.title}
+                        productImage={product.images[0]?.src || ""}
+                        productPrice={
+                          selectedVariant?.variantPrice ||
+                          product.variants[0].variantPrice
+                        }
+                        productHandle={product.handle}
+                      />
                     </div>
                   </div>
                 </div>

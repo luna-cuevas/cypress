@@ -90,16 +90,22 @@ const NavItem = ({
     <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto m-0">
       <MenuItem
         onClick={handleCartClick}
-        className={`flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent focus:bg-transparent active:bg-transparent ${
-          path === "/" ? "justify-center" : "justify-end lg:justify-end"
-        } items-center gap-2 transition-all duration-200`}>
+        className={`flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white`}>
         <ListItem
           className={`${
             path == "/"
               ? "lg:text-white text-black dark:text-white"
               : "text-black dark:text-white"
-          } underline-animation active:bg-transparent hover:text-white focus:text-white w-fit justify-end lg:gap-2 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content dark:text-white group-hover:text-black dark:group-hover:text-white transition-all duration-200`}>
-          {label}
+          } underline-animation w-fit justify-start lg:justify-end lg:gap-2 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content !text-black dark:!text-white`}>
+          <ListItemPrefix className="lg:hidden">
+            <ShoppingBagIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          <span className="!text-black dark:!text-white">{label}</span>
+          {totalCartItems > 0 && (
+            <span className="ml-1 text-xs bg-cypress-green text-white rounded-full px-1.5 py-0.5">
+              {totalCartItems}
+            </span>
+          )}
         </ListItem>
       </MenuItem>
     </div>

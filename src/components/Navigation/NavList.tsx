@@ -8,6 +8,7 @@ import {
   MoonIcon,
   EnvelopeIcon,
   BookOpenIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
@@ -52,6 +53,7 @@ const navListItems = [
   {
     label: "Shop",
     url: "/shop",
+    icon: <ShoppingBagIcon className="h-5 w-5" />,
   },
   {
     label: "About",
@@ -107,7 +109,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
   }
 
   return (
-    <ul className="relative border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
+    <ul className="relative z-50 border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <li className="w-full">
         <div className="w-full mx-auto mt-auto h-full flex justify-between">
           <Motion
@@ -120,13 +122,10 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
                 staggerDirection: 1,
               },
             }}
-            className={`lg:w-fit items-end py-3 lg:py-0 bg-transparent dark:bg-cypress-green dark:lg:bg-transparent lg:bg-transparent w-full flex gap-2 ${
+            className={`lg:w-fit items-end py-3 lg:py-0 bg-transparent lg:bg-transparent w-full flex gap-2 ${
               path != "/" && "lg:flex-row"
             } flex-col`}>
             {navListItems.map(({ label, url, icon }, key) => {
-              if (label === "Cart" && path === "/") {
-                return null;
-              }
               return (
                 <NavItem
                   key={key}
@@ -151,7 +150,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
                 }}
                 className={`${
                   path == "/"
-                    ? "lg:text-white text-black"
+                    ? "lg:text-white text-black dark:text-white"
                     : "text-black dark:text-white"
                 } hover:opacity-60 transition-opacity p-1`}
                 aria-label="Toggle dark mode">

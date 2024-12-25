@@ -139,7 +139,7 @@ export default function Home() {
       </div>
 
       <div
-        className="relative w-full text-left z-50 ml-[4%]  my-auto flex justify-start items-center h-[10%] "
+        className="relative w-full text-left z-20 ml-[4%]  my-auto flex justify-start items-center h-[10%] "
         style={{ perspective: "1000px" }}>
         <AnimatePresence custom={direction} initial={false}>
           <motion.div

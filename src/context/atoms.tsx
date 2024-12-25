@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { User } from "@supabase/supabase-js";
 
 type Address = {
   id: string;
@@ -15,13 +16,13 @@ type Customer = {
   email: string;
   firstName: string;
   lastName: string;
-  addresses: Address[];
+  addresses?: Address[];
 };
 
 type State = {
   isSignInOpen: boolean;
-  session: null | string;
-  user: null | string;
+  session: string | null;
+  user: User | null;
   customer: Customer | null;
   showMobileMenu: boolean;
   darkMode: boolean;
@@ -81,7 +82,7 @@ const initialState: State = {
   user: null,
   customer: null,
   showMobileMenu: false,
-  darkMode: false,
+  darkMode: true,
   firstVisit: true,
   cartOpen: false,
   cartId: null,

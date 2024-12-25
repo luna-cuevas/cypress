@@ -202,7 +202,7 @@ export default function Cart() {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full">
                 <DialogPanel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex flex-col h-full flex- px-0 overflow-y-scroll bg-white dark:bg-black shadow-xl">
+                  <div className="flex flex-col h-full flex- px-0 overflow-y-scroll bg-white dark:bg-gray-900 shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-4">
                       <div className="flex items-start justify-between border-b">
                         <DialogTitle className="text-xl font-medium text-gray-900 dark:text-white !font-['trajan']">

@@ -24,9 +24,9 @@ export const Navigation = (props: Props) => {
     <nav
       className={`${
         pathName == "/"
-          ? "absolute z-50 grid grid-cols-3 grid-flow-col"
-          : "z-[0] border-b hover:bg-white group flex"
-      } h-fit w-screen  lg:px-[2%] backdrop-blur-[1px]  justify-between transition-background-color duration-1000  top-0 items-center rounded-none  dark:hover:bg-gray-900/50 bg-transparent max-w-none dark:bg-black dark:border-gray-800 lg:py-2 p-0`}>
+          ? "absolute grid grid-cols-3 grid-flow-col"
+          : "border-b hover:bg-white dark:hover:bg-gray-900/50 group flex relative"
+      }   top-0 left-0 right-0 h-fit z-50 lg:px-[2%] backdrop-blur-[1px] justify-between transition-background-color duration-1000 items-center rounded-none dark:hover:bg-gray-900/50 bg-transparent dark:bg-black dark:border-gray-800 lg:py-2 p-0`}>
       <span className="col-span-1"></span>
       <Motion
         type="div"
@@ -39,7 +39,7 @@ export const Navigation = (props: Props) => {
         } w-fit justify-center flex m-auto`}>
         <Link
           href="/"
-          className="z-[0] h-[50px] w-[150px] lg:w-[200px] relative left-0 right-0 flex m-auto top-0 bottom-0">
+          className="h-[50px] w-[150px] lg:w-[200px] relative left-0 right-0 flex m-auto top-0 bottom-0">
           <Image
             src="/cypress-text-logo.svg"
             alt="Cypress Logo"
@@ -63,7 +63,7 @@ export const Navigation = (props: Props) => {
           <div className="my-auto hidden w-fit h-full lg:flex items-center justify-between text-blue-gray-900">
             <NavList homePageNav={false} />
           </div>
-          <div className="w-fit absolute right-0 top-2 flex justify-end">
+          <div className="w-fit absolute right-4 top-2 flex justify-end">
             <DropDownButton />
           </div>
         </>
