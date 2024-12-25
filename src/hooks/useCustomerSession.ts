@@ -11,9 +11,17 @@ export function useCustomerSession() {
 
     const checkSession = async () => {
       try {
-        const response = await fetch("/api/customer/session");
+        const response = await fetch("/api/customer/session", {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const { customer } = await response.json();
-        console.log("customer", customer);
 
         if (isMounted) {
           setState((prev) => ({
@@ -25,6 +33,10 @@ export function useCustomerSession() {
       } catch (error) {
         console.error("Error checking customer session:", error);
         if (isMounted) {
+          setState((prev) => ({
+            ...prev,
+            customer: null,
+          }));
           setIsLoading(false);
         }
       }
@@ -33,8 +45,8 @@ export function useCustomerSession() {
     // Check session on mount
     checkSession();
 
-    // Set up interval to check session periodically (every 5 minutes)
-    const interval = setInterval(checkSession, 5 * 60 * 1000);
+    // Set up interval to check session periodically (every minute)
+    const interval = setInterval(checkSession, 60 * 1000);
 
     // Cleanup function
     return () => {
