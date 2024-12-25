@@ -8,17 +8,66 @@ const SHOPIFY_STOREFRONT_ACCESS_TOKEN =
 export async function GET() {
   try {
     const cookieStore = cookies();
-    // Shopify's customer access token cookie
-    const customerAccessToken = cookieStore.get("_shopify_y")?.value;
+    const shopifyY = cookieStore.get("_shopify_y")?.value;
 
-    if (!customerAccessToken) {
+    if (!shopifyY) {
       return NextResponse.json({ customer: null });
     }
 
-    // Query to get customer information using the multipass token
-    const query = `
-      query {
-        customer(customerAccessToken: "${customerAccessToken}") {
+    // First, get the customer access token
+    const getTokenMutation = `
+      mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+        customerAccessTokenCreate(input: $input) {
+          customerAccessToken {
+            accessToken
+            expiresAt
+          }
+          customerUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const tokenResponse = await fetch(
+      `https://${SHOPIFY_STORE_DOMAIN}/api/2024-01/graphql.json`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
+          Cookie: `_shopify_y=${shopifyY}`,
+        },
+        body: JSON.stringify({
+          query: getTokenMutation,
+          variables: {
+            input: {
+              multipassToken: shopifyY,
+            },
+          },
+        }),
+      }
+    );
+
+    const tokenData = await tokenResponse.json();
+    console.log("Token response:", tokenData);
+
+    if (
+      tokenData.errors ||
+      !tokenData.data?.customerAccessTokenCreate?.customerAccessToken
+    ) {
+      return NextResponse.json({ customer: null });
+    }
+
+    const accessToken =
+      tokenData.data.customerAccessTokenCreate.customerAccessToken.accessToken;
+
+    // Now use the access token to get customer data
+    const getCustomerQuery = `
+      query getCustomer($customerAccessToken: String!) {
+        customer(customerAccessToken: $customerAccessToken) {
           id
           firstName
           lastName
@@ -37,28 +86,32 @@ export async function GET() {
       }
     `;
 
-    const response = await fetch(
+    const customerResponse = await fetch(
       `https://${SHOPIFY_STORE_DOMAIN}/api/2024-01/graphql.json`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
-          "X-Shopify-Customer-Access-Token": customerAccessToken,
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({
+          query: getCustomerQuery,
+          variables: {
+            customerAccessToken: accessToken,
+          },
+        }),
       }
     );
 
-    const data = await response.json();
-    console.log("Shopify response:", data);
+    const customerData = await customerResponse.json();
+    console.log("Customer response:", customerData);
 
-    if (data.errors) {
-      console.error("Shopify GraphQL errors:", data.errors);
+    if (customerData.errors) {
+      console.error("Shopify GraphQL errors:", customerData.errors);
       return NextResponse.json({ customer: null });
     }
 
-    return NextResponse.json({ customer: data.data?.customer || null });
+    return NextResponse.json({ customer: customerData.data?.customer || null });
   } catch (error) {
     console.error("Error fetching customer session:", error);
     return NextResponse.json({ customer: null });
