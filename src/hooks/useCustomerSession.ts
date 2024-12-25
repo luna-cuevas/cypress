@@ -21,7 +21,6 @@ export function useCustomerSession() {
           headers: {
             "Cache-Control": "no-cache",
           },
-          credentials: "include",
         });
 
         if (!response.ok) {
