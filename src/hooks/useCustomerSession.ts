@@ -17,6 +17,7 @@ export function useCustomerSession() {
           headers: {
             "Cache-Control": "no-cache",
           },
+          credentials: "include",
         });
 
         if (!response.ok) {
@@ -24,7 +25,7 @@ export function useCustomerSession() {
         }
 
         const { customer } = await response.json();
-        console.log("Session check response:", customer);
+        console.log("Session check response:", { customer });
 
         if (isMounted) {
           setState((prev) => ({
@@ -51,8 +52,8 @@ export function useCustomerSession() {
     // Check session on mount
     checkSession();
 
-    // Set up interval to check session periodically (every 5 minutes)
-    const interval = setInterval(checkSession, 5 * 60 * 1000);
+    // Set up interval to check session periodically (every minute)
+    const interval = setInterval(checkSession, 60 * 1000);
 
     // Cleanup function
     return () => {
@@ -61,10 +62,15 @@ export function useCustomerSession() {
     };
   }, [setState]);
 
+  const redirectToLogin = () => {
+    window.location.href = `https://shopify.com/69307498727/account`;
+  };
+
   return {
     customer: state.customer,
     isAuthenticated: !!state.customer,
     isLoading,
     error,
+    redirectToLogin,
   };
 }
