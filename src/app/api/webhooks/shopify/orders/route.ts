@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { getDefaultStore } from "jotai";
+import { clearCartAction } from "@/context/atoms";
 
 const SHOPIFY_WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -38,23 +40,24 @@ export async function POST(req: Request) {
 
     // Get user_id from customer email using Supabase auth
     const { data: userData, error: userError } = await supabase
-      .from("auth.users")
+      .from("profiles") // Make sure this matches your table name
       .select("id")
       .eq("email", orderData.email)
-      .single();
+      .maybeSingle();
 
     if (userError) {
       console.error("Error finding user:", userError);
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      // Continue processing even if user not found
     }
 
     // Insert order into Supabase
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
-        user_id: userData.id,
+        user_id: userData?.id,
         shopify_order_id: orderData.id,
         order_number: orderData.order_number,
+        email: orderData.email, // Store email even if user not found
         processed_at: orderData.processed_at,
         financial_status: orderData.financial_status,
         fulfillment_status: orderData.fulfillment_status || "unfulfilled",
@@ -96,6 +99,13 @@ export async function POST(req: Request) {
         { error: "Failed to create order items" },
         { status: 500 }
       );
+    }
+
+    // Clear the cart after successful order processing
+    if (orderData.financial_status === "paid") {
+      const store = getDefaultStore();
+      store.set(clearCartAction);
+      console.log("Cart cleared for order:", orderData.order_number);
     }
 
     return NextResponse.json({ success: true });
