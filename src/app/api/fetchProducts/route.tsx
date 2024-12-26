@@ -62,8 +62,6 @@ export async function POST(request: Request) {
             })) || [],
         })) || [];
 
-      console.log("relatedProducts", relatedProducts);
-
       return NextResponse.json({
         product: transformedProduct,
         relatedProducts: relatedProducts.filter(
@@ -71,7 +69,6 @@ export async function POST(request: Request) {
         ),
       });
     }
-    console.log("productResponse", productResponse);
 
     return NextResponse.json(productResponse);
   } catch (error) {

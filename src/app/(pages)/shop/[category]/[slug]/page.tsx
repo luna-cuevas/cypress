@@ -18,7 +18,7 @@ import NewsletterForm from "@/components/shop/NewsletterForm";
 
 type Props = {
   params: { category: string; slug: string };
-  searchParams: { size?: string };
+  searchParams: { variantSize?: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,15 +51,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ProductPage({
-  params,
-  searchParams,
-}: {
-  params: { category: string; slug: string };
-  searchParams: { size?: string };
-}) {
+export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = params;
-  const variantSize = searchParams.size;
+  const variantSize = searchParams.variantSize;
+  console.log(variantSize);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
