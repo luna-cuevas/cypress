@@ -27,7 +27,6 @@ const LoadingScreen = (props: Props) => {
   return (
     <div
       className={`
-        ${environment == "development" ? "hidden" : ""}
         w-screen fixed z-[20000000000] flex bg-white h-screen   mx-auto transition-opacity duration-1000 ${
           fadeOut ? "opacity-0" : "opacity-100"
         } ${!loading && "hidden"}`}>

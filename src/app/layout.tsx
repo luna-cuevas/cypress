@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { Provider as JotaiProvider } from "jotai";
 import { NavDrawer } from "@/components/Navigation/NavDrawer";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -27,6 +28,7 @@ export default function RootLayout({
             <Suspense fallback={<div>Loading...</div>}>
               <Cart />
               <NavDrawer />
+              <LoadingScreen />
             </Suspense>
             <main>{children}</main>
             <Footer />
