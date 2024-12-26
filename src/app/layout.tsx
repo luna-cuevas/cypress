@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Navigation } from "@/components/Navigation/Navigation";
@@ -22,7 +23,9 @@ export default function RootLayout({
         <JotaiProvider>
           <AuthProvider>
             <Navigation />
-            <Cart />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Cart />
+            </Suspense>
             <main>{children}</main>
             <Footer />
           </AuthProvider>
