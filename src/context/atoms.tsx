@@ -125,7 +125,7 @@ const initialState: State = {
 
 // Create an atom with local storage persistence for the entire application state
 export const globalStateAtom = atomWithLocalStorage(
-  "CypressAppState-v2",
+  "CypressAppState-v3",
   initialState
 );
 

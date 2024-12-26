@@ -92,7 +92,18 @@ export default function Cart() {
         checkoutUrl: responseData.cart.checkoutUrl,
       });
     } else {
-      console.error("Failed to fetch cart:", responseData);
+      console.log("No cart found:", responseData);
+      setState({
+        ...state,
+        cartId: null,
+        cartItems: [],
+        cartCost: {
+          subtotalAmount: { amount: 0, currencyCode: "USD" },
+          totalTax: { amount: 0, currencyCode: "USD" },
+          totalDuty: { amount: 0, currencyCode: "USD" },
+          total: { amount: 0, currencyCode: "USD" },
+        },
+      });
       // Handle cart not found
     }
   };
