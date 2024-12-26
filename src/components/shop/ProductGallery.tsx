@@ -97,7 +97,7 @@ const ProductGallery = (props: Props) => {
     <div className="z-0 w-full h-auto">
       <div className="mx-auto h-full lg:max-w-[100%] ">
         <div
-          className={`grid gap-2 sm:gap-3.5 lg:gap-4 ${getGridColumns()} p-4 sm:p-6`}>
+          className={`grid gap-2 sm:gap-3.5 lg:gap-4 ${getGridColumns()} p-1 sm:p-6`}>
           {products &&
             products.map((product: any, index) => (
               <motion.div

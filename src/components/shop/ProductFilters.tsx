@@ -170,7 +170,7 @@ export default function ProductFilters({
 
   return (
     <div className="bg-white dark:bg-black">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1600px] px-8 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="py-4">
           <ol role="list" className="flex items-center space-x-1">

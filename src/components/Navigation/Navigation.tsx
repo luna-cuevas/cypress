@@ -26,7 +26,7 @@ export const Navigation = (props: Props) => {
         pathName == "/"
           ? "absolute grid grid-cols-3 grid-flow-col z-20"
           : "border-b hover:bg-white dark:hover:bg-gray-900/50 group flex relative"
-      }   top-0 left-0 right-0 h-fit  lg:px-[2%] backdrop-blur-[1px] justify-between transition-background-color duration-1000 items-center rounded-none dark:hover:bg-gray-900/50 bg-transparent dark:bg-black dark:border-gray-800 lg:py-2 p-0`}>
+      }  overflow-hidden top-0 left-0 right-0 h-fit  lg:px-[2%] backdrop-blur-[1px] justify-between transition-background-color duration-1000 items-center rounded-none dark:hover:bg-gray-900/50 bg-transparent dark:bg-black dark:border-gray-800 lg:py-2 p-0`}>
       <span className="col-span-1"></span>
       <Motion
         type="div"
@@ -68,7 +68,6 @@ export const Navigation = (props: Props) => {
           </div>
         </>
       )}
-      <NavDrawer />
     </nav>
   );
 };
