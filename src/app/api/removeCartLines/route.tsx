@@ -38,11 +38,12 @@ export async function POST(req: NextRequest) {
                         id
                         title
                         handle
+                        vendor
                         images(first: 1) {
                           edges {
                             node {
+                              src: url
                               altText
-                              url
                             }
                           }
                         }

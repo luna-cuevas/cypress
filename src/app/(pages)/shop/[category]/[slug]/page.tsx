@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { productQuery } from "@/utils/productQuery";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,37 +11,27 @@ import RelatedProducts from "@/components/shop/RelatedProducts";
 import { Accordions } from "@/components/shop/Accordions";
 import { Motion } from "@/utils/Motion";
 import FavoriteButton from "@/components/shop/FavoriteButton";
+import { Metadata } from "next";
+import ProductReviews from "@/components/shop/ProductReviews";
+import RatingPreview from "@/components/shop/RatingPreview";
+import NewsletterForm from "@/components/shop/NewsletterForm";
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: {
-    slug: string;
-  };
-  searchParams: {
-    variantSize?: any;
-    selectedTab?: string;
-  };
-}) {
+type Props = {
+  params: { category: string; slug: string };
+  searchParams: { size?: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = params;
-
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-store",
     },
     body: JSON.stringify({
-      productQuery: productQuery({
-        handle: slug,
-      }),
+      productQuery: productQuery({ handle: slug }),
     }),
   });
-
-  if (!response.ok) {
-    return <div>HTTP error! status: {response.status}</div>;
-  }
 
   const data = await response.json();
   const product = data.product;
@@ -52,66 +42,44 @@ export async function generateMetadata({
     openGraph: {
       title: product.title,
       description: product.description || "Product details",
-      images: product.images.map((image: { src: string; altText: string }) => ({
-        url: image.src,
-        alt: image.altText || product.title,
-      })),
+      images:
+        product.images?.map((image: { src: string; altText: string }) => ({
+          url: image.src,
+          alt: image.altText || product.title,
+        })) || [],
     },
   };
 }
 
-type Props = {};
-
-const ProductPage = async ({
+export default async function ProductPage({
   params,
   searchParams,
 }: {
-  params: {
-    slug: string;
-    category: string;
-  };
-  searchParams: {
-    variantSize?: any;
-    selectedTab?: string;
-  };
-}) => {
-  const { slug, category } = params;
-  const { variantSize, selectedTab = "description" } = searchParams;
-
-  console.log("params", params);
+  params: { category: string; slug: string };
+  searchParams: { size?: string };
+}) {
+  const { slug } = params;
+  const variantSize = searchParams.size;
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-store",
     },
+    cache: "no-store",
     body: JSON.stringify({
-      productQuery: productQuery({
-        handle: slug,
-      }),
+      productQuery: productQuery({ handle: slug }),
     }),
   });
 
-  if (!response.ok) {
-    return <div>HTTP error! status: {response.status}</div>;
-  }
-
   const data = await response.json();
-  console.error("response", data);
-
-  if (!data) {
-    return <div>No product found</div>;
-  }
-
   const product = data.product;
-  const relatedProducts = data.relatedProducts;
 
-  const selectedVariant = product.variants.find(
-    (variant: any) => variant.variantTitle == variantSize
+  const selectedVariant = product.variants?.find(
+    (variant: any) => variant.variantTitle === variantSize
   );
 
-  const pathSegments = ["shop", category, slug];
+  const pathSegments = ["shop", params.category, slug];
 
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-black">
@@ -260,13 +228,19 @@ const ProductPage = async ({
                 duration: 0.5,
                 delay: 0.5,
               }}
-              className="!relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4 bg-white dark:bg-black">
+              className="relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4 bg-white dark:bg-black">
               {/* Product info */}
               <div className="m-auto md:sticky right-0 top-0 pt-4 left-0 max-w-2xl   ">
                 <div className="lg:col-span-2 mb-2 lg:pr-8">
                   <h1 className="text-2xl text-gray-900 dark:text-white sm:text-2xl">
                     {product.title}
                   </h1>
+                  <div className="flex items-center gap-4 mt-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {product.vendor}
+                    </span>
+                    <RatingPreview productId={product.id} />
+                  </div>
                 </div>
 
                 {/* Options */}
@@ -337,15 +311,23 @@ const ProductPage = async ({
               </div>
             </Motion>
           </div>
-          <div>
-            <RelatedProducts relatedProducts={relatedProducts} />
+
+          {/* Related Products */}
+          <div className="my-12 py-8 relative border-t border-gray-200 dark:border-gray-800">
+            <RelatedProducts relatedProducts={data.relatedProducts} />
           </div>
 
-          <div></div>
+          {/* Reviews Section */}
+          <div className="my-12 py-8 relative border-t border-gray-200 dark:border-gray-800">
+            <ProductReviews productId={product.id} />
+          </div>
+
+          {/* Newsletter Section */}
+          <div className="my-12 py-8  relative border-t border-gray-200 dark:border-gray-800">
+            <NewsletterForm />
+          </div>
         </Motion>
       </div>
     </div>
   );
-};
-
-export default ProductPage;
+}

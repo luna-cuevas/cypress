@@ -12,7 +12,7 @@ import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Product = {
   lineId: string;
@@ -21,6 +21,7 @@ type Product = {
     id: string;
     handle: string;
     title: string;
+    vendor: string;
     images: Array<{
       altText: string;
       src: string;
@@ -37,6 +38,7 @@ type Product = {
 export default function Cart() {
   const [state, setState] = useAtom(globalStateAtom);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Function to map cart lines from Shopify to local state
   const mapCartLine = (edge: any): Product => {
@@ -52,10 +54,11 @@ export default function Cart() {
         id: product.id,
         handle: product.handle,
         title: product.title,
+        vendor: product.vendor || "Unknown",
         images: [
           {
-            altText: image?.altText || "",
-            src: image?.url || "",
+            altText: image?.altText || product.title,
+            src: image?.url || image?.src || "/placeholder.jpg",
           },
         ],
       },
@@ -176,10 +179,47 @@ export default function Cart() {
     }
   };
 
+  useEffect(() => {
+    // Check for Shopify success parameter
+    const checkoutStatus = searchParams.get("checkout_status");
+
+    if (checkoutStatus === "success") {
+      // Clear the cart
+      setState({
+        ...state,
+        cartId: null,
+        cartItems: [],
+        cartCost: {
+          subtotalAmount: {
+            amount: 0,
+            currencyCode: "USD",
+          },
+          totalTax: {
+            amount: 0,
+            currencyCode: "USD",
+          },
+          totalDuty: {
+            amount: 0,
+            currencyCode: "USD",
+          },
+          total: {
+            amount: 0,
+            currencyCode: "USD",
+          },
+        },
+        checkoutUrl: null,
+      });
+
+      // Optional: Remove the query parameter from the URL
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [searchParams, setState]);
+
   return (
     <Transition show={state.cartOpen}>
       <Dialog
-        className="relative !z-[200000000] cart"
+        className="relative !z-[2000000000000] cart"
         onClose={() => setState({ ...state, cartOpen: false })}>
         <TransitionChild
           enter="ease-in-out duration-500"
@@ -257,10 +297,10 @@ export default function Cart() {
                                     <div className="ml-4 flex flex-1 flex-col">
                                       <div>
                                         <div className="flex justify-between">
-                                          <h3 className="text-base font-medium text-gray-900 dark:text-white">
+                                          <h3 className="text-base font-medium text-gray-900 dark:text-white max-w-[200px]">
                                             <Link
                                               href={`/shop/${product.handle}`}
-                                              className="!font-['trajan'] hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200">
+                                              className="!font-['trajan'] hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200 truncate block">
                                               {product.title}
                                             </Link>
                                           </h3>
@@ -272,6 +312,7 @@ export default function Cart() {
                                           </p>
                                         </div>
                                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                          {product.vendor} •{" "}
                                           {variant.variantTitle}
                                         </p>
                                       </div>

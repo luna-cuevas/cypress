@@ -3,8 +3,14 @@ import ProductGallery from "@/components/shop/ProductGallery";
 import { productQuery } from "@/utils/productQuery";
 import React from "react";
 import { subCategories } from "@/utils/subCategories";
+import { getVendors } from "@/utils/shopify";
 
 type Props = {};
+
+async function fetchVendors() {
+  const vendors = await getVendors();
+  return vendors;
+}
 
 const page = async ({
   params,
@@ -36,16 +42,54 @@ const page = async ({
   }
 
   const data = await response.json();
-  const products = data.products;
-  const productCount = products.length;
+
+  // Transform products from edges/nodes structure
+  const products =
+    data.products?.edges?.map((edge: any) => {
+      const product = edge.node;
+      return {
+        id: product.id,
+        title: product.title,
+        vendor: product.vendor,
+        handle: product.handle,
+        productType: product.productType,
+        description: product.description,
+        variants:
+          product.variants?.edges?.map((variantEdge: any) => ({
+            variantId: variantEdge.node.id,
+            variantTitle: variantEdge.node.title,
+            variantPrice: variantEdge.node.price.amount,
+            variantCurrencyCode: variantEdge.node.price.currencyCode,
+            variantQuantityAvailable: variantEdge.node.quantityAvailable,
+          })) || [],
+        images:
+          product.images?.edges?.map((imageEdge: any) => ({
+            src: imageEdge.node.src,
+            altText: imageEdge.node.altText || "",
+          })) || [],
+      };
+    }) || [];
+
+  // Filter products to only include those with matching variants if sizes are specified
+  const filteredProducts = !sizesArray.length
+    ? products
+    : products.filter((product: any) =>
+        product.variants.some((variant: any) =>
+          sizesArray.some((size: string) => variant.variantTitle.includes(size))
+        )
+      );
+
+  const productCount = filteredProducts.length;
+
+  const availableVendors = await fetchVendors();
 
   return (
     <div className="z-0 relative">
       <ProductFilters
         productCount={productCount}
         subCategories={subCategories}
-        title={params.category}>
-        <ProductGallery products={products} />
+        vendors={availableVendors}>
+        <ProductGallery products={filteredProducts} />
       </ProductFilters>
     </div>
   );

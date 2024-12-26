@@ -1,96 +1,41 @@
-type Sort =
-  | "id"
-  | "relevance"
-  | "price_asc"
-  | "price_desc"
-  | "created_at"
-  | "best_selling";
-
 export const productQuery = ({
-  category,
-  sizes,
+  sizes = [],
   sort,
+  vendors = [],
   handle,
+  category,
 }: {
-  category?: string;
   sizes?: string[];
-  sort?: Sort;
+  sort?: string;
+  vendors?: string[];
   handle?: string;
+  category?: string;
 }) => {
-  let sizeQuery = "";
-  if (Array.isArray(sizes)) {
-    sizeQuery = sizes.map((size) => `variant.option:${size}`).join(" OR ");
-  } else if (sizes) {
-    sizeQuery = `variant.option:${sizes}`;
-  }
-
-  const combinedQuery = [
-    category ? `product_type:${category}` : null,
-    sizeQuery ? `(${sizeQuery})` : null,
-  ]
-    .filter(Boolean)
-    .join(" AND ");
-
-  const determineSortParams = (sort: Sort) => {
-    let sortKey;
-    let reverse;
-
-    switch (sort) {
-      case "price_asc":
-        sortKey = "PRICE";
-        reverse = false;
-        break;
-      case "price_desc":
-        sortKey = "PRICE";
-        reverse = true;
-        break;
-      case "created_at":
-        sortKey = "CREATED_AT";
-        reverse = true;
-        break;
-      case "best_selling":
-        sortKey = "BEST_SELLING";
-        reverse = true;
-        break;
-      case "id":
-        sortKey = "ID";
-        reverse = false;
-        break;
-      default:
-        sortKey = "RELEVANCE";
-        reverse = false;
-    }
-
-    return { sortKey, reverse };
-  };
-
-  const { sortKey, reverse } = determineSortParams(sort || "relevance");
-
+  // If handle is provided, return single product query
   if (handle) {
     return `
       query {
         product(handle: "${handle}") {
           id
-          handle
           title
+          vendor
+          handle
           description
           productType
-          vendor
-          tags
           variants(first: 20) {
             edges {
               node {
                 id
                 title
-                quantityAvailable
                 price {
                   amount
                   currencyCode
                 }
+                quantityAvailable
               }
             }
           }
-          images(first: 10) {
+          images(first: 20) {
             edges {
               node {
                 src
@@ -99,36 +44,116 @@ export const productQuery = ({
             }
           }
         }
+        products(first: 5, query: "vendor:\\"$vendor\\"") {
+          edges {
+            node {
+              id
+              title
+              vendor
+              handle
+              description
+              productType
+              variants(first: 1) {
+                edges {
+                  node {
+                    price {
+                      amount
+                    }
+                  }
+                }
+              }
+              images(first: 1) {
+                edges {
+                  node {
+                    src
+                    altText
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     `;
   }
 
+  // Build filter conditions
+  const conditions: string[] = [];
+
+  if (category) {
+    conditions.push(`(product_type:${category})`);
+  }
+
+  if (sizes.length > 0) {
+    const sizeFilter = sizes.map((size) => `(variant:${size})`).join(" OR ");
+    conditions.push(`(${sizeFilter})`);
+  }
+
+  if (vendors.length > 0) {
+    const vendorFilter = vendors
+      .map((vendor) => `(vendor:${vendor})`)
+      .join(" OR ");
+    conditions.push(`(${vendorFilter})`);
+  }
+
+  const filterCondition = conditions.length > 0 ? conditions.join(" AND ") : "";
+
+  // Determine sort key and direction
+  let sortKey = "RELEVANCE";
+  let reverse = false;
+
+  switch (sort) {
+    case "price_asc":
+      sortKey = "PRICE";
+      reverse = false;
+      break;
+    case "price_desc":
+      sortKey = "PRICE";
+      reverse = true;
+      break;
+    case "created_at":
+      sortKey = "CREATED_AT";
+      reverse = true;
+      break;
+    case "best_selling":
+      sortKey = "BEST_SELLING";
+      reverse = false;
+      break;
+    default:
+      sortKey = "RELEVANCE";
+      reverse = false;
+  }
+
   return `
     query {
-      products(first: 20, query: "${combinedQuery}", reverse: ${reverse}, sortKey: ${sortKey}) {
+      products(
+        first: 250
+        ${filterCondition ? `query: "${filterCondition}"` : ""}
+        sortKey: ${sortKey}
+        reverse: ${reverse}
+      ) {
         edges {
           node {
             id
-            handle
             title
             vendor
+            handle
             description
             productType
-            tags
             variants(first: 20) {
               edges {
                 node {
                   id
                   title
-                  quantityAvailable
                   price {
                     amount
                     currencyCode
                   }
+                  quantityAvailable
                 }
               }
             }
-            images(first: 10) {
+            images(first: 20) {
               edges {
                 node {
                   src

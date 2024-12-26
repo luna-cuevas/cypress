@@ -19,14 +19,16 @@ type RelatedProducts = {
 };
 
 export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
+  if (!relatedProducts?.length) return null;
+
   return (
-    <div className="">
-      <div className="mx-auto  px-0 py-16 sm:px-6 sm:py-24  lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">
+    <div className="max-w-7xl mx-auto">
+      <div className="mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-light tracking-tight text-gray-900 dark:text-gray-200">
           More from {relatedProducts[0].vendor}
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8">
+        <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8">
           {relatedProducts.map((product) => (
             <div key={product.id} className="group relative">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">

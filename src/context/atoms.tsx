@@ -45,6 +45,27 @@ type State = {
   favorites: any[];
 };
 
+type CartItem = {
+  lineId: string;
+  quantity: number;
+  product: {
+    id: string;
+    handle: string;
+    title: string;
+    vendor: string;
+    images: Array<{
+      altText: string;
+      src: string;
+    }>;
+  };
+  variant: {
+    variantId: string;
+    variantTitle: string;
+    variantPrice: string;
+    variantCurrencyCode: string;
+  };
+};
+
 // A helper function to work with localStorage and JSON serialization for the entire application state
 const atomWithLocalStorage = (key: string, initialValue: any) => {
   const getInitialValue = () => {
@@ -107,3 +128,17 @@ export const globalStateAtom = atomWithLocalStorage(
   "CypressAppState-v2",
   initialState
 );
+
+export const cartAtom = atom<CartItem[]>([]);
+
+// Create a simple action atom for clearing the cart
+export const clearCartAction = atom(null, (_get, set) => {
+  set(cartAtom, []);
+  set(globalStateAtom, (prev) => ({
+    ...prev,
+    cartId: null,
+    cartItems: [],
+    cartCost: null,
+    checkoutUrl: null,
+  }));
+});

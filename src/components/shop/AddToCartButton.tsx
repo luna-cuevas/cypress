@@ -1,7 +1,7 @@
 "use client";
 import { globalStateAtom } from "@/context/atoms";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -13,6 +13,14 @@ type Props = {
 const AddToCartButton = (props: Props) => {
   const [state, setState] = useAtom(globalStateAtom);
   const { product, selectedVariant, closeBox } = props;
+  const [showSizeRequired, setShowSizeRequired] = useState(false);
+
+  // Reset error message when variant is selected
+  useEffect(() => {
+    if (selectedVariant) {
+      setShowSizeRequired(false);
+    }
+  }, [selectedVariant]);
 
   // Helper function to map cart lines from Shopify to local state
   const mapCartLine = (edge: any) => {
@@ -30,8 +38,8 @@ const AddToCartButton = (props: Props) => {
         title: product.title,
         images: [
           {
-            altText: image?.altText || "",
-            src: image?.url || "",
+            altText: image?.altText || product.title,
+            src: image?.src || "/placeholder.jpg",
           },
         ],
       },
@@ -50,10 +58,11 @@ const AddToCartButton = (props: Props) => {
     e?.preventDefault();
 
     if (!selectedVariant) {
-      console.error("Please select a variant");
-      toast.error("Please select a variant");
+      setShowSizeRequired(true);
       return;
     }
+
+    setShowSizeRequired(false);
 
     // Get the quantity from the form or default to 1
     const quantity = e?.currentTarget?.quantity
@@ -134,33 +143,44 @@ const AddToCartButton = (props: Props) => {
   };
 
   return (
-    <form onSubmit={handleAddToCart} className="flex w-full gap-4">
-      <select
-        id="quantity"
-        name="quantity"
-        autoComplete="off"
-        className="block w-fit px-6 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 
-        dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-cypress-green 
-        focus:border-cypress-green dark:focus:ring-cypress-green-light 
-        dark:focus:border-cypress-green-light sm:text-sm"
-        defaultValue="1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
+    <div className="w-full">
+      {showSizeRequired && (
+        <p className="text-red-500 dark:text-red-400 text-sm mb-2 text-center">
+          Please select a size
+        </p>
+      )}
+      <form onSubmit={handleAddToCart} className="flex w-full gap-4">
+        <select
+          id="quantity"
+          name="quantity"
+          autoComplete="off"
+          className="block w-fit px-6 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 
+          dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-cypress-green 
+          focus:border-cypress-green dark:focus:ring-cypress-green-light 
+          dark:focus:border-cypress-green-light sm:text-sm"
+          defaultValue="1">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
 
-      <button
-        type="submit"
-        className="flex w-full items-center justify-center border border-transparent 
-        bg-cypress-green px-6 py-2 text-base font-medium text-white 
-        hover:bg-cypress-green-light focus:outline-none focus:ring-2 
-        focus:ring-cypress-green dark:focus:ring-cypress-green-light focus:ring-offset-2 
-        dark:focus:ring-offset-black">
-        Add to cart
-      </button>
-    </form>
+        <button
+          type="submit"
+          className={`flex w-full items-center justify-center border border-transparent 
+          ${
+            showSizeRequired
+              ? "bg-gray-400 dark:bg-gray-700"
+              : "bg-cypress-green hover:bg-cypress-green-light"
+          } px-6 py-2 text-base font-medium text-white 
+          focus:outline-none focus:ring-2 
+          focus:ring-cypress-green dark:focus:ring-cypress-green-light focus:ring-offset-2 
+          dark:focus:ring-offset-black transition-colors duration-200`}>
+          Add to cart
+        </button>
+      </form>
+    </div>
   );
 };
 

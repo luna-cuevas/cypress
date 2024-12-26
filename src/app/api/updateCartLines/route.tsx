@@ -35,12 +35,14 @@ export async function POST(req: NextRequest) {
                         currencyCode
                       }
                       product {
+                        id
                         title
                         handle
+                        vendor
                         images(first: 1) {
                           edges {
                             node {
-                              url
+                              src: url
                               altText
                             }
                           }

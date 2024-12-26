@@ -109,7 +109,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
   }
 
   return (
-    <ul className="relative z-50 border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
+    <ul className="relative z-0 border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <li className="w-full">
         <div className="w-full mx-auto mt-auto h-full flex justify-between">
           <Motion

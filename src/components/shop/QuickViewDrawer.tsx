@@ -86,7 +86,7 @@ export function QuickViewDrawer(props: Props) {
         base: {
           drawer: {
             position: "fixed",
-            zIndex: "z-[9999]",
+            zIndex: "z-[1000000000000]",
             pointerEvents: "pointer-events-auto",
             backgroundColor: "bg-white",
             boxSizing: "box-border",
@@ -118,7 +118,7 @@ export function QuickViewDrawer(props: Props) {
         onClose={closeBox}
         placement="right"
         className="pt-2 px-8 dark:bg-black">
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col ">
           <button
             onClick={closeBox}
             className="w-fit mb-2 ml-auto text-xl shadow-md rounded-full px-2 text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300">
@@ -180,7 +180,7 @@ export function QuickViewDrawer(props: Props) {
                               ? "cursor-pointer bg-white dark:bg-black text-gray-900 dark:text-white shadow-sm"
                               : "cursor-not-allowed bg-gray-50 dark:bg-gray-900 text-gray-200 dark:text-gray-700",
                             focus
-                              ? "ring-2 ring-indigo-500 dark:ring-indigo-400"
+                              ? "ring-2 ring-cypress-green dark:ring-cypress-green-light"
                               : "",
                             "group relative flex items-center justify-center border dark:border-gray-700 py-3 text-sm font-medium uppercase hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
                           )

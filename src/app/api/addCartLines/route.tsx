@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
                       product {
                         title
                         handle
+                        vendor
                         images(first: 1) {
                           edges {
                             node {

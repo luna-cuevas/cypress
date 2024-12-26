@@ -44,14 +44,13 @@ export default function FavoriteButton({
           .from("favorites")
           .select("id")
           .eq("user_id", user.id)
-          .eq("product_id", productId)
-          .single();
+          .eq("product_id", productId);
 
-        if (error && error.code !== "PGRST116") {
+        if (error) {
           console.error("Error checking favorite status:", error);
         }
 
-        setIsFavorite(!!data);
+        setIsFavorite(data && data.length > 0);
       } catch (err) {
         console.error("Error checking favorite status:", err);
       } finally {
@@ -103,7 +102,7 @@ export default function FavoriteButton({
     return (
       <button
         disabled
-        className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-md">
+        className="p-2 rounded-full bg-white/40 backdrop-blur-sm shadow-md">
         <HeartIcon className="h-5 w-5 text-gray-400 animate-pulse" />
       </button>
     );
@@ -112,11 +111,11 @@ export default function FavoriteButton({
   return (
     <button
       onClick={toggleFavorite}
-      className="p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-md hover:bg-white transition-colors">
+      className="p-2 rounded-full dark:shadow-white/10 dark:border-gray-800 border-2 backdrop-blur-sm shadow-md hover:bg-white transition-colors">
       {isFavorite ? (
         <HeartIconSolid className="h-5 w-5 text-red-500" />
       ) : (
-        <HeartIcon className="h-5 w-5 text-gray-600" />
+        <HeartIcon className="h-5 w-5 text-gray-600 dark:text-red-500" />
       )}
     </button>
   );

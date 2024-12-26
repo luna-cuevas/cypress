@@ -36,10 +36,11 @@ export async function POST(req: NextRequest) {
                       id
                       title
                       handle
+                      vendor
                       images(first: 1) {
                         edges {
                           node {
-                            url
+                            src: url
                             altText
                           }
                         }
@@ -77,8 +78,6 @@ export async function POST(req: NextRequest) {
     });
 
     const responseData = await response.json();
-
-    console.log("response:", responseData);
 
     if (responseData.data && responseData.data.cart) {
       return NextResponse.json({

@@ -94,15 +94,21 @@ const NavItem = ({
         <ListItem
           className={`${
             path == "/"
-              ? "lg:text-white text-black dark:text-white"
+              ? "lg:text-white !text-white dark:text-white"
               : "text-black dark:text-white"
-          } underline-animation w-fit justify-start lg:justify-end lg:gap-2 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content !text-black dark:!text-white`}>
+          } underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
           <ListItemPrefix className="lg:hidden">
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
-          <span className="!text-black dark:!text-white">{label}</span>
+          {label}
           {totalCartItems > 0 && (
-            <span className="ml-1 text-xs bg-cypress-green text-white rounded-full px-1.5 py-0.5">
+            <span
+              className={` ${
+                path == "/"
+                  ? "text-black dark:text-black bg-white dark:bg-white "
+                  : "bg-black dark:bg-white text-white dark:text-black"
+              }
+            text-xs    rounded-full px-[4px] py-[0.15px] `}>
               {totalCartItems}
             </span>
           )}
