@@ -389,7 +389,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
               </div>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Leave password fields empty if you don't want to change it.
+              Leave password fields empty if you do not want to change it.
             </p>
           </div>
         </div>
