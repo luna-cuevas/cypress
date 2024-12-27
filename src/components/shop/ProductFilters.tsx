@@ -28,10 +28,6 @@ import {
   useSearchParams,
   usePathname,
 } from "next/navigation";
-import { Accordion } from "../Accordion";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Option, Select, Slider } from "@material-tailwind/react";
 
 const sortOptions = [
   { name: "Relevance", value: "relevance", current: true },
