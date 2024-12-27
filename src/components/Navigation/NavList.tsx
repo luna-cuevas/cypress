@@ -93,9 +93,8 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
         <div className="flex gap-1 w-fit justify-center items-center">
           <button
             onClick={() => setState({ ...state, darkMode: !state.darkMode })}
-            className={`${
-              path == "/" ? "text-white" : "text-black dark:text-white"
-            } hover:opacity-60 transition-opacity p-1`}
+            className={`text-black dark:text-white
+             hover:opacity-60 transition-opacity p-1`}
             aria-label="Toggle dark mode">
             {state.darkMode ? (
               <SunIcon className="h-4 w-4" />
@@ -148,11 +147,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
                 onClick={(event) => {
                   setState({ ...state, darkMode: !state.darkMode });
                 }}
-                className={`${
-                  path == "/"
-                    ? "lg:text-white text-black dark:text-white"
-                    : "text-black dark:text-white"
-                } hover:opacity-60 transition-opacity p-1`}
+                className={`text-black dark:text-white hover:opacity-60 transition-opacity p-1`}
                 aria-label="Toggle dark mode">
                 {state.darkMode ? (
                   <SunIcon className="h-4 w-4" />

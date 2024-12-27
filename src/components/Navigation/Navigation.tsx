@@ -44,9 +44,7 @@ export const Navigation = (props: Props) => {
             src="/cypress-text-logo.svg"
             alt="Cypress Logo"
             fill
-            className={`${
-              pathName == "/" ? "invert" : "invert-0"
-            } w-full h-full !object-contain group-hover:invert-0 dark:invert dark:group-hover:invert pt-2`}
+            className={` w-full h-full !object-contain group-hover:invert-0 dark:invert dark:group-hover:invert pt-2`}
           />
         </Link>
       </Motion>

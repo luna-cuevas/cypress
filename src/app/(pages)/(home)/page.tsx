@@ -133,8 +133,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="w-screen justify-start flex h-screen overflow-hidden relative bg-black">
-      <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-blue-gray-900">
+    <main className="w-screen justify-start flex h-screen overflow-hidden relative bg-white dark:bg-black">
+      <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-gray-900 dark:text-white">
         <NavList />
       </div>
 
@@ -144,7 +144,7 @@ export default function Home() {
         <AnimatePresence custom={direction} initial={false}>
           <motion.div
             key={currentIndex}
-            className="absolute text-white font-bold flex items-center justify-center w-fit
+            className="absolute text-gray-900 dark:text-white font-bold flex items-center justify-center w-fit
               text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
               px-4 sm:px-0"
             custom={direction}
@@ -160,7 +160,7 @@ export default function Home() {
       <div
         id="home-banner"
         ref={bannerRef}
-        className="banner-v w-[85%] lg:w-3/4 max-w-[1000px] opacity-70 m-auto h-[80%] overflow-hidden"
+        className="banner-v w-[85%] lg:w-3/4 max-w-[800px] opacity-90 m-auto h-[80%] overflow-hidden"
         style={{ display: "block" }}>
         <div className="t-box t-01">
           <div
@@ -183,6 +183,12 @@ export default function Home() {
             className={`home-banner-img ${newClass}`}
             style={{ backgroundImage: `url(${newImage})` }}></div>
         </div>
+      </div>
+      {/* message to scroll down  */}
+      <div className="absolute bottom-0 left-0 w-full h-fit z-50">
+        <p className="text-center text-gray-900 dark:text-white text-sm">
+          Scroll down to explore
+        </p>
       </div>
     </main>
   );

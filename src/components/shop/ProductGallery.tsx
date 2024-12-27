@@ -27,15 +27,29 @@ const ProductGallery = (props: Props) => {
 
   // Get grid columns class based on size
   const getGridColumns = () => {
-    // Always 2 columns on mobile
-    let classes = "grid-cols-2 ";
+    let classes = "";
+
+    // Mobile (default) breakpoint
+    if (gridSize === 1) {
+      classes += "grid-cols-1 ";
+    } else if (gridSize === 2) {
+      classes += "grid-cols-2 ";
+    } else {
+      classes += "grid-cols-2 "; // Default for mobile
+    }
 
     // Tablet (sm) breakpoint
-    if (gridSize === 2) classes += "sm:grid-cols-2 ";
-    else classes += "sm:grid-cols-3 ";
+    if (gridSize <= 2) {
+      classes += "sm:grid-cols-2 ";
+    } else {
+      classes += "sm:grid-cols-3 ";
+    }
 
     // Desktop (lg) breakpoint
     switch (gridSize) {
+      case 1:
+        classes += "lg:grid-cols-1";
+        break;
       case 2:
         classes += "lg:grid-cols-2";
         break;

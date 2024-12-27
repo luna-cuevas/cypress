@@ -55,9 +55,7 @@ export default function ProfileMenu() {
   if (loading) return null;
 
   const hoverBackground =
-    path === "/"
-      ? "hover:bg-none hover:bg-opacity-0 dark:hover:text-white focus:text-white dark:hover:text-white/80 dark:focus:text-white/80"
-      : "hover:text-black focus:text-black active:text-black dark:hover:text-white/80 dark:focus:text-white/80";
+    "hover:text-black focus:text-black active:text-black dark:hover:text-white/80 dark:focus:text-white/80";
 
   const renderMenuItems = () => (
     <>
@@ -125,11 +123,7 @@ export default function ProfileMenu() {
           className={`hover:bg-transparent focus:bg-transparent active:bg-transparent flex px-2 lg:py-[0.35rem] rounded-none justify-start lg:justify-end items-center ${hoverBackground} transition-all duration-200`}>
           <ListItem
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className={`${
-              path === "/"
-                ? "lg:text-white text-black dark:text-white"
-                : "text-black dark:text-white"
-            } ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
+            className={`${"text-black dark:text-white"} ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
             {" "}
             <ListItemPrefix>
               <UserCircleIcon className="h-5 w-5" />
@@ -153,11 +147,7 @@ export default function ProfileMenu() {
           <MenuHandler>
             <MenuItem className="flex  border-b px-2 lg:py-[0.35rem] rounded-none justify-end items-center hover:bg-transparent focus:bg-transparent active:bg-transparent">
               <ListItem
-                className={`${
-                  path === "/"
-                    ? "lg:text-white text-black dark:hover:text-white hover:text-white"
-                    : "text-black"
-                } dark:text-white relative justify-center group-hover:text-black dark:group-hover:text-white flex gap-2 uppercase text-sm box-content underline-animation hover:bg-transparent focus:bg-transparent active:bg-transparent w-fit lg:p-0`}>
+                className={` dark:text-white relative justify-center group-hover:text-black dark:group-hover:text-white flex gap-2 uppercase text-sm box-content underline-animation hover:bg-transparent focus:bg-transparent active:bg-transparent w-fit lg:p-0`}>
                 Account
               </ListItem>
             </MenuItem>
