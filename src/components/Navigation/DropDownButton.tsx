@@ -21,9 +21,7 @@ const DropDownButton = (props: Props) => {
       }
       className="ml-auto mr-4 lg:hidden max-w-none">
       <Bars2Icon
-        className={`${
-          path != "/" ? "text-black" : "text-white"
-        } h-6 w-6  dark:text-white group-hover:text-black dark:group-hover:text-white`}
+        className={` h-6 w-6  dark:text-white group-hover:text-black dark:group-hover:text-white`}
       />
     </IconButton>
   );

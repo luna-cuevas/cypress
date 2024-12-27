@@ -82,7 +82,7 @@ const NavItem = ({
   if (!isClient) return null;
 
   const hoverBackground =
-    "hover:text-black focus:text-black active:text-black dark:text-white dark:hover:text-white/80 dark:focus:text-white/80";
+    "hover:text-black text-black focus:text-black active:text-black dark:text-white dark:hover:text-white/80 dark:focus:text-white/80";
 
   return isCart ? (
     <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto m-0">
