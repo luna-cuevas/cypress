@@ -9,6 +9,8 @@ import { Provider as JotaiProvider } from "jotai";
 import { NavDrawer } from "@/components/Navigation/NavDrawer";
 import LoadingScreen from "@/components/common/LoadingScreen";
 import IntroAnimation from "@/components/common/IntroAnimation";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -145,6 +147,18 @@ export default function RootLayout({
             </Suspense>
           </AuthProvider>
         </JotaiProvider>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss={true}
+          draggable={true}
+          pauseOnHover={true}
+          theme="dark"
+        />
       </body>
     </html>
   );

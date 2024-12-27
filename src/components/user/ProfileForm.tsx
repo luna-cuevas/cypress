@@ -16,6 +16,7 @@ import {
 } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
+import { toast } from "react-toastify";
 
 type Props = {
   initialProfile: any;
@@ -39,7 +40,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
     firstName: user?.user_metadata?.first_name || "",
     lastName: user?.user_metadata?.last_name || "",
     gender: initialProfile?.gender || "",
-    birthDate: initialProfile?.birth_date || "",
+    birthDate: initialProfile?.birth_date || null,
     location: initialProfile?.location || "",
     phoneNumber: initialProfile?.phone_number || "",
   });
@@ -74,7 +75,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
   const handlePasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      alert("New passwords do not match.");
+      toast.error("New passwords do not match.");
       return;
     }
 
@@ -85,7 +86,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
 
       if (error) throw error;
 
-      alert("Password updated successfully!");
+      toast.success("Password updated successfully!");
       setPasswordData({
         currentPassword: "",
         newPassword: "",
@@ -94,7 +95,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
       setIsUpdatingPassword(false);
     } catch (error) {
       console.error("Error updating password:", error);
-      alert("Failed to update password. Please try again.");
+      toast.error("Failed to update password. Please try again.");
     }
   };
 
@@ -116,7 +117,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
       const { error: profileError } = await supabase.from("profiles").upsert({
         id: user.id,
         gender: formData.gender,
-        birth_date: formData.birthDate,
+        birth_date: formData.birthDate || null,
         location: formData.location,
         phone_number: formData.phoneNumber,
         updated_at: new Date().toISOString(),
@@ -142,10 +143,12 @@ export default function ProfileForm({ initialProfile, user }: Props) {
         },
       }));
 
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("An error occurred while updating your profile. Please try again.");
+      toast.error(
+        "An error occurred while updating your profile. Please try again."
+      );
     }
   };
 
