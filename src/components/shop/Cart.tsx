@@ -73,38 +73,47 @@ export default function Cart() {
 
   // Function to fetch the cart from Shopify
   const fetchCart = async (cartId: string) => {
-    const response = await fetch("/api/fetchCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ cartId }),
-    });
+    try {
+      // Add a small delay to ensure cart creation is complete
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const responseData = await response.json();
-
-    if (responseData.cart) {
-      setState({
-        ...state,
-        cartId: responseData.cart.id,
-        cartItems: responseData.cart.lines.edges.map(mapCartLine),
-        cartCost: responseData.cart.cost,
-        checkoutUrl: responseData.cart.checkoutUrl,
-      });
-    } else {
-      console.log("No cart found:", responseData);
-      setState({
-        ...state,
-        cartId: null,
-        cartItems: [],
-        cartCost: {
-          subtotalAmount: { amount: 0, currencyCode: "USD" },
-          totalTax: { amount: 0, currencyCode: "USD" },
-          totalDuty: { amount: 0, currencyCode: "USD" },
-          total: { amount: 0, currencyCode: "USD" },
+      const response = await fetch("/api/fetchCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ cartId }),
       });
-      // Handle cart not found
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch cart");
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.cart) {
+        setState((prevState) => ({
+          // Use function form to avoid stale state
+          ...prevState,
+          cartId: responseData.cart.id,
+          cartItems: responseData.cart.lines.edges.map(mapCartLine),
+          cartCost: responseData.cart.cost,
+          checkoutUrl: responseData.cart.checkoutUrl,
+        }));
+      } else {
+        console.log("No cart found:", responseData);
+        setState((prevState) => ({
+          ...prevState,
+          cartId: null,
+          cartItems: [],
+          cartCost: {
+            subtotalAmount: { amount: "0", currencyCode: "USD" },
+            totalAmount: { amount: "0", currencyCode: "USD" },
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart:", error);
     }
   };
 

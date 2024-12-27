@@ -56,7 +56,7 @@ export default function ProfileMenu() {
 
   const hoverBackground =
     path === "/"
-      ? "hover:bg-none hover:bg-opacity-0 hover:text-white focus:text-white dark:hover:text-white/80 dark:focus:text-white/80"
+      ? "hover:bg-none hover:bg-opacity-0 dark:hover:text-white focus:text-white dark:hover:text-white/80 dark:focus:text-white/80"
       : "hover:text-black focus:text-black active:text-black dark:hover:text-white/80 dark:focus:text-white/80";
 
   const renderMenuItems = () => (

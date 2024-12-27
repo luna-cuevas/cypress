@@ -82,7 +82,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
   // If on home page, only show cart and dark mode
   if (homePageNav) {
     return (
-      <ul className="flex items-center gap-4">
+      <ul className=" items-center gap-4 hidden lg:flex">
         <NavItem
           label="Cart"
           isCart={true}

@@ -78,13 +78,6 @@ const ProductGallery = (props: Props) => {
     setSelectedVariant(variant);
   };
 
-  // Debug products data
-  console.log("Products data:", {
-    isArray: Array.isArray(props.products),
-    rawProducts: props.products,
-    processedProducts: products,
-  });
-
   if (!products.length) {
     return (
       <div className="w-full h-full flex items-center justify-center py-12">

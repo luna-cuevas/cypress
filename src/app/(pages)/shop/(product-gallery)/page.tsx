@@ -45,22 +45,11 @@ const page = async ({
   const sizesArray = sizes ? sizes.split(",") : [];
   const vendorArray = vendorParam ? vendorParam.split(",") : [];
 
-  // Debug the incoming filter parameters
-  console.log("Filter parameters:", {
-    sizes: sizesArray,
-    vendors: vendorArray,
-    sort,
-    view,
-  });
-
   const query = productQuery({
     sizes: sizesArray,
     vendors: vendorArray,
     sort: sort || undefined,
   });
-
-  // Debug the query being sent
-  console.log("Query being sent to API:", query);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
     method: "POST",
@@ -99,16 +88,6 @@ const page = async ({
     );
   }
 
-  // Debug raw response
-  console.log("Raw response data structure:", {
-    hasData: !!data,
-    hasProducts: !!data?.products,
-    hasEdges: !!data?.products?.edges,
-    edgesLength: data?.products?.edges?.length,
-    firstEdge: data?.products?.edges?.[0],
-    query: query, // Log the query that was sent
-  });
-
   // Extract products from the edges/node structure
   const products =
     data?.products?.edges?.map((edge: any) => {
@@ -140,25 +119,10 @@ const page = async ({
   const filteredProducts = !sizesArray.length
     ? products
     : products.filter((product: any) => {
-        // Debug variant matching
-        console.log("Checking variants for product:", {
-          title: product.title,
-          variants: product.variants.map((v: any) => v.variantTitle),
-          searching: sizesArray,
-        });
-
         return product.variants.some((variant: any) =>
           sizesArray.some((size) => variant.variantTitle.includes(size))
         );
       });
-
-  // Debug filtered results
-  console.log("Final filtered products:", {
-    originalCount: products.length,
-    filteredCount: filteredProducts.length,
-    appliedSizes: sizesArray,
-    sampleTitles: filteredProducts.slice(0, 3).map((p: any) => p.title),
-  });
 
   const productCount = filteredProducts.length;
   const availableVendors = await fetchVendors();

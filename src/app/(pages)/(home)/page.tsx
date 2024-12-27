@@ -13,12 +13,12 @@ const heroImages = [
 ];
 
 const heroTitles = [
-  "Look 1: Bold Beginnings",
-  "Look 2: Subtle Elegance",
-  "Look 3: Modern Aesthetics",
-  "Look 4: Refined Classics",
-  "Look 5: Urban Statement",
-  "Look 6: Timeless Allure",
+  "Bold Beginnings",
+  "Subtle Elegance",
+  "Modern Aesthetics",
+  "Refined Classics",
+  "Urban Statement",
+  "Timeless Allure",
 ];
 
 export default function Home() {
@@ -134,17 +134,19 @@ export default function Home() {
 
   return (
     <main className="w-screen justify-start flex h-screen overflow-hidden relative bg-black">
-      <div className=" right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-blue-gray-900">
+      <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-blue-gray-900">
         <NavList />
       </div>
 
       <div
-        className="relative w-full text-left z-20 ml-[4%]  my-auto flex justify-start items-center h-[10%] "
+        className="relative w-full text-left z-20 ml-[4%] my-auto flex justify-start items-center h-[10%]"
         style={{ perspective: "1000px" }}>
         <AnimatePresence custom={direction} initial={false}>
           <motion.div
             key={currentIndex}
-            className="absolute text-white text-6xl font-bold flex items-center justify-center w-fit"
+            className="absolute text-white font-bold flex items-center justify-center w-fit
+              text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+              px-4 sm:px-0"
             custom={direction}
             variants={variants}
             initial="initial"
@@ -158,7 +160,7 @@ export default function Home() {
       <div
         id="home-banner"
         ref={bannerRef}
-        className="banner-v w-3/4 max-w-[1000px] opacity-70 m-auto h-[80%] overflow-hidden"
+        className="banner-v w-[85%] lg:w-3/4 max-w-[1000px] opacity-70 m-auto h-[80%] overflow-hidden"
         style={{ display: "block" }}>
         <div className="t-box t-01">
           <div

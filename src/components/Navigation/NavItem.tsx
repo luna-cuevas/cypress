@@ -83,18 +83,18 @@ const NavItem = ({
 
   const hoverBackground =
     path === "/"
-      ? "hover:bg-none hover:bg-opacity-0 hover:text-white focus:text-white dark:hover:text-white/80 dark:focus:text-white/80"
+      ? "hover:bg-none hover:bg-opacity-0 lg:hover:text-white lg:focus:text-white lg:dark:hover:text-white/80 lg:dark:focus:text-white/80 dark:hover:text-white dark:focus:text-white dark:active:text-white dark:text-white"
       : "hover:text-black focus:text-black active:text-black dark:hover:text-white/80 dark:focus:text-white/80";
 
   return isCart ? (
     <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto m-0">
       <MenuItem
         onClick={handleCartClick}
-        className={`flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white`}>
+        className={`flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent  focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white`}>
         <ListItem
           className={`${
             path == "/"
-              ? "lg:text-white !text-white dark:text-white"
+              ? "lg:text-white dark:hover:text-white text-black    dark:text-white lg:hover:text-white lg:focus:text-white lg:active:text-white"
               : "text-black dark:text-white"
           } underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
           <ListItemPrefix className="lg:hidden">
@@ -105,10 +105,10 @@ const NavItem = ({
             <span
               className={` ${
                 path == "/"
-                  ? "text-black dark:text-black bg-white dark:bg-white "
+                  ? "lg:text-black text-white dark:text-black bg-black lg:bg-white dark:bg-white "
                   : "bg-black dark:bg-white text-white dark:text-black"
               }
-            text-xs    rounded-full px-[4px] py-[0.15px] `}>
+            text-xs ml-2 lg:ml-0   rounded-full px-[4px] py-[0.15px] `}>
               {totalCartItems}
             </span>
           )}
@@ -218,7 +218,7 @@ const NavItem = ({
           }}
           className={`${
             path === "/"
-              ? "lg:text-white text-black dark:text-white"
+              ? "lg:text-white text-black "
               : "text-black dark:text-white"
           } ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
           <ListItemPrefix className="lg:hidden underline-animation">

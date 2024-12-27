@@ -30,7 +30,6 @@ export async function shopifyFetch({
     }
 
     const json = await response.json();
-    console.log("Response:", json);
 
     if (json.errors) {
       throw new Error(
