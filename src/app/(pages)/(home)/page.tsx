@@ -187,7 +187,7 @@ export default function Home() {
       {/* message to scroll down  */}
       <div className="absolute bottom-0 left-0 w-full h-fit z-50">
         <p className="text-center text-gray-900 dark:text-white text-sm">
-          Scroll down to explore
+          Scroll down to animate
         </p>
       </div>
     </main>

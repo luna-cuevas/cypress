@@ -1,17 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
+  Dialog as HeadlessDialog,
+  Disclosure as HeadlessDisclosure,
 } from "@headlessui/react";
+import type {
+  Menu as MT_Menu,
+  MenuHandler as MT_MenuHandler,
+  MenuItem as MT_MenuItem,
+  MenuList as MT_MenuList,
+  Typography as MT_Typography,
+} from "@material-tailwind/react";
+import {
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Typography,
+} from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -168,7 +174,9 @@ export default function ProductFilters({
     <div className="bg-white dark:bg-black">
       <div className="mx-auto max-w-[1600px] px-8 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="py-4">
+        <nav
+          aria-label="Breadcrumb"
+          className="py-4 sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
           <ol role="list" className="flex items-center space-x-1">
             <li className="flex items-center">
               <Link
@@ -219,7 +227,8 @@ export default function ProductFilters({
           </ol>
         </nav>
 
-        <div className="flex items-baseline justify-between border-b border-gray-200 dark:border-gray-800 pb-6">
+        {/* Header with title and controls */}
+        <div className="flex items-baseline justify-between border-b border-gray-200 dark:border-gray-800 pb-6 sticky top-[52px] z-40 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {title}
@@ -232,89 +241,101 @@ export default function ProductFilters({
           <div className="flex items-center gap-4">
             {/* Desktop Controls */}
             <div className="hidden lg:flex items-center gap-4">
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+              <Menu>
+                <MenuHandler>
+                  <button
+                    type="button"
+                    className="group inline-flex justify-center text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                     Sort
                     <ChevronDownIcon
                       className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300"
                       aria-hidden="true"
                     />
-                  </MenuButton>
-                </div>
+                  </button>
+                </MenuHandler>
 
-                <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white dark:bg-gray-900 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    {sortOptions.map((option) => (
-                      <MenuItem key={option.value}>
-                        {({ active }) => (
-                          <Link
-                            href={{
-                              pathname: pathName,
-                              query: {
-                                ...Object.fromEntries(searchParams.entries()),
-                                sort: option.value,
-                              },
-                            }}
-                            className={classNames(
-                              active ? "bg-gray-100 dark:bg-gray-800" : "",
-                              "block px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-200 hover:text-gray-700 dark:hover:text-white"
-                            )}>
-                            {option.name}
-                          </Link>
-                        )}
-                      </MenuItem>
-                    ))}
-                  </div>
-                </MenuItems>
+                <MenuList className="border-gray-200 dark:border-gray-700 dark:bg-black">
+                  {sortOptions.map((option) => (
+                    <MenuItem key={option.value}>
+                      <Link
+                        href={{
+                          pathname: pathName,
+                          query: {
+                            ...Object.fromEntries(searchParams.entries()),
+                            sort: option.value,
+                          },
+                        }}>
+                        <Typography
+                          variant="small"
+                          className="font-normal text-gray-900 dark:text-white">
+                          {option.name}
+                        </Typography>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                </MenuList>
               </Menu>
 
-              <Menu as="div" className="relative flex text-left items-end">
-                <MenuButton className="group inline-flex mt-auto text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
-                  <Squares2X2Icon
-                    className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
+              <Menu>
+                <MenuHandler>
+                  <button
+                    type="button"
+                    className="group inline-flex mt-auto text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                    <Squares2X2Icon
+                      className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </MenuHandler>
 
-                <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-bottom-left rounded-md bg-white dark:bg-gray-900 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="p-4">
-                    <div className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Grid Size
+                <MenuList className="border-gray-200 dark:border-gray-700 dark:bg-black">
+                  <MenuItem>
+                    <div className="p-2">
+                      <Typography
+                        variant="small"
+                        className="font-medium text-gray-900 dark:text-white mb-2">
+                        Grid Size
+                      </Typography>
+                      <div className="flex gap-2">
+                        {[3, 4, 5].map((size) => (
+                          <button
+                            key={size}
+                            type="button"
+                            onClick={() => {
+                              handleGridSizeChange(size);
+                              const button =
+                                document.activeElement as HTMLElement;
+                              button?.blur();
+                            }}
+                            className={`${gridButtonStyles.base} ${
+                              gridSize === size
+                                ? gridButtonStyles.active
+                                : gridButtonStyles.inactive
+                            }`}
+                            title={`${size} columns`}>
+                            <div
+                              className="grid gap-0.5"
+                              style={{
+                                gridTemplateColumns: `repeat(${Math.min(
+                                  size,
+                                  3
+                                )}, minmax(0, 1fr))`,
+                              }}>
+                              {Array(Math.min(size, 6))
+                                .fill(0)
+                                .map((_, i) => (
+                                  <div
+                                    key={i}
+                                    className="w-1 h-1 bg-current rounded-sm"
+                                  />
+                                ))}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex gap-2">
-                      {[3, 4, 5].map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => handleGridSizeChange(size)}
-                          className={`${gridButtonStyles.base} ${
-                            gridSize === size
-                              ? gridButtonStyles.active
-                              : gridButtonStyles.inactive
-                          }`}
-                          title={`${size} columns`}>
-                          <div
-                            className="grid gap-0.5"
-                            style={{
-                              gridTemplateColumns: `repeat(${Math.min(
-                                size,
-                                3
-                              )}, minmax(0, 1fr))`,
-                            }}>
-                            {Array(Math.min(size, 6))
-                              .fill(0)
-                              .map((_, i) => (
-                                <div
-                                  key={i}
-                                  className="w-1 h-1 bg-current rounded-sm"
-                                />
-                              ))}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </MenuItems>
+                  </MenuItem>
+                </MenuList>
               </Menu>
             </div>
 
@@ -330,7 +351,7 @@ export default function ProductFilters({
         </div>
 
         {/* Mobile filter dialog */}
-        <Dialog
+        <HeadlessDialog
           as="div"
           className="relative z-40 lg:hidden"
           open={mobileFiltersOpen}
@@ -338,7 +359,7 @@ export default function ProductFilters({
           <div className="fixed inset-0 bg-black/25 dark:bg-black/50" />
 
           <div className="fixed inset-0 z-40 flex">
-            <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white dark:bg-gray-900 py-4 pb-12 shadow-xl">
+            <HeadlessDialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white dark:bg-gray-900 py-4 pb-12 shadow-xl">
               <div className="flex items-center justify-between px-4">
                 <h2 className="text-lg font-medium text-gray-900 dark:text-white">
                   Filters
@@ -355,11 +376,14 @@ export default function ProductFilters({
               {/* Filters */}
               <div className="mt-4 border-t border-gray-200 dark:border-gray-700">
                 {/* Categories Section */}
-                <Disclosure as="div" defaultOpen={true} className="px-4 py-6">
+                <HeadlessDisclosure
+                  as="div"
+                  defaultOpen={true}
+                  className="px-4 py-6">
                   {({ open }) => (
                     <>
                       <h3 className="-mx-2 -my-3 flow-root">
-                        <Disclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <HeadlessDisclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                           <span className="font-medium text-gray-900 dark:text-white">
                             Categories
                           </span>
@@ -376,9 +400,9 @@ export default function ProductFilters({
                               />
                             )}
                           </span>
-                        </Disclosure.Button>
+                        </HeadlessDisclosure.Button>
                       </h3>
-                      <Disclosure.Panel className="pt-6">
+                      <HeadlessDisclosure.Panel className="pt-6">
                         <div className="space-y-4">
                           {subCategories.map((category) => (
                             <Link
@@ -389,19 +413,19 @@ export default function ProductFilters({
                             </Link>
                           ))}
                         </div>
-                      </Disclosure.Panel>
+                      </HeadlessDisclosure.Panel>
                     </>
                   )}
-                </Disclosure>
+                </HeadlessDisclosure>
 
                 {/* Sort Options */}
-                <Disclosure
+                <HeadlessDisclosure
                   as="div"
                   className="border-t border-gray-200 dark:border-gray-700 px-4 py-6">
                   {({ open }) => (
                     <>
                       <h3 className="-mx-2 -my-3 flow-root">
-                        <Disclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <HeadlessDisclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                           <span className="font-medium text-gray-900 dark:text-white">
                             Sort By
                           </span>
@@ -418,9 +442,9 @@ export default function ProductFilters({
                               />
                             )}
                           </span>
-                        </Disclosure.Button>
+                        </HeadlessDisclosure.Button>
                       </h3>
-                      <Disclosure.Panel className="pt-6">
+                      <HeadlessDisclosure.Panel className="pt-6">
                         <div className="space-y-2">
                           {sortOptions.map((option) => (
                             <div
@@ -443,21 +467,21 @@ export default function ProductFilters({
                             </div>
                           ))}
                         </div>
-                      </Disclosure.Panel>
+                      </HeadlessDisclosure.Panel>
                     </>
                   )}
-                </Disclosure>
+                </HeadlessDisclosure>
 
                 {/* Size Filters */}
                 {filters.map((section) => (
-                  <Disclosure
+                  <HeadlessDisclosure
                     as="div"
                     key={section.id}
                     className="border-t border-gray-200 dark:border-gray-700 px-4 py-6">
                     {({ open }) => (
                       <>
                         <h3 className="-my-3 flow-root">
-                          <Disclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                          <HeadlessDisclosure.Button className="flex w-full items-center justify-between bg-white dark:bg-gray-900 px-2 py-3 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                             <span className="font-medium text-gray-900 dark:text-white">
                               {section.name}
                             </span>
@@ -474,9 +498,9 @@ export default function ProductFilters({
                                 />
                               )}
                             </span>
-                          </Disclosure.Button>
+                          </HeadlessDisclosure.Button>
                         </h3>
-                        <Disclosure.Panel className="pt-6">
+                        <HeadlessDisclosure.Panel className="pt-6">
                           {section.id === "size" ? (
                             <div className="flex flex-wrap gap-3">
                               {section.options.map((option) => (
@@ -521,10 +545,10 @@ export default function ProductFilters({
                               ))}
                             </div>
                           )}
-                        </Disclosure.Panel>
+                        </HeadlessDisclosure.Panel>
                       </>
                     )}
-                  </Disclosure>
+                  </HeadlessDisclosure>
                 ))}
 
                 {/* Grid Size Control - Mobile */}
@@ -570,9 +594,9 @@ export default function ProductFilters({
                   </div>
                 </div>
               </div>
-            </Dialog.Panel>
+            </HeadlessDialog.Panel>
           </div>
-        </Dialog>
+        </HeadlessDialog>
 
         {/* Desktop filter section */}
         <section aria-labelledby="products-heading" className="pb-24 pt-6">
@@ -582,7 +606,7 @@ export default function ProductFilters({
 
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             {/* Filters */}
-            <form className="hidden lg:block">
+            <form className="hidden lg:block sticky top-[160px] h-fit max-h-[calc(100vh-132px)] overflow-y-auto pt-2 pb-4">
               <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white">
                   Categories
@@ -600,14 +624,14 @@ export default function ProductFilters({
               </div>
 
               {filters.map((section) => (
-                <Disclosure
+                <HeadlessDisclosure
                   as="div"
                   key={section.id}
                   className="border-b border-gray-200 dark:border-gray-700 py-6">
                   {({ open }) => (
                     <>
                       <h3 className="-my-3 flow-root">
-                        <Disclosure.Button className="flex w-full dark:bg-white/5 px-2 items-center justify-between bg-gray-600/5 py-3 text-sm text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <HeadlessDisclosure.Button className="flex w-full dark:bg-white/5 px-2 items-center justify-between bg-gray-600/5 py-3 text-sm text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                           <span className="font-medium text-gray-900 dark:text-white">
                             {section.name}
                           </span>
@@ -624,9 +648,9 @@ export default function ProductFilters({
                               />
                             )}
                           </span>
-                        </Disclosure.Button>
+                        </HeadlessDisclosure.Button>
                       </h3>
-                      <Disclosure.Panel className="pt-6">
+                      <HeadlessDisclosure.Panel className="pt-6">
                         {section.id === "size" ? (
                           <div className="flex flex-wrap gap-3">
                             {section.options.map((option) => (
@@ -669,10 +693,10 @@ export default function ProductFilters({
                             ))}
                           </div>
                         )}
-                      </Disclosure.Panel>
+                      </HeadlessDisclosure.Panel>
                     </>
                   )}
-                </Disclosure>
+                </HeadlessDisclosure>
               ))}
             </form>
 
