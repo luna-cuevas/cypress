@@ -1,0 +1,88 @@
+{
+  "name": "Cypress Clothiers",
+  "short_name": "Cypress",
+  "description": "Premium Fashion & Lifestyle Store",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "scope": "/",
+  "id": "cypressclothiers",
+  "icons": [
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "48x48",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop",
+      "url": "/shop",
+      "description": "Browse our collection"
+    },
+    {
+      "name": "Account",
+      "url": "/account",
+      "description": "View your account"
+    },
+    {
+      "name": "Cart",
+      "url": "/cart",
+      "description": "View your shopping cart"
+    }
+  ],
+  "categories": ["shopping", "lifestyle", "fashion"],
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "minimal-ui"],
+  "lang": "en",
+  "dir": "ltr",
+  "related_applications": [],
+  "screenshots": [
+    {
+      "src": "/cypress-logo.svg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Homepage of Cypress Clothiers"
+    }
+  ]
+}
