@@ -1,4 +1,4 @@
-import ImgWithSkeleton from "@/components/ImgWithSkeleton";
+import ImgWithSkeleton from "@/components/common/ImgWithSkeleton";
 import Image from "next/image";
 import React from "react";
 

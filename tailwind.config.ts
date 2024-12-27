@@ -18,6 +18,20 @@ const config: Config = withMT({
       gridTemplateRows: {
         "[auto,auto,1fr]": "auto auto 1fr",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "none",
+            color: "#333",
+            a: {
+              color: "#22c55e",
+              "&:hover": {
+                color: "#16a34a",
+              },
+            },
+          },
+        },
+      },
     },
   },
   plugins: [

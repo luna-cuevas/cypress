@@ -3,11 +3,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Navigation } from "@/components/Navigation/Navigation";
 import Cart from "@/components/shop/Cart";
-import Footer from "@/components/Footer";
+import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { Provider as JotaiProvider } from "jotai";
 import { NavDrawer } from "@/components/Navigation/NavDrawer";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/common/IntroAnimation";
 
 export const metadata: Metadata = {
   title: "Cypress",
@@ -24,14 +24,14 @@ export default function RootLayout({
       <body className="w-screen overflow-x-hidden">
         <JotaiProvider>
           <AuthProvider>
-            <Navigation />
             <Suspense fallback={<div>Loading...</div>}>
+              <Navigation />
               <Cart />
               <NavDrawer />
               <LoadingScreen />
+              <main>{children}</main>
+              <Footer />
             </Suspense>
-            <main>{children}</main>
-            <Footer />
           </AuthProvider>
         </JotaiProvider>
       </body>

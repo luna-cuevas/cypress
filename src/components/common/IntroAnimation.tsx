@@ -1,13 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { TracedLogo } from "./Home/TracedLogo";
+import { TracedLogo } from "../Home/TracedLogo";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
-const LoadingScreen = (props: Props) => {
+const IntroAnimation = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
   const environment = process.env.NODE_ENV;
+  const path = usePathname();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,6 +26,10 @@ const LoadingScreen = (props: Props) => {
     }; // Cleanup the timers if the component unmounts
   }, []);
 
+  if (path != "/") {
+    return null;
+  }
+
   return (
     <div
       className={`
@@ -37,4 +43,4 @@ const LoadingScreen = (props: Props) => {
   );
 };
 
-export default LoadingScreen;
+export default IntroAnimation;

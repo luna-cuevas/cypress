@@ -91,42 +91,49 @@ export default function FavoritesList() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
       {favorites.map((favorite) => (
         <div
           key={favorite.id}
-          className="group relative border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200">
-          <Link
-            href={`/shop/all/${favorite.product_handle}`}
-            className="block aspect-[4/3] relative">
-            <Image
-              src={favorite.product_image}
-              alt={favorite.product_title}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-            />
-          </Link>
-          <div className="p-4">
-            <div className="flex justify-between items-start gap-2">
-              <div className="flex-1 min-w-0">
-                <Link
-                  href={`/shop/all/${favorite.product_handle}`}
-                  className="block">
-                  <Typography className="font-medium text-gray-900 dark:text-white hover:text-cypress-green dark:hover:text-cypress-green transition-colors truncate">
-                    {favorite.product_title}
-                  </Typography>
-                </Link>
-                <Typography className="text-gray-600 dark:text-gray-400 mt-1">
-                  ${favorite.product_price.toFixed(2)}
-                </Typography>
+          className="group relative"
+          data-test-id="wishlist--product-card">
+          <div className="relative overflow-hidden bg-gray-100 dark:bg-gray-800 aspect-[3/4] rounded-lg">
+            {/* Remove Button */}
+            <button
+              onClick={() => removeFavorite(favorite.id)}
+              className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm transition-all duration-200 hover:scale-110"
+              aria-label="Remove from favorites">
+              <TrashIcon className="h-4 w-4 text-white hover:text-cypress-green-light" />
+            </button>
+
+            {/* Product Image */}
+            <Link
+              href={`/shop/all/${favorite.product_handle}`}
+              className="block">
+              <div className="absolute inset-0 bg-black/5">
+                <Image
+                  src={favorite.product_image}
+                  alt={favorite.product_title}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 25vw"
+                  className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                />
               </div>
-              <button
-                onClick={() => removeFavorite(favorite.id)}
-                className="text-gray-400 hover:text-red-500 transition-colors p-1 flex-shrink-0">
-                <TrashIcon className="h-5 w-5" />
-              </button>
-            </div>
+            </Link>
+          </div>
+
+          {/* Product Info */}
+          <div className="mt-4 space-y-1">
+            <Link
+              href={`/shop/all/${favorite.product_handle}`}
+              className="block group/title">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white group-hover/title:text-cypress-green dark:group-hover/title:text-cypress-green-light transition-colors line-clamp-1">
+                {favorite.product_title}
+              </h3>
+            </Link>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              ${favorite.product_price.toFixed(2)}
+            </p>
           </div>
         </div>
       ))}

@@ -95,7 +95,7 @@ const NavItem = ({
           className={`${
             path == "/"
               ? "lg:text-white dark:hover:text-white text-black    dark:text-white lg:hover:text-white lg:focus:text-white lg:active:text-white"
-              : "text-black dark:text-white"
+              : "text-black dark:text-white hover:text-black dark:hover:text-white"
           } underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
           <ListItemPrefix className="lg:hidden">
             <ShoppingBagIcon className="h-5 w-5" />

@@ -17,6 +17,7 @@
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@shopify/shopify-api": "^11.2.0",
     "@shopify/storefront-api-client": "^1.0.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.43.6",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/fullpage.js": "^2.9.6",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",

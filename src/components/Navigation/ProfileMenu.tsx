@@ -29,7 +29,7 @@ const profileMenuItems = [
   {
     label: "Help",
     icon: LifebuoyIcon,
-    url: "/help",
+    url: "/contact",
   },
   {
     label: "Sign Out",
