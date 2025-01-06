@@ -3,15 +3,24 @@ import NavList from "@/components/Navigation/NavList";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
-const heroImages = [
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4501.jpg?v=1734678057",
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4500.jpg?v=1734678057",
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4515.jpg?v=1734678057",
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4488.jpg?v=1734678057",
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4490.jpg?v=1734678057",
-  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4503.jpg?v=1734678057",
+// Utility function to generate optimized Shopify image URLs
+const getOptimizedImageUrl = (url: string, width: number = 1200) => {
+  const baseUrl = url.split("?")[0];
+  return `${baseUrl}?width=${width}&height=${width}&crop=center&format=jpg&quality=90`;
+};
+
+const baseHeroImages = [
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4501.jpg",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4500.jpg",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4515.jpg",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4488.jpg",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4490.jpg",
+  "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4503.jpg",
 ];
+
+const heroImages = baseHeroImages.map((url) => getOptimizedImageUrl(url));
 
 const heroTitles = [
   "Bold Beginnings",
@@ -180,33 +189,66 @@ export default function Home() {
       <div
         id="home-banner"
         ref={bannerRef}
-        className="banner-v w-[85%] lg:w-3/4 max-w-[800px] opacity-90 m-auto h-[80%] overflow-hidden"
+        className="banner-v w-[85%] lg:w-3/4 max-w-[800px]  m-auto h-[80%] overflow-hidden"
         style={{ display: "block" }}>
         <Link href="/shop">
           <div className="t-box t-01">
             <div
               id="t-01-banner-old"
-              className={`home-banner-img ${oldClass}`}
-              style={{ backgroundImage: `url(${oldImage})` }}></div>
+              className={`home-banner-img ${oldClass} relative`}>
+              <Image
+                src={oldImage}
+                alt={heroTitles[prevSlideIndex]}
+                fill
+                priority
+                sizes="(max-width: 768px) 85vw, (max-width: 1200px) 75vw, 800px"
+                className="object-cover"
+              />
+            </div>
             <div
               id="t-01-banner-new"
-              className={`home-banner-img ${newClass}`}
-              style={{ backgroundImage: `url(${newImage})` }}></div>
+              className={`home-banner-img ${newClass} relative`}>
+              <Image
+                src={newImage}
+                alt={heroTitles[currentIndex]}
+                fill
+                priority
+                sizes="(max-width: 768px) 85vw, (max-width: 1200px) 75vw, 800px"
+                className="object-cover"
+              />
+            </div>
           </div>
 
           <div className="t-box t-02">
             <div
               id="t-02-banner-old"
-              className={`home-banner-img ${oldClass}`}
-              style={{ backgroundImage: `url(${oldImage})` }}></div>
+              className={`home-banner-img ${oldClass} relative`}>
+              <Image
+                src={oldImage}
+                alt={heroTitles[prevSlideIndex]}
+                fill
+                priority
+                quality={85}
+                sizes="(max-width: 768px) 85vw, (max-width: 1200px) 75vw, 800px"
+                className="object-cover"
+              />
+            </div>
             <div
               id="t-02-banner-new"
-              className={`home-banner-img ${newClass}`}
-              style={{ backgroundImage: `url(${newImage})` }}></div>
+              className={`home-banner-img ${newClass} relative`}>
+              <Image
+                src={newImage}
+                alt={heroTitles[currentIndex]}
+                fill
+                priority
+                quality={85}
+                sizes="(max-width: 768px) 85vw, (max-width: 1200px) 75vw, 800px"
+                className="object-cover"
+              />
+            </div>
           </div>
         </Link>
       </div>
-      {/* message to scroll down  */}
       <div className="absolute bottom-0 left-0 w-full h-fit z-50">
         <p className="text-center text-gray-900 dark:text-white text-sm">
           Scroll down to animate
