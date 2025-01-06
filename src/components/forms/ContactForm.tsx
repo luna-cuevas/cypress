@@ -73,30 +73,26 @@ const ContactForm = (props: Props) => {
     }
   };
   return (
-    <div
-      className={`flex flex-col -z-10 min-h-max mx-auto text-center  dark:text-white`}>
+    <div className="flex flex-col min-h-max mx-auto text-center dark:text-white max-w-6xl px-6">
       <Typography
         variant="h1"
-        className="mb-4 !text-2xl md:!text-4xl lg:!text-5xl">
+        className="mb-8 !text-4xl md:!text-6xl lg:!text-7xl !font-['arpona'] font-extralight tracking-wide">
         We&apos;re Here to Help
       </Typography>
-      <Typography className="mb-10 font-normal text-sm lg:text-lg lg:mb-20 mx-auto max-w-3xl ">
+      <Typography className="!font-['arpona'] mb-10 lg:mb-12 font-light text-base lg:text-xl mx-auto max-w-2xl tracking-wide leading-relaxed">
         Whether it&apos;s a question about our services, a request for technical
         assistance, or suggestions for improvement, our team is eager to hear
         from you.
       </Typography>
-      <div className="grid grid-cols-1 gap-x-12 gap-y-6 lg:grid-cols-1 items-start justify-center">
-        {/* <img
-          src="/image/map.svg"
-          alt="map"
-          className="w-full h-full lg:max-h-[510px]"
-        /> */}
+      <div className="grid grid-cols-1 gap-8 items-start justify-center">
         {messageSent.message == "Message sent successfully" ? (
-          <div className="flex flex-col gap-4 lg:w-1/2 m-auto">
-            <Typography variant="h4" className="text-green-500">
+          <div className="flex flex-col gap-8 max-w-xl m-auto p-16 bg-gradient-to-b from-white/5 to-transparent backdrop-blur-sm rounded-none border border-white/10">
+            <Typography
+              variant="h4"
+              className="text-white !font-['arpona'] tracking-widest font-light">
               Message Sent Successfully
             </Typography>
-            <Typography className="font-normal text-sm  mx-auto  ">
+            <Typography className="!font-['arpona'] font-light text-lg tracking-wide leading-relaxed">
               Thank you for reaching out to us. We will get back to you as soon
               as possible.
             </Typography>
@@ -107,18 +103,20 @@ const ContactForm = (props: Props) => {
               e.preventDefault();
               onSubmit(e);
             }}
-            className="flex flex-col gap-4 max-w-3xl w-full mx-auto">
-            <Typography variant="small" className="text-left !font-semibold  ">
-              Select Options for Business Engagement
+            className="flex flex-col gap-12 max-w-4xl w-full mx-auto bg-gradient-to-b dark:from-white/5 from-black/5  to-transparent backdrop-blur-sm  p-12 lg:p-16 rounded-none border border-black/10 dark:border-white/10">
+            <Typography
+              variant="small"
+              className="text-left !font-['arpona'] text-xl tracking-widest font-light">
+              Select Type of Inquiry
             </Typography>
-            <div className="flex gap-4 relative -z-10">
+            <div className="flex flex-wrap gap-6 relative">
               <Button
                 onClick={() => setSelectedSupport("General Inquiry")}
                 variant="outlined"
-                className={`max-w-fit bg-transparent dark:bg-transparent ${
+                className={`!font-['arpona'] text-base tracking-wider  py-4 px-8 max-w-fit bg-transparent transition-all duration-500 rounded-none ${
                   selectedSupport !== "General Inquiry"
-                    ? "dark:text-white dark:border-white"
-                    : "bg-gray-400 dark:bg-white/20"
+                    ? "dark:text-white border border-black/20 dark:border-white/20 hover:border-white"
+                    : "bg-white text-black border-2 dark:border-white border-black/20  hover:bg-white/90"
                 }`}>
                 <input
                   type="radio"
@@ -132,10 +130,10 @@ const ContactForm = (props: Props) => {
               <Button
                 onClick={() => setSelectedSupport("Product Support")}
                 variant="outlined"
-                className={`max-w-fit bg-transparent dark:bg-transparent ${
+                className={`!font-['arpona']  text-base tracking-wider py-4 px-8 max-w-fit bg-transparent transition-all duration-500 rounded-none ${
                   selectedSupport !== "Product Support"
-                    ? "dark:text-white dark:border-white"
-                    : "bg-gray-400 dark:bg-white/20"
+                    ? "dark:text-white border dark:border-white/20 border-black/20 hover:border-white"
+                    : "bg-white text-black border-2 dark:border-white border-black/20 hover:bg-white/90"
                 }`}>
                 <input
                   type="radio"
@@ -147,18 +145,18 @@ const ContactForm = (props: Props) => {
                 Product Support
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-4 -z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 text-left font-medium ">
+                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
                   First Name
                 </Typography>
                 <Input
                   size="lg"
                   placeholder="First Name"
                   name="firstName"
-                  className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
+                  className="!font-['arpona'] bg-transparent border-white/20 text-white focus:border-white transition-all duration-500 rounded-none tracking-wider"
                   containerProps={{
                     className: "min-w-full",
                   }}
@@ -171,14 +169,14 @@ const ContactForm = (props: Props) => {
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 text-left font-medium ">
+                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
                   Last Name
                 </Typography>
                 <Input
                   size="lg"
                   placeholder="Last Name"
                   name="lastName"
-                  className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
+                  className="!font-['arpona'] bg-transparent border-white/20 text-white focus:border-white transition-all duration-500 rounded-none tracking-wider"
                   containerProps={{
                     className: "!min-w-full",
                   }}
@@ -189,17 +187,17 @@ const ContactForm = (props: Props) => {
                 />
               </div>
             </div>
-            <div className="-z-10">
+            <div>
               <Typography
                 variant="small"
-                className="mb-2 text-left font-medium ">
+                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
                 Your Email
               </Typography>
               <Input
                 size="lg"
                 placeholder="name@email.com"
                 name="email"
-                className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
+                className="!font-['arpona'] bg-transparent border-white/20 text-white focus:border-white transition-all duration-500 rounded-none tracking-wider"
                 containerProps={{
                   className: "!min-w-full",
                 }}
@@ -209,17 +207,17 @@ const ContactForm = (props: Props) => {
                 crossOrigin={undefined}
               />
             </div>
-            <div className="-z-10">
+            <div>
               <Typography
                 variant="small"
-                className="mb-2 text-left font-medium ">
+                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
                 Your Message
               </Typography>
               <Textarea
                 rows={6}
                 placeholder="Message"
                 name="message"
-                className="dark:bg-transparent dark:border-white dark:text-white dark:focus:border-white"
+                className="!font-['arpona'] bg-transparent border-white/20 text-white focus:border-white transition-all duration-500 rounded-none tracking-wider resize-none"
                 containerProps={{
                   className: "!min-w-full",
                 }}
@@ -231,27 +229,27 @@ const ContactForm = (props: Props) => {
             <Button
               type="submit"
               disabled={messageSent.loading}
-              className="lg:w-1/4 w-full -z-10 m-auto dark:bg-white bg-gray-500 dark:text-black">
+              className="!font-['arpona'] text-base tracking-widest uppercase w-full md:w-1/3 m-auto bg-white text-black hover:bg-white/90 transition-all duration-500 rounded-none py-4">
               {messageSent.loading ? (
                 <div
                   role="status"
-                  className=" flex m-auto  align-middle w-fit my-auto mx-auto  text-gray-200 rounded-xl">
+                  className="flex m-auto align-middle w-fit my-auto mx-auto text-black rounded-xl">
                   <svg
                     aria-hidden="true"
-                    className="m-auto w-[30px] h-[30px]  animate-spin  fill-purple-300 "
+                    className="m-auto w-6 h-6 animate-spin"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="#474747"
+                      fill="currentColor"
+                      fillOpacity="0.2"
                     />
                     <path
                       d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
+                      fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Loading...</span>
                 </div>
               ) : (
                 "Send Message"

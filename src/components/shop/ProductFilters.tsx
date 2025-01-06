@@ -607,21 +607,43 @@ export default function ProductFilters({
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             {/* Filters */}
             <form className="hidden lg:block sticky top-[160px] h-fit max-h-[calc(100vh-132px)] overflow-y-auto pt-2 pb-4">
-              <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Categories
-                </h3>
-                <div className="mt-4 space-y-4">
-                  {subCategories.map((category) => (
-                    <Link
-                      key={category.name}
-                      href={category.href}
-                      className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                      {category.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <HeadlessDisclosure
+                as="div"
+                defaultOpen={true}
+                className="border-b border-gray-200 dark:border-gray-700 py-6">
+                {({ open }) => (
+                  <>
+                    <h3 className="-my-3 flow-root">
+                      <HeadlessDisclosure.Button className="flex w-full dark:bg-white/5 px-2 items-center justify-between bg-gray-600/5 py-3 text-sm text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          Categories
+                        </span>
+                        <span className="ml-6 flex items-center">
+                          {open ? (
+                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                          ) : (
+                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                          )}
+                        </span>
+                      </HeadlessDisclosure.Button>
+                    </h3>
+                    <HeadlessDisclosure.Panel className="pt-6">
+                      <div className="space-y-2">
+                        {subCategories.map((category) => (
+                          <Link
+                            key={category.name}
+                            href={category.href}
+                            className="flex items-center px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+                            <span className="text-sm font-medium">
+                              {category.name}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </HeadlessDisclosure.Panel>
+                  </>
+                )}
+              </HeadlessDisclosure>
 
               {filters.map((section) => (
                 <HeadlessDisclosure

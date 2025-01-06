@@ -281,7 +281,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                         product={product}
                         selectedVariant={selectedVariant}
                       />
-                      <FavoriteButton
+                      {/* <FavoriteButton
                         productId={product.id}
                         productTitle={product.title}
                         productImage={product.images[0]?.src || ""}
@@ -290,7 +290,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                           product.variants[0].variantPrice
                         }
                         productHandle={product.handle}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -313,9 +313,9 @@ export default async function ProductPage({ params, searchParams }: Props) {
           </div>
 
           {/* Reviews Section */}
-          <div className="my-12 py-8 relative border-t border-gray-200 dark:border-gray-800">
+          {/* <div className="my-12 py-8 relative border-t border-gray-200 dark:border-gray-800">
             <ProductReviews productId={product.id} />
-          </div>
+          </div> */}
 
           {/* Newsletter Section */}
           <div className="my-12 py-8  relative border-t border-gray-200 dark:border-gray-800">

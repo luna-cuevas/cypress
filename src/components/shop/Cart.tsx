@@ -265,7 +265,7 @@ export default function Cart() {
                   <div className="flex flex-col h-full flex- px-0 overflow-y-scroll bg-white dark:bg-gray-900 shadow-xl">
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-4">
                       <div className="flex items-start justify-between border-b">
-                        <DialogTitle className="text-xl font-medium text-gray-900 dark:text-white !font-['trajan']">
+                        <DialogTitle className="text-xl font-medium text-gray-900 dark:text-white ">
                           Shopping cart
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
@@ -320,7 +320,7 @@ export default function Cart() {
                                           <h3 className="text-base font-medium text-gray-900 dark:text-white max-w-[200px]">
                                             <Link
                                               href={`/shop/${product.handle}`}
-                                              className="!font-['trajan'] hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200 truncate block">
+                                              className=" hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-200 truncate block">
                                               {product.title}
                                             </Link>
                                           </h3>
@@ -378,7 +378,7 @@ export default function Cart() {
                             </ul>
                           ) : (
                             <div className="flex flex-col items-center justify-center py-12">
-                              <h2 className="!font-['trajan'] text-xl font-medium text-gray-900 dark:text-white">
+                              <h2 className=" text-xl font-medium text-gray-900 dark:text-white">
                                 Your cart is empty
                               </h2>
                               <p className="mt-2 text-center text-gray-500 dark:text-gray-400">

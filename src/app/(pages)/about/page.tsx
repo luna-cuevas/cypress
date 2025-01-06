@@ -1,53 +1,37 @@
 import ImgWithSkeleton from "@/components/common/ImgWithSkeleton";
-import Image from "next/image";
 import React from "react";
 
-type Props = {};
-
-const page = (props: Props) => {
+const page = () => {
   return (
-    <div className="flex w-full h-screen   lg:min-h-[calc(100vh-80px)]  lg:mt-0 px-[2.5%] lg:px-0">
-      <div className="m-auto flex h-full  justify-center mx-auto w-full py-12 max-w-7xl lg:flex-row flex-col gap-4 lg:gap-0">
-        <div className="relative  mt-6 lg:mt-auto  justify-end my-auto order-2 w-[90%] lg:w-1/2  m-auto lg:mx-0 h-full md:h-[80%] xl:h-[90%] ">
-          <ImgWithSkeleton
-            src="/about-image.jpg"
-            alt="About us"
-            styles="rounded-lg object-cover object-right-top w-full h-full grayscale filter"
-          />
-          {/* <Image
-            src="/about-image.jpg"
-            alt="Picture of the author"
-            fill
-            priority
-            blurDataURL=""
-            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 50vw"
-            className="h-full opacity-90 rounded-lg w-full object-cover object-right-top"
-          /> */}
-          <div
-            className="absolute inset-0   "
-            style={{
-              backgroundSize: "100% 100%",
-              backgroundPosition: "100% 100%",
-            }}></div>{" "}
-        </div>
-        <div className="lg:w-1/2 lg:h-[85%]  my-auto text-black dark:text-white px-1  flex flex-col lg:order-2">
-          <div className="mx-auto w-full gap-6 pl-4 flex flex-col">
-            <h1 className="text-4xl lg:text-left text-center uppercase">
-              Who we are
-            </h1>
-            <p
-              id="about-paragraph"
-              className="lg:text-xl !leading-relaxed text-center lg:text-left text-lg dark:text-gray-200">
-              Cypress is a multi-brand space championing thoughtful elegance in
-              the Dallas menswear scene. Inspired by the beauty of the natural
-              world, we aim to curate a moment in time defined by calm and
-              creativity. Our selections revolve around craftsmanship and
-              experimentation, constructing a playground for self-expression.
-            </p>
+    <section className="relative min-h-[calc(100vh-90px)] py-32 lg:py-40">
+      <div className="relative max-w-[1920px] mx-auto px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-7xl mx-auto">
+          <div className="order-2 lg:order-1 h-[60vh] lg:h-[75vh] relative">
+            <ImgWithSkeleton
+              src="/about-image.jpg"
+              alt="About us"
+              styles="object-cover object-right-top w-full h-full grayscale hover:grayscale-0 transition-all duration-1000"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+          </div>
+
+          <div className="order-1 lg:order-2 flex flex-col gap-12 text-black dark:text-white">
+            <div className="space-y-8">
+              <h1 className="!font-['arpona'] text-3xl md:text-4xl lg:text-5xl font-extralight tracking-wide">
+                Who We Are
+              </h1>
+              <p className="!font-['arpona'] text-lg lg:text-xl font-light tracking-wide leading-relaxed">
+                Cypress is a multi-brand space championing thoughtful elegance
+                in the Dallas menswear scene. Inspired by the beauty of the
+                natural world, we aim to curate a moment in time defined by calm
+                and creativity. Our selections revolve around craftsmanship and
+                experimentation, constructing a playground for self-expression.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

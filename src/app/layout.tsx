@@ -11,6 +11,7 @@ import LoadingScreen from "@/components/common/LoadingScreen";
 import IntroAnimation from "@/components/common/IntroAnimation";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PageTransition from "@/components/common/PageTransition";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -134,7 +135,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="w-screen overflow-x-hidden">
+      <body className="w-screen overflow-x-hidden relative">
         <JotaiProvider>
           <AuthProvider>
             <Suspense fallback={<LoadingScreen />}>
@@ -142,6 +143,7 @@ export default function RootLayout({
               <Cart />
               <NavDrawer />
               <IntroAnimation />
+              <PageTransition />
               <main>{children}</main>
               <Footer />
             </Suspense>

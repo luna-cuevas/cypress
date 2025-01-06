@@ -116,6 +116,7 @@ const ProductGallery = (props: Props) => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative overflow-hidden group/image group dark:hover:bg-white/10 hover:bg-black/10 flex flex-col bg-white dark:bg-black">
                 <Link
+                  prefetch={true}
                   tabIndex={1}
                   href={`/shop/${product.productType}/${product.handle}`}
                   className="cursor-pointer relative">
@@ -161,7 +162,7 @@ const ProductGallery = (props: Props) => {
                   className="absolute cursor-pointer inset-0 dark:group-hover:bg-white/10 bg-black/5 group-hover:bg-black/10 transition-colors duration-300"
                 /> */}
 
-                <motion.div className="absolute hidden group-hover:flex bottom-1/4 xl:bottom-[20%] left-0 right-0 z-10">
+                <motion.div className="absolute hidden lg:group-hover:flex bottom-1/4 xl:bottom-[20%] left-0 right-0 z-10">
                   <button
                     type="button"
                     className="text-sm py-2.5 px-6 rounded-full w-fit mx-auto bg-white/90 hover:bg-white text-black transition-colors duration-200 backdrop-blur-sm"

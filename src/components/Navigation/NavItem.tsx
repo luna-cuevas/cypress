@@ -87,10 +87,13 @@ const NavItem = ({
   return isCart ? (
     <div className="justify-center h-fit border-b lg:border-none border-gray-200 w-full mx-auto m-0">
       <MenuItem
-        onClick={handleCartClick}
-        className={`flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent  focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white`}>
+        onClick={(e: React.MouseEvent<HTMLElement>) => {
+          handleCartClick();
+          (e.target as HTMLElement).blur();
+        }}
+        className="flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent  focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white">
         <ListItem
-          className={`${"text-black dark:text-white hover:text-black dark:hover:text-white"} underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
+          className={`${"text-black dark:text-white hover:text-black dark:hover:text-white"} underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent dark:active:text-white dark:focus:text-white  focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
           <ListItemPrefix className="lg:hidden">
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>

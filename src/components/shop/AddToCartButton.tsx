@@ -155,7 +155,7 @@ const AddToCartButton = (props: Props) => {
           name="quantity"
           autoComplete="off"
           className="block w-fit px-6 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 
-          dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-cypress-green 
+          dark:bg-transparent dark:text-white focus:outline-none focus:ring-cypress-green 
           focus:border-cypress-green dark:focus:ring-cypress-green-light 
           dark:focus:border-cypress-green-light sm:text-sm"
           defaultValue="1">
@@ -172,7 +172,7 @@ const AddToCartButton = (props: Props) => {
           ${
             showSizeRequired
               ? "bg-gray-400 dark:bg-gray-700"
-              : "bg-cypress-green hover:bg-cypress-green-light"
+              : "bg-black hover:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-white dark:border-gray-800 border-2"
           } px-6 py-2 text-base font-medium text-white 
           focus:outline-none focus:ring-2 
           focus:ring-cypress-green dark:focus:ring-cypress-green-light focus:ring-offset-2 

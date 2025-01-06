@@ -2,6 +2,7 @@
 import NavList from "@/components/Navigation/NavList";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 
 const heroImages = [
   "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/IMG_4501.jpg?v=1734678057",
@@ -27,8 +28,13 @@ export default function Home() {
   const [direction, setDirection] = useState<"down" | "up">("down");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionKey, setTransitionKey] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const bannerRef = useRef<HTMLDivElement | null>(null);
+
+  // Minimum swipe distance required (in pixels)
+  const minSwipeDistance = 50;
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -42,11 +48,45 @@ export default function Home() {
       }
     };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      setTouchEnd(null);
+      setTouchStart(e.targetTouches[0].clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      setTouchEnd(e.targetTouches[0].clientY);
+    };
+
+    const handleTouchEnd = () => {
+      if (!touchStart || !touchEnd || isTransitioning) return;
+
+      const distance = touchStart - touchEnd;
+      const isSwipe = Math.abs(distance) > minSwipeDistance;
+
+      if (isSwipe) {
+        if (distance > 0) {
+          goNext();
+        } else {
+          goPrev();
+        }
+      }
+
+      setTouchStart(null);
+      setTouchEnd(null);
+    };
+
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+
     return () => {
       window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [isTransitioning]);
+  }, [isTransitioning, touchStart, touchEnd]);
 
   function goNext() {
     const newIndex = (currentIndex + 1) % heroImages.length;
@@ -137,52 +177,34 @@ export default function Home() {
       <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-gray-900 dark:text-white">
         <NavList />
       </div>
-
-      <div
-        className="relative w-full text-left z-20 ml-[4%] my-auto flex justify-start items-center h-[10%]"
-        style={{ perspective: "1000px" }}>
-        <AnimatePresence custom={direction} initial={false}>
-          <motion.div
-            key={currentIndex}
-            className="absolute text-gray-900 dark:text-white font-bold flex items-center justify-center w-fit
-              text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
-              px-4 sm:px-0"
-            custom={direction}
-            variants={variants}
-            initial="initial"
-            animate="enter"
-            exit="exit">
-            {heroTitles[currentIndex]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
       <div
         id="home-banner"
         ref={bannerRef}
         className="banner-v w-[85%] lg:w-3/4 max-w-[800px] opacity-90 m-auto h-[80%] overflow-hidden"
         style={{ display: "block" }}>
-        <div className="t-box t-01">
-          <div
-            id="t-01-banner-old"
-            className={`home-banner-img ${oldClass}`}
-            style={{ backgroundImage: `url(${oldImage})` }}></div>
-          <div
-            id="t-01-banner-new"
-            className={`home-banner-img ${newClass}`}
-            style={{ backgroundImage: `url(${newImage})` }}></div>
-        </div>
+        <Link href="/shop">
+          <div className="t-box t-01">
+            <div
+              id="t-01-banner-old"
+              className={`home-banner-img ${oldClass}`}
+              style={{ backgroundImage: `url(${oldImage})` }}></div>
+            <div
+              id="t-01-banner-new"
+              className={`home-banner-img ${newClass}`}
+              style={{ backgroundImage: `url(${newImage})` }}></div>
+          </div>
 
-        <div className="t-box t-02">
-          <div
-            id="t-02-banner-old"
-            className={`home-banner-img ${oldClass}`}
-            style={{ backgroundImage: `url(${oldImage})` }}></div>
-          <div
-            id="t-02-banner-new"
-            className={`home-banner-img ${newClass}`}
-            style={{ backgroundImage: `url(${newImage})` }}></div>
-        </div>
+          <div className="t-box t-02">
+            <div
+              id="t-02-banner-old"
+              className={`home-banner-img ${oldClass}`}
+              style={{ backgroundImage: `url(${oldImage})` }}></div>
+            <div
+              id="t-02-banner-new"
+              className={`home-banner-img ${newClass}`}
+              style={{ backgroundImage: `url(${newImage})` }}></div>
+          </div>
+        </Link>
       </div>
       {/* message to scroll down  */}
       <div className="absolute bottom-0 left-0 w-full h-fit z-50">

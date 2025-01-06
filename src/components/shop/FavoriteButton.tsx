@@ -115,7 +115,7 @@ export default function FavoriteButton({
       {isFavorite ? (
         <HeartIconSolid className="h-5 w-5 text-red-500" />
       ) : (
-        <HeartIcon className="h-5 w-5 text-gray-600 dark:text-red-500" />
+        <HeartIcon className="h-5 w-5 text-gray-600 dark:text-white" />
       )}
     </button>
   );
