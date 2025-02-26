@@ -40,6 +40,8 @@ export async function POST(request: Request) {
             src: edge.node.src,
             altText: edge.node.altText || "",
           })) || [],
+        description: fullResponse.product.description,
+        descriptionHtml: fullResponse.product.descriptionHtml,
       };
 
       // Transform related products (products from same vendor)
@@ -50,6 +52,7 @@ export async function POST(request: Request) {
           vendor: edge.node.vendor,
           handle: edge.node.handle,
           description: edge.node.description,
+          descriptionHtml: edge.node.descriptionHtml,
           productType: edge.node.productType,
           variants:
             edge.node.variants.edges.map((variantEdge: any) => ({

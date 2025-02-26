@@ -21,6 +21,7 @@ export const productQuery = ({
           vendor
           handle
           description
+          descriptionHtml
           productType
           variants(first: 20) {
             edges {
@@ -52,6 +53,7 @@ export const productQuery = ({
               vendor
               handle
               description
+              descriptionHtml
               productType
               variants(first: 1) {
                 edges {
@@ -139,6 +141,7 @@ export const productQuery = ({
             vendor
             handle
             description
+            descriptionHtml
             productType
             variants(first: 20) {
               edges {

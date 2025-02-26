@@ -6,6 +6,7 @@ function classNames(...classes: any[]) {
 }
 export default function TabContent({ product }: { product: any }) {
   const [activeTab, setActiveTab] = useState("description");
+  console.log("product", product);
   return (
     <>
       <div className="border-b border-gray-200">
@@ -29,9 +30,23 @@ export default function TabContent({ product }: { product: any }) {
       <div className="mt-4">
         {activeTab === "description" && (
           <div className="text-sm">
-            <p className=" text-gray-700 dark:text-gray-300">
-              {product?.description || "No description found."}
-            </p>
+            {product?.descriptionHtml ? (
+              <div
+                className="text-gray-700 dark:text-gray-300 gap-2 flex flex-col"
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              />
+            ) : product?.description ? (
+              <div
+                className="text-gray-700 dark:text-gray-300"
+                dangerouslySetInnerHTML={{
+                  __html: product.description,
+                }}
+              />
+            ) : (
+              <p className="text-gray-700 dark:text-gray-300">
+                No description found.
+              </p>
+            )}
           </div>
         )}
         {activeTab === "highlights" && (
