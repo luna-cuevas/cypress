@@ -907,7 +907,10 @@ async function fetchProductMetadata(
                         }
 
                         // Update the specific item in the list
-                        if (gidIndex >= 0) {
+                        if (
+                          gidIndex >= 0 &&
+                          metafieldMap[fullKey].resolvedList
+                        ) {
                           metafieldMap[fullKey].resolvedList[gidIndex] = {
                             id: metaobject.id,
                             handle: metaobject.handle,
@@ -922,7 +925,8 @@ async function fetchProductMetadata(
                           if (
                             currentValue &&
                             currentValue.raw &&
-                            Array.isArray(currentValue.raw)
+                            Array.isArray(currentValue.raw) &&
+                            metafieldMap[fullKey].resolvedList
                           ) {
                             // Transform the raw GIDs into resolved references
                             metafieldHumanReadable[fullKey] = metafieldMap[

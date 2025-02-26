@@ -162,10 +162,10 @@ const ProductGallery = (props: Props) => {
                   className="absolute cursor-pointer inset-0 dark:group-hover:bg-white/10 bg-black/5 group-hover:bg-black/10 transition-colors duration-300"
                 /> */}
 
-                <motion.div className="absolute hidden lg:group-hover:flex bottom-1/4 xl:bottom-[20%] left-0 right-0 z-10">
+                <motion.div className="absolute hidden lg:group-hover:flex bottom-1/4 xl:bottom-[25%] left-0 right-0 z-10 w-fit mx-auto text-white bg-black transition-colors duration-200 backdrop-blur-sm py-2 px-3 rounded-full">
                   <button
                     type="button"
-                    className="text-sm py-2.5 px-6 rounded-full w-fit mx-auto bg-white/90 hover:bg-white text-black transition-colors duration-200 backdrop-blur-sm"
+                    className="text-[10px]  w-fit mx-auto "
                     onClick={() => open(product)}>
                     Quick View
                   </button>
