@@ -145,9 +145,9 @@ export default function ProfileMenu() {
       <div className="hidden lg:block">
         <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
           <MenuHandler>
-            <MenuItem className="flex  border-b px-2 lg:py-[0.35rem] rounded-none justify-end items-center hover:bg-transparent focus:bg-transparent active:bg-transparent">
+            <MenuItem className="flex  border-b px-2 lg:py-[0.35rem] group rounded-none justify-end items-center hover:bg-transparent focus:bg-transparent active:bg-transparent">
               <ListItem
-                className={` dark:text-white relative justify-center group-hover:text-black dark:group-hover:text-white flex gap-2 uppercase text-sm box-content underline-animation hover:bg-transparent focus:bg-transparent active:bg-transparent w-fit lg:p-0`}>
+                className={`dark:focus:text-white dark:text-white relative justify-center group-hover:text-black dark:group-hover:text-white flex gap-2 uppercase text-sm box-content underline-animation hover:bg-transparent focus:bg-transparent active:bg-transparent w-fit lg:p-0`}>
                 Account
               </ListItem>
             </MenuItem>

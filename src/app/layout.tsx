@@ -13,18 +13,53 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTransition from "@/components/common/PageTransition";
 
+// Define structured data types
+type StructuredData = Record<string, unknown>;
+
 export async function generateMetadata(): Promise<Metadata> {
+  // Base URL for the site
+  const baseUrl = "https://cypressclothiers.com";
+
+  // Create structured data for organization
+  const organizationSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Cypress Clothiers",
+    url: baseUrl,
+    logo: `${baseUrl}/cypress-logo.svg`,
+    sameAs: [
+      "https://www.instagram.com/cypressclothiers",
+      "https://twitter.com/cypressclothiers",
+      // Add other social media links as needed
+    ],
+    description:
+      "Premium menswear brand offering minimalist, high-quality designs for the modern gentleman.",
+  };
+
+  // Create structured data for website
+  const websiteSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Cypress Clothiers",
+    url: baseUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${baseUrl}/shop?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return {
-    metadataBase: new URL("https://cypressclothiers.com"),
+    metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: "https://cypressclothiers.com/",
+      canonical: baseUrl,
     },
     title: {
       template: "%s | Cypress Clothiers",
-      default: "Cypress Clothiers - Premium Fashion & Lifestyle",
+      default: "Cypress Clothiers - Refined Minimalist Menswear",
     },
     description:
-      "Discover premium fashion and lifestyle products at Cypress Clothiers. Shop the latest trends in clothing, accessories, and more with worldwide shipping.",
+      "Discover premium minimalist menswear at Cypress Clothiers. Thoughtfully crafted garments combining timeless design, quality materials, and precise tailoring for the modern gentleman.",
     icons: [
       {
         url: "/cypress-logo.svg",
@@ -48,18 +83,22 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     manifest: "/manifest.json",
     keywords: [
-      "fashion",
-      "clothing",
-      "accessories",
-      "lifestyle",
-      "premium fashion",
-      "online shopping",
-      "designer clothes",
-      "fashion store",
-      "trendy fashion",
-      "luxury fashion",
+      "premium menswear",
+      "minimalist clothing",
+      "high-end fashion",
+      "designer menswear",
+      "luxury essentials",
+      "modern tailoring",
       "sustainable fashion",
-      "worldwide shipping",
+      "quality fabrics",
+      "timeless design",
+      "men's essentials",
+      "sophisticated style",
+      "clean aesthetics",
+      "sartorial excellence",
+      "premium shirts",
+      "designer pants",
+      "luxury denim",
     ].join(", "),
     robots: {
       index: true,
@@ -74,35 +113,35 @@ export async function generateMetadata(): Promise<Metadata> {
         "max-snippet": -1,
       },
     },
-    category: "E-commerce",
+    category: "E-commerce, Fashion, Menswear",
     openGraph: {
       images: [
         {
-          url: "/cypress-logo.svg",
+          url: "/images/og-home.jpg",
           width: 1200,
           height: 630,
-          alt: "Cypress Clothiers - Premium Fashion & Lifestyle",
+          alt: "Cypress Clothiers - Refined Minimalist Menswear",
         },
       ],
-      title: "Cypress Clothiers - Premium Fashion & Lifestyle",
+      title: "Cypress Clothiers - Refined Minimalist Menswear",
       description:
-        "Discover premium fashion and lifestyle products at Cypress Clothiers. Shop the latest trends in clothing, accessories, and more with worldwide shipping.",
-      url: "https://cypressclothiers.com",
+        "Discover premium minimalist menswear at Cypress Clothiers. Thoughtfully crafted garments combining timeless design, quality materials, and precise tailoring for the modern gentleman.",
+      url: baseUrl,
       type: "website",
       locale: "en_US",
       siteName: "Cypress Clothiers",
     },
     twitter: {
       card: "summary_large_image",
-      title: "Cypress Clothiers - Premium Fashion & Lifestyle",
+      title: "Cypress Clothiers - Refined Minimalist Menswear",
       description:
-        "Discover premium fashion and lifestyle products at Cypress Clothiers. Shop the latest trends in clothing, accessories, and more with worldwide shipping.",
+        "Discover premium minimalist menswear at Cypress Clothiers. Thoughtfully crafted garments combining timeless design, quality materials, and precise tailoring for the modern gentleman.",
       site: "@cypressclothiers",
       creator: "@cypressclothiers",
       images: [
         {
-          url: "/cypress-logo.svg",
-          alt: "Cypress Clothiers - Premium Fashion & Lifestyle",
+          url: "/images/og-home.jpg",
+          alt: "Cypress Clothiers - Refined Minimalist Menswear",
           width: 1200,
           height: 630,
         },
@@ -111,11 +150,10 @@ export async function generateMetadata(): Promise<Metadata> {
     viewport: {
       width: "device-width",
       initialScale: 1,
-      maximumScale: 1,
-      userScalable: false,
+      maximumScale: 5,
+      userScalable: true,
     },
-
-    authors: [{ name: "Cypress Clothiers Team" }],
+    authors: [{ name: "Cypress Clothiers" }],
     creator: "Cypress Clothiers",
     publisher: "Cypress Clothiers",
     formatDetection: {
@@ -124,6 +162,13 @@ export async function generateMetadata(): Promise<Metadata> {
       address: true,
       email: true,
       url: true,
+    },
+    other: {
+      "theme-color": "#000000",
+      "apple-mobile-web-app-capable": "yes",
+      "apple-mobile-web-app-status-bar-style": "black",
+      "format-detection": "telephone=no",
+      "json-ld": JSON.stringify([organizationSchema, websiteSchema]),
     },
   };
 }
