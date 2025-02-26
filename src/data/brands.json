@@ -1,0 +1,34 @@
+{
+  "brands": [
+    {
+      "name": "An Irrational Element",
+      "description": "'My view of the matter, for what it is worth, is that there is no such thing as a logical method of having new ideas, or a logical reconstruction of this process. My view may be expressed by saying that every discovery contains an 'irrational element,' or 'a creative intuition,' in Bergson's sense. In a similar way Einstein speaks of the 'search for those highly universal laws … from which a picture of the world can be obtained by pure deduction. There is no logical path.' he says, 'leading to these … laws. They can only be reached by intuition, based upon something like an intellectual love (Einfühlung) of the objects of experience.' - Karl Popper",
+      "foundedYear": null,
+      "location": null
+    },
+    {
+      "name": "Another Aspect",
+      "description": "Another Aspect, established in 2019, is born from a fundamental commitment to consider every facet of our operations. From sourcing raw materials to manufacturing, packaging, and distribution, we eagerly believe in our responsibility to the environment. Our brand ethos extends beyond the mere production of clothing, encompassing care, longevity, and a conscientious approach to consumption. ANOTHER ASPECT derives inspiration from the beauty of everyday life, seamlessly blending tradition and contemporary design.",
+      "foundedYear": 2019,
+      "location": null
+    },
+    {
+      "name": "Carter Young",
+      "description": "Founded in 2020 in New York City, by way of Detroit, our inspirations are tied to the heartland. We draw from the American cultural canon—Easy Rider, William Eggleston, Coca-Cola—the backdrop of American life that exists between the coasts. Although we now operate internationally between New York and London, our references are always informed by our cultural roots. Each collection begins with an intensive research process spanning film, literature, ephemera, and music. Sometimes a song, photo, or painting becomes the keystone for a capsule, informing fabrics, colors, textures, and visuals. These touchstones play an integral role in our process, helping to contextualize our creative explorations. Our pieces are not precious and are made to be worn. Our core ranges are mainly cut from natural fibers, with many featuring vintage washes for a pre-broken-in feel. Whenever possible, we employ responsible production methods, from small-scale runs to using deadstock materials left over from other companies' excess.",
+      "foundedYear": 2020,
+      "location": "New York City"
+    },
+    {
+      "name": "MFPEN",
+      "description": "mfpen is a co-ed clothing brand from Copenhagen recontextualising classic design with relaxed silhouettes and responsible production. mfpen strives to design a relevant wardrobe whilst making minimal impact. Durable and functional designs follow a Responsible Hierarchy; first looking to high-quality European deadstock fabrics from overproduction elsewhere in the fashion industry. Where deadstock is unavailable, recycled and biodegradable fabrics are used before resorting to certified organic cotton. Established by Sigurd Bank in 2016.",
+      "foundedYear": 2016,
+      "location": "Copenhagen"
+    },
+    {
+      "name": "STEIN",
+      "description": "stillness and motion, minimal and maximal, mode and tradition. Setting 'quiet and strong beautiful products' as its statement, ssstein proposes timeless mens and womens wear with subtle nuance silhouette by well thought pattern and high quality original fabrics made in Japan. With the balance of energetic silhouette and serene details, and oversized shapes that can be beautifully draped on any body types, ssstein shaves off excessive decoration to minimal and expresses pure elegance.",
+      "foundedYear": null,
+      "location": "Japan"
+    }
+  ]
+}

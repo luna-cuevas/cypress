@@ -114,7 +114,7 @@ const ProductGallery = (props: Props) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative overflow-hidden group/image group dark:hover:bg-white/10 hover:bg-black/10 flex flex-col bg-white dark:bg-black">
+                className="relative overflow-hidden group/image group dark:hover:bg-white/20 hover:bg-gray-200 flex flex-col bg-gray-50 border dark:border-gray-700 box-border border-gray-200 dark:bg-white/10">
                 <Link
                   prefetch={true}
                   tabIndex={1}
@@ -171,16 +171,20 @@ const ProductGallery = (props: Props) => {
                   </button>
                 </motion.div>
 
-                <div className="flex h-full flex-col pt-4 pb-6 px-2">
+                <div className="flex h-full flex-col py-4 px-2">
                   <div className="flex flex-col space-y-1.5 w-full">
                     <p className="text-xs tracking-wide text-gray-500 dark:text-gray-400 font-medium uppercase">
                       {product.vendor}
                     </p>
-                    <h2 className="font-light text-sm text-black dark:text-white truncate">
+                    <h2 className="font-medium text-sm text-gray-800 dark:text-gray-200 truncate">
                       {product.title}
                     </h2>
-                    <p className="text-sm text-black dark:text-gray-300">
-                      ${parseFloat(product.variants[0].variantPrice).toFixed(2)}
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      $
+                      {parseFloat(product.variants[0].variantPrice)
+                        .toFixed(2)
+                        .replace(".00", "")
+                        .replace(".0", "")}
                     </p>
                   </div>
                 </div>

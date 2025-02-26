@@ -168,12 +168,10 @@ const AddToCartButton = (props: Props) => {
 
         <button
           type="submit"
-          className={`flex w-full items-center justify-center border border-transparent 
+          className={`flex w-full items-center justify-center border 
           ${
-            showSizeRequired
-              ? "bg-gray-400 dark:bg-gray-700"
-              : "bg-black hover:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-white dark:border-gray-800 border-2"
-          } px-6 py-2 text-base font-medium text-white 
+            showSizeRequired ? "border-red-500 dark:border-red-400" : ""
+          } px-6 py-2 text-base font-medium text-white bg-black hover:bg-black/80 dark:bg-white dark:text-black dark:hover:!bg-white/80 
           focus:outline-none focus:ring-2 
           focus:ring-cypress-green dark:focus:ring-cypress-green-light focus:ring-offset-2 
           dark:focus:ring-offset-black transition-colors duration-200`}>

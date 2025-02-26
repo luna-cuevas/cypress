@@ -7,7 +7,6 @@ import AddToCartButton from "@/components/shop/AddToCartButton";
 import SizeSelection from "@/components/shop/SizeSelection";
 import TabContent from "@/components/shop/TabContent";
 import RelatedProducts from "@/components/shop/RelatedProducts";
-import { Accordions } from "@/components/shop/Accordions";
 import { Motion } from "@/utils/Motion";
 import { Metadata } from "next";
 import NewsletterForm from "@/components/shop/NewsletterForm";
@@ -15,7 +14,7 @@ import DesktopGalleryWithLightbox from "@/components/shop/DesktopGalleryWithLigh
 
 type Props = {
   params: { category: string; slug: string };
-  searchParams: { variantSize?: string };
+  searchParams: { variantSize?: string; tab?: string };
 };
 
 // Helper function to fetch product metadata
@@ -483,6 +482,7 @@ function getSeoValue(
 export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = params;
   const variantSize = searchParams.variantSize;
+  const selectedTab = searchParams.tab || "description"; // Default to description if no tab is specified
   console.log(`📝 Rendering product page for: ${slug}`);
 
   try {
@@ -638,9 +638,9 @@ export default async function ProductPage({ params, searchParams }: Props) {
               </ol>
             </nav>
 
-            <div className="w-full h-full flex md:flex-row flex-col max-w-[1600px] px-0 mx-auto">
+            <div className="w-full h-full flex md:flex-row flex-col max-w-[1600px] px-0 mx-auto justify-between">
               {/* Desktop Image Gallery with Lightbox */}
-              <div className="hidden h-full relative gap-2 md:w-[50%] lg:w-[60%] md:flex">
+              <div className="hidden h-full relative gap-2 md:w-[50%] lg:w-[55%] md:flex ">
                 <DesktopGalleryWithLightbox images={product.images} />
               </div>
 
@@ -659,7 +659,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                   duration: 0.5,
                   delay: 0.5,
                 }}
-                className="relative block h-auto md:w-[50%] lg:w-[40%] pl-4 pr-4 bg-white dark:bg-black">
+                className="relative block h-auto md:w-[50%] lg:w-[45%] pl-4 pr-4 bg-white dark:bg-black">
                 {/* Product info */}
                 <div className="m-auto md:sticky right-0 top-0 pt-4 left-0 max-w-2xl   ">
                   <div className="lg:col-span-2 mb-2 lg:pr-8">
@@ -678,8 +678,12 @@ export default async function ProductPage({ params, searchParams }: Props) {
                     <h2 className="sr-only">Product information</h2>
                     <p className="text-xl tracking-tight text-gray-600 dark:text-gray-400">
                       $
-                      {selectedVariant?.variantPrice ||
-                        product.variants[0].variantPrice}
+                      {(
+                        selectedVariant?.variantPrice ||
+                        product.variants[0].variantPrice
+                      )
+                        .replace(".00", "")
+                        .replace(".0", "")}
                     </p>
 
                     <div className="flex flex-col gap-8 my-8">
@@ -732,12 +736,11 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
                   <div className=" lg:col-span-2 lg:col-start-1 mb-4 lg:border-gray-200 ">
                     {/* Tabs */}
-                    <TabContent product={product} />
-                  </div>
-
-                  <div>
-                    {/* Now using the updated Accordions component with product prop */}
-                    <Accordions product={enhancedProduct} />
+                    <TabContent
+                      product={enhancedProduct}
+                      selectedTab={selectedTab}
+                      preserveParams={searchParams}
+                    />
                   </div>
                 </div>
               </Motion>
