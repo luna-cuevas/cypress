@@ -907,11 +907,9 @@ async function fetchProductMetadata(
                         }
 
                         // Update the specific item in the list
-                        if (
-                          gidIndex >= 0 &&
-                          metafieldMap[fullKey].resolvedList
-                        ) {
-                          metafieldMap[fullKey].resolvedList[gidIndex] = {
+                        const resolvedList = metafieldMap[fullKey].resolvedList;
+                        if (gidIndex >= 0 && resolvedList) {
+                          resolvedList[gidIndex] = {
                             id: metaobject.id,
                             handle: metaobject.handle,
                             type: metaobject.type,
@@ -926,12 +924,11 @@ async function fetchProductMetadata(
                             currentValue &&
                             currentValue.raw &&
                             Array.isArray(currentValue.raw) &&
-                            metafieldMap[fullKey].resolvedList
+                            resolvedList
                           ) {
                             // Transform the raw GIDs into resolved references
-                            metafieldHumanReadable[fullKey] = metafieldMap[
-                              fullKey
-                            ].resolvedList.filter((item) => item !== null);
+                            metafieldHumanReadable[fullKey] =
+                              resolvedList.filter((item) => item !== null);
                           }
                         }
                       } else {
