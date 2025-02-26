@@ -36,7 +36,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
             Complete Your Style
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-            Curated suggestions from {relatedProducts[0].vendor}'s collection
+            Curated suggestions from the {relatedProducts[0].vendor} collection
           </p>
         </Motion>
 
