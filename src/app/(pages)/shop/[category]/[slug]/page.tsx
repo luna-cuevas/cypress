@@ -223,7 +223,7 @@ function createMetafieldHumanReadable(metafields: any[]) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = params;
+  const { slug, category } = params;
   try {
     // Fetch metadata from our new endpoint
     const metadata = await fetchProductMetadata(slug);
@@ -289,81 +289,172 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "keywords"
     );
 
+    // Get product data for structured data
+    const productTitle =
+      seoTitle || metadataContent.seo?.title || metadataContent.title;
+    const productDescription =
+      seoDescription ||
+      metadataContent.seo?.description ||
+      metadataContent.description ||
+      "Premium men's fashion item. Minimalist design crafted with quality materials.";
+
+    // Build image array for OpenGraph and Twitter
+    const images =
+      metadataContent.images?.edges?.map((edge: any) => ({
+        url: edge.node.src,
+        alt: edge.node.altText || metadataContent.title,
+      })) ||
+      (metadataContent.featuredImage
+        ? [
+            {
+              url:
+                metadataContent.featuredImage.url ||
+                metadataContent.featuredImage.src,
+              alt:
+                metadataContent.featuredImage.altText || metadataContent.title,
+            },
+          ]
+        : []);
+
+    // Extract product details for structured data
+    const price = metadataContent.priceRange?.minVariantPrice?.amount;
+    const currency =
+      metadataContent.priceRange?.minVariantPrice?.currencyCode || "USD";
+    const availability = metadataContent.availableForSale
+      ? "https://schema.org/InStock"
+      : "https://schema.org/OutOfStock";
+    const brand =
+      metadataContent.vendor ||
+      getSeoValue(metafields, metafieldMap, "product", "vendor");
+
+    // Format category for display
+    const formattedCategory =
+      category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ");
+
+    // Create structured data for rich results
+    const productSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: productTitle,
+      description: productDescription,
+      image: images.length > 0 ? images[0].url : undefined,
+      offers: {
+        "@type": "Offer",
+        price: price,
+        priceCurrency: currency,
+        availability: availability,
+        url: `${
+          process.env.BASE_URL || "https://yourwebsite.com"
+        }/shop/${category}/${slug}`,
+      },
+      brand: {
+        "@type": "Brand",
+        name: brand || "Premium Menswear",
+      },
+      category: `Apparel & Accessories > Clothing > Men's Fashion > ${formattedCategory}`,
+      sku: metadataContent.sku || slug,
+      material:
+        getSeoValue(metafields, metafieldMap, "shopify", "fabric") ||
+        getSeoValue(metafields, metafieldMap, "product", "material"),
+      color: getSeoValue(metafields, metafieldMap, "shopify", "color"),
+    };
+
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: `${process.env.BASE_URL || "https://yourwebsite.com"}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Shop",
+          item: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: formattedCategory,
+          item: `${
+            process.env.BASE_URL || "https://yourwebsite.com"
+          }/shop/${category}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: productTitle,
+          item: `${
+            process.env.BASE_URL || "https://yourwebsite.com"
+          }/shop/${category}/${slug}`,
+        },
+      ],
+    };
+
     // Build structured metadata for better SEO
     return {
-      title: seoTitle || metadataContent.seo?.title || metadataContent.title,
-      description:
-        seoDescription ||
-        metadataContent.seo?.description ||
-        metadataContent.description ||
-        "Product details",
-      keywords: seoKeywords || metadataContent.tags || metadataContent.keywords,
+      title: `${productTitle} | Premium Men's Fashion`,
+      description: productDescription,
+      keywords:
+        seoKeywords ||
+        metadataContent.tags ||
+        metadataContent.keywords ||
+        `premium menswear, ${
+          brand || ""
+        } ${formattedCategory.toLowerCase()}, minimalist fashion, high-end apparel`,
       openGraph: {
-        title: seoTitle || metadataContent.seo?.title || metadataContent.title,
-        description:
-          seoDescription ||
-          metadataContent.seo?.description ||
-          metadataContent.description ||
-          "Product details",
-        images:
-          metadataContent.images?.edges?.map((edge: any) => ({
-            url: edge.node.src,
-            alt: edge.node.altText || metadataContent.title,
-          })) ||
-          (metadataContent.featuredImage
-            ? [
-                {
-                  url:
-                    metadataContent.featuredImage.url ||
-                    metadataContent.featuredImage.src,
-                  alt:
-                    metadataContent.featuredImage.altText ||
-                    metadataContent.title,
-                },
-              ]
-            : []),
+        title: productTitle,
+        description: productDescription,
+        images: images,
         type: "website",
         locale: "en_US",
         siteName: "Cypress",
       },
       twitter: {
         card: "summary_large_image",
-        title: seoTitle || metadataContent.seo?.title || metadataContent.title,
-        description:
-          seoDescription ||
-          metadataContent.seo?.description ||
-          metadataContent.description ||
-          "Product details",
-        images:
-          metadataContent.images?.edges?.[0]?.node.src ||
-          (metadataContent.featuredImage
-            ? metadataContent.featuredImage.url ||
-              metadataContent.featuredImage.src
-            : undefined),
+        title: productTitle,
+        description: productDescription,
+        images: images.length > 0 ? [images[0].url] : undefined,
       },
       robots: {
         index: true,
         follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
       },
       // Include canonical URL if available
-      ...(metadataContent.onlineStoreUrl && {
-        alternates: {
-          canonical: metadataContent.onlineStoreUrl,
-        },
-      }),
+      alternates: {
+        canonical: `${
+          process.env.BASE_URL || "https://yourwebsite.com"
+        }/shop/${category}/${slug}`,
+      },
       // Add structured data for product
       other: {
-        "og:price:amount":
-          metadataContent.priceRange?.minVariantPrice?.amount || "",
-        "og:price:currency":
-          metadataContent.priceRange?.minVariantPrice?.currencyCode || "USD",
+        "og:price:amount": price || "",
+        "og:price:currency": currency,
+        "og:availability": availability.replace("https://schema.org/", ""),
+        "product:price:amount": price || "",
+        "product:price:currency": currency,
+        "product:availability": availability.replace("https://schema.org/", ""),
+        "product:brand": brand || "Premium Menswear",
+        "product:category": formattedCategory,
+        "product:condition": "new",
+        "json-ld": JSON.stringify([productSchema, breadcrumbSchema]),
       },
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Product Page",
-      description: "View our product details",
+      title: "Product Page | Premium Men's Fashion",
+      description:
+        "View our premium men's fashion product details. Minimalist design crafted with quality materials.",
     };
   }
 }

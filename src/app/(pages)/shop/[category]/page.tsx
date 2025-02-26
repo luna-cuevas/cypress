@@ -4,6 +4,174 @@ import { productQuery } from "@/utils/productQuery";
 import React from "react";
 import { subCategories } from "@/utils/subCategories";
 import { getVendors } from "@/utils/shopify";
+import { Metadata } from "next";
+
+// Define the type for structured data
+type StructuredData = Record<string, unknown>;
+
+// Dynamic metadata generation based on category and search parameters
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { category: string };
+  searchParams: { sizes?: string; view?: string };
+}): Promise<Metadata> {
+  const category = params.category;
+  const { sizes } = searchParams;
+
+  // Format category for display
+  const capitalized = category.charAt(0).toUpperCase() + category.slice(1);
+  const formattedCategory = capitalized.replace(/-/g, " ");
+
+  // Create title components
+  const title = `${formattedCategory} Collection | Premium Men's Fashion`;
+
+  // Prepare description with category and size information
+  let description = `Explore our curated selection of high-end men's ${formattedCategory.toLowerCase()}. Minimalist designs crafted with precision and quality.`;
+
+  if (sizes) {
+    const sizeNames = sizes.split(",").join(", ");
+    description = `${description} Available in sizes ${sizeNames}.`;
+  }
+
+  // Prepare structured data
+  const itemListSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@type": "Product",
+          name: `${formattedCategory} Collection`,
+          description: description,
+          url: `${
+            process.env.BASE_URL || "https://yourwebsite.com"
+          }/shop/${category}`,
+          category: `Apparel & Accessories > Clothing > Men's Fashion > ${formattedCategory}`,
+          image: "/images/og-category.jpg",
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+          },
+        },
+      },
+    ],
+  };
+
+  const collectionSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${formattedCategory} Collection`,
+    description: description,
+    url: `${
+      process.env.BASE_URL || "https://yourwebsite.com"
+    }/shop/${category}`,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          url: `${
+            process.env.BASE_URL || "https://yourwebsite.com"
+          }/shop/${category}`,
+        },
+      ],
+    },
+    specialty: "Premium Men's Fashion",
+    about: {
+      "@type": "Thing",
+      name: `Men's ${formattedCategory}`,
+      description: `High-quality, minimalist men's ${formattedCategory.toLowerCase()} designs from exclusive fashion brands.`,
+    },
+  };
+
+  const breadcrumbSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${process.env.BASE_URL || "https://yourwebsite.com"}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: formattedCategory,
+        item: `${
+          process.env.BASE_URL || "https://yourwebsite.com"
+        }/shop/${category}`,
+      },
+    ],
+  };
+
+  // Return the metadata object
+  return {
+    title: title,
+    description: description,
+    keywords: `premium men's ${formattedCategory.toLowerCase()}, designer ${formattedCategory.toLowerCase()}, minimalist fashion, high-end apparel, exclusive brands`,
+    openGraph: {
+      title: title,
+      description: description,
+      type: "website",
+      locale: "en_US",
+      images: [
+        {
+          url: "/images/og-category.jpg",
+          width: 1200,
+          height: 630,
+          alt: `Premium men's ${formattedCategory.toLowerCase()} collection`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: ["/images/og-category.jpg"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    alternates: {
+      canonical: `/shop/${category}${
+        new URLSearchParams(searchParams as Record<string, string>).toString()
+          ? "?" +
+            new URLSearchParams(
+              searchParams as Record<string, string>
+            ).toString()
+          : ""
+      }`,
+    },
+    // Add structured data for rich results
+    other: {
+      "json-ld": JSON.stringify([
+        itemListSchema,
+        collectionSchema,
+        breadcrumbSchema,
+      ]),
+    },
+  };
+}
 
 type Props = {};
 
@@ -19,11 +187,11 @@ const page = async ({
   params: {
     category: string;
   };
-  searchParams: { sizes: any[] };
+  searchParams: { sizes?: string; view?: string };
 }) => {
   const category = params.category;
   const { sizes } = searchParams;
-  const sizesArray = sizes ? (sizes as any).split(",") : [];
+  const sizesArray = sizes ? sizes.split(",") : [];
   const capitalized = category.charAt(0).toUpperCase() + category.slice(1);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {

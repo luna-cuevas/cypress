@@ -4,6 +4,194 @@ import ProductFilters from "@/components/shop/ProductFilters";
 import { productQuery } from "@/utils/productQuery";
 import { subCategories } from "@/utils/subCategories";
 import { getVendors } from "@/utils/shopify";
+import { Metadata } from "next";
+
+// Define the type for structured data
+type StructuredData = Record<string, unknown>;
+
+// Dynamic metadata generation based on search parameters
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: {
+    sizes?: string;
+    sort?: string;
+    view?: string;
+    vendors?: string;
+  };
+}): Promise<Metadata> {
+  // Extract search parameters
+  const { sizes, vendors: vendorParam, sort } = searchParams;
+
+  // Create title components
+  let titlePrefix = "Premium Men's Collection";
+  let titleSuffix = "";
+
+  // Add vendor information if available
+  if (vendorParam) {
+    const vendorNames = vendorParam.split(",").join(", ");
+    titlePrefix = `${vendorNames} Collection`;
+    titleSuffix = " | Premium Men's Fashion";
+  }
+
+  // Add size information if available
+  if (sizes) {
+    const sizeNames = sizes.split(",").join(", ");
+    titleSuffix = `${titleSuffix} | ${sizeNames}`;
+  }
+
+  // Add sort information for more specific titles
+  if (sort) {
+    let sortDesc = "";
+    switch (sort) {
+      case "price_asc":
+        sortDesc = "From Lowest Price";
+        break;
+      case "price_desc":
+        sortDesc = "From Highest Price";
+        break;
+      case "best_selling":
+        sortDesc = "Best Sellers";
+        break;
+      case "created_at":
+        sortDesc = "New Arrivals";
+        break;
+      default:
+        break;
+    }
+
+    if (sortDesc) {
+      titleSuffix = `${titleSuffix} | ${sortDesc}`;
+    }
+  }
+
+  // Prepare description with any available filters
+  let description =
+    "Discover our curated selection of high-end men's apparel. Minimalist designs from exclusive brands";
+
+  if (vendorParam) {
+    const vendorNames = vendorParam.split(",").join(", ");
+    description = `Explore premium ${vendorNames} men's clothing. ${description}`;
+  }
+
+  if (sizes) {
+    description = `${description} available in sizes ${sizes
+      .split(",")
+      .join(", ")}.`;
+  } else {
+    description = `${description}.`;
+  }
+
+  const title = `${titlePrefix}${titleSuffix}`;
+
+  // Prepare structured data
+  const itemListSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@type": "Product",
+          name: "Premium Men's Collection",
+          description: description,
+          url: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop`,
+          brand: vendorParam
+            ? { "@type": "Brand", name: vendorParam.split(",")[0] }
+            : undefined,
+          category: "Apparel & Accessories > Clothing > Men's Fashion",
+          image: "/images/og-shop.jpg",
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+          },
+        },
+      },
+    ],
+  };
+
+  const breadcrumbSchema: StructuredData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${process.env.BASE_URL || "https://yourwebsite.com"}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: vendorParam || "All Collections",
+        item: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop${
+          vendorParam ? `?vendors=${vendorParam}` : ""
+        }`,
+      },
+    ],
+  };
+
+  // Return the metadata object
+  return {
+    title: title,
+    description: description,
+    keywords: `premium menswear, designer clothing, minimalist fashion, high-end apparel, exclusive brands${
+      vendorParam ? ", " + vendorParam.replace(/,/g, ", ") : ""
+    }`,
+    openGraph: {
+      title: title,
+      description: description,
+      type: "website",
+      locale: "en_US",
+      images: [
+        {
+          url: "/images/og-shop.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Premium men's fashion collection",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: ["/images/og-shop.jpg"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    alternates: {
+      canonical: `/shop${
+        new URLSearchParams(searchParams as Record<string, string>).toString()
+          ? "?" +
+            new URLSearchParams(
+              searchParams as Record<string, string>
+            ).toString()
+          : ""
+      }`,
+    },
+    // Add structured data for rich results
+    other: {
+      "json-ld": JSON.stringify([itemListSchema, breadcrumbSchema]),
+    },
+  };
+}
 
 type Props = {};
 
@@ -126,6 +314,8 @@ const page = async ({
 
   const productCount = filteredProducts.length;
   const availableVendors = await fetchVendors();
+
+  console.log("filteredProducts", filteredProducts);
 
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)]">
