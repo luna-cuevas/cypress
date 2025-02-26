@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createStorefrontApiClient } from "@shopify/storefront-api-client";
 
 /**
  * API endpoint to fetch product metafields using the Shopify Admin API
@@ -95,6 +96,7 @@ export async function GET(req: NextRequest) {
         metafieldCount: metafields.length,
         resolvedReferences: resolveReferences,
         shopifyStore: process.env.SHOPIFY_HOSTNAME,
+        apiVersion: "2024-07",
         queryParams: { handle, productId },
         timestamp: new Date().toISOString(),
       },
@@ -108,6 +110,7 @@ export async function GET(req: NextRequest) {
           errorMessage: error.message,
           errorStack: error.stack,
           shopifyStore: process.env.SHOPIFY_HOSTNAME,
+          apiVersion: "2024-07",
           queryParams: { handle, productId },
           timestamp: new Date().toISOString(),
         },
@@ -122,7 +125,7 @@ export async function GET(req: NextRequest) {
  */
 async function getProductIdFromHandle(handle: string): Promise<string | null> {
   try {
-    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2023-07/graphql.json`;
+    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/graphql.json`;
     console.log("🌐 Admin GraphQL request to:", url);
 
     const query = `
@@ -177,7 +180,7 @@ async function getProductIdFromHandleREST(
   handle: string
 ): Promise<string | null> {
   try {
-    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2023-07/products.json?handle=${handle}`;
+    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/products.json?handle=${handle}`;
     console.log("🌐 Admin REST request to:", url);
 
     const response = await fetch(url, {
@@ -234,7 +237,7 @@ async function fetchProductMetafields(productId: string): Promise<any[]> {
       throw new Error(`Could not extract numeric ID from: ${productId}`);
     }
 
-    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2023-07/products/${numericId}/metafields.json`;
+    const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/products/${numericId}/metafields.json`;
     console.log("🌐 Fetching metafields from:", url);
 
     const response = await fetch(url, {
@@ -302,6 +305,35 @@ function formatMetafieldsResponse(metafields: any[]) {
       ) {
         parsedValue = JSON.parse(value);
         console.log(`📋 Parsed JSON value for ${namespace}.${key}`);
+
+        // Enhanced handling for arrays
+        if (Array.isArray(parsedValue)) {
+          // Check if this is a multi-value reference to metaobjects (common pattern)
+          if (
+            parsedValue.length > 0 &&
+            typeof parsedValue[0] === "string" &&
+            parsedValue[0].includes("gid://shopify/")
+          ) {
+            console.log(
+              `📋 Detected array of references in ${namespace}.${key} (${parsedValue.length} items)`
+            );
+          }
+
+          // Make sure all array items are properly formatted if they're JSON strings themselves
+          parsedValue = parsedValue.map((item) => {
+            if (
+              typeof item === "string" &&
+              (item.startsWith("{") || item.startsWith("["))
+            ) {
+              try {
+                return JSON.parse(item);
+              } catch {
+                return item;
+              }
+            }
+            return item;
+          });
+        }
       }
     } catch (e) {
       console.warn(`⚠️ Failed to parse JSON value for ${namespace}.${key}:`, e);
@@ -314,6 +346,10 @@ function formatMetafieldsResponse(metafields: any[]) {
       id: metafield.id,
       createdAt: metafield.created_at,
       updatedAt: metafield.updated_at,
+      // Add a flag for client-side to know if this is a multi-value field
+      isMultiValue: Array.isArray(parsedValue),
+      // Add the count of items if it's an array
+      itemCount: Array.isArray(parsedValue) ? parsedValue.length : undefined,
     };
   });
 
@@ -327,6 +363,20 @@ function formatMetafieldsResponse(metafields: any[]) {
   namespaces.forEach((namespace) => {
     const keys = Object.keys(groupedMetafields[namespace]);
     console.log(`📊 Namespace '${namespace}' has ${keys.length} keys:`, keys);
+
+    // Log multi-value fields
+    const multiValueFields = keys.filter(
+      (key) => groupedMetafields[namespace][key].isMultiValue
+    );
+
+    if (multiValueFields.length > 0) {
+      console.log(
+        `📊 Found ${multiValueFields.length} multi-value fields in namespace '${namespace}':`,
+        multiValueFields.map(
+          (key) => `${key}(${groupedMetafields[namespace][key].itemCount})`
+        )
+      );
+    }
   });
 
   return {
@@ -498,7 +548,7 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
 }
 
 /**
- * Fetches metaobjects by IDs
+ * Fetches metaobjects by IDs using the Storefront API instead of Admin API
  */
 async function fetchMetaobjects(ids: string[]): Promise<any[]> {
   try {
@@ -506,62 +556,92 @@ async function fetchMetaobjects(ids: string[]): Promise<any[]> {
       return [];
     }
 
-    console.log(`🔄 Fetching ${ids.length} metaobjects by IDs`);
+    console.log(
+      `🔄 Fetching ${ids.length} metaobjects by IDs using Storefront API`
+    );
 
-    // Extract the handles from the GIDs if possible
-    const metaobjectIds = ids.map((id) => {
-      const parts = id.split("/");
-      return parts[parts.length - 1];
+    // Create a Storefront API client
+    const client = createStorefrontApiClient({
+      storeDomain:
+        process.env.SHOPIFY_STORE_DOMAIN || "cypress-storefront.myshopify.com",
+      apiVersion: "2024-07",
+      publicAccessToken:
+        process.env.SHOPIFY_STOREFRONT_API_TOKEN ||
+        "aaac8bfb8d762d1fc7466101ee6fb3e6",
     });
 
     const results: any[] = [];
+    const batchSize = 10;
 
-    // Fetch each metaobject individually using the REST API
-    // GraphQL was returning 404s, so we'll try the REST API instead
-    for (const id of metaobjectIds) {
+    // Process batches of IDs to avoid query complexity limits
+    for (let i = 0; i < ids.length; i += batchSize) {
+      const batchIds = ids.slice(i, i + batchSize);
+      console.log(`🔄 Processing batch of ${batchIds.length} metaobject IDs`);
+
       try {
-        const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2023-07/metaobjects/${id}.json`;
-        console.log(`🌐 Fetching metaobject with ID ${id} from ${url}`);
+        // Build a query that fetches each metaobject by ID
+        const batchQuery = `
+          query {
+            ${batchIds
+              .map(
+                (id, index) => `
+              metaobject${index}: node(id: "${id}") {
+                ... on Metaobject {
+                  id
+                  handle
+                  type
+                  fields {
+                    key
+                    value
+                  }
+                }
+              }
+            `
+              )
+              .join("\n")}
+          }
+        `;
 
-        const response = await fetch(url, {
-          headers: {
-            "X-Shopify-Access-Token": process.env
-              .SHOPIFY_ADMIN_API_TOKEN as string,
-          },
-        });
+        // Execute the query
+        const { data, errors } = await client.request(batchQuery);
 
-        if (!response.ok) {
-          console.warn(
-            `⚠️ Failed to fetch metaobject with ID ${id}: ${response.status}`
-          );
-          continue;
+        if (errors) {
+          console.error("❌ GraphQL errors:", JSON.stringify(errors));
         }
 
-        const data = await response.json();
+        if (data) {
+          // Process each result
+          batchIds.forEach((id, index) => {
+            const metaobject = data[`metaobject${index}`];
+            if (metaobject) {
+              console.log(
+                `✅ Successfully fetched metaobject: ${metaobject.type}/${
+                  metaobject.handle || id
+                }`
+              );
 
-        if (data.metaobject) {
-          console.log(
-            `✅ Successfully fetched metaobject ${id}: Type = ${data.metaobject.type}`
-          );
+              // Convert fields array to an object
+              const fieldsObj: Record<string, string> = {};
+              if (metaobject.fields) {
+                metaobject.fields.forEach((field: any) => {
+                  fieldsObj[field.key] = field.value;
+                });
+              }
 
-          // Convert fields array to an object
-          const fieldsObj: Record<string, string> = {};
-          if (data.metaobject.fields) {
-            data.metaobject.fields.forEach((field: any) => {
-              fieldsObj[field.key] = field.value;
-            });
-          }
-
-          results.push({
-            id: `gid://shopify/Metaobject/${id}`,
-            handle: data.metaobject.handle,
-            type: data.metaobject.type,
-            fields: fieldsObj,
-            fieldsArray: data.metaobject.fields,
+              results.push({
+                id: id,
+                handle: metaobject.handle,
+                type: metaobject.type,
+                fields: fieldsObj,
+                fieldsArray: metaobject.fields,
+              });
+            } else {
+              console.warn(`⚠️ Failed to fetch metaobject with ID ${id}`);
+            }
           });
         }
       } catch (error) {
-        console.error(`❌ Error fetching metaobject ${id}:`, error);
+        console.error(`❌ Error fetching metaobject batch:`, error);
       }
     }
 

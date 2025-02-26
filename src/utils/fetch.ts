@@ -11,7 +11,7 @@ export async function shopifyFetch({
   cache?: RequestCache;
 }) {
   try {
-    const endpoint = `https://${domain}/api/2023-07/graphql.json`;
+    const endpoint = `https://${domain}/api/2024-07/graphql.json`;
 
     const options = {
       method: "POST",

@@ -18,40 +18,345 @@ type Props = {
   searchParams: { variantSize?: string };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = params;
+// Helper function to fetch product metadata
+async function fetchProductMetadata(handle: string) {
+  console.log(`Fetching product metadata for product handle: ${handle}`);
   try {
-    const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productQuery: productQuery({ handle: slug }),
-      }),
-    });
+    // Use both handle and product params for compatibility with API
+    const res = await fetch(
+      `${process.env.BASE_URL}/api/product-metadata?handle=${handle}&product=${handle}`,
+      { cache: "no-store" }
+    );
+    if (!res.ok) {
+      console.error(
+        `Error response from metadata API: ${res.status} ${res.statusText}`
+      );
+      console.log(
+        "API URL used:",
+        `${process.env.BASE_URL}/api/product-metadata?handle=${handle}&product=${handle}`
+      );
+      throw new Error(`Error fetching product metadata: ${res.statusText}`);
+    }
+    const data = await res.json();
 
-    const data = await response.json();
-    const product = data?.product;
+    // Check for metadata in the response (new API format returns metadata directly)
+    const metadata = data.metadata || {};
+    const metafields = metadata.metafields || [];
 
-    if (!product) {
+    // Count resolved references for debugging
+    let resolvedCount = 0;
+    let metaobjectCount = 0;
+
+    // Check metafields for resolved references
+    if (Array.isArray(metafields)) {
+      metafields.forEach((mf: any) => {
+        if (mf && mf.type?.includes("reference") && mf.reference) {
+          resolvedCount++;
+        }
+      });
+    }
+
+    // Check metafieldMap for resolved references
+    if (metadata.metafieldMap) {
+      metaobjectCount = Object.keys(metadata.metafieldMap).length;
+      Object.values(metadata.metafieldMap).forEach((mf: any) => {
+        if (mf && (mf.resolvedList || mf.directlyResolvedReference)) {
+          resolvedCount++;
+        }
+      });
+    }
+
+    console.log(
+      `Metadata API: Fetched product metadata with ${metaobjectCount} metaobject references, ${resolvedCount} resolved`
+    );
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching product metadata:", error);
+    return { metadata: null };
+  }
+}
+
+// Helper function to fetch metafields
+async function fetchProductMetafields(id: string) {
+  console.log(`Fetching product metafields for product ID: ${id}`);
+  try {
+    // Use both product and id params for compatibility
+    const res = await fetch(
+      `${
+        process.env.BASE_URL
+      }/api/product-metafields?id=${id}&product=${id.replace(
+        "gid://shopify/Product/",
+        ""
+      )}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      console.error(
+        `Error response from metafields API: ${res.status} ${res.statusText}`
+      );
+      console.log(
+        "API URL used:",
+        `${
+          process.env.BASE_URL
+        }/api/product-metafields?id=${id}&product=${id.replace(
+          "gid://shopify/Product/",
+          ""
+        )}`
+      );
+      throw new Error(`Error fetching product metafields: ${res.statusText}`);
+    }
+
+    const data = await res.json();
+
+    // Check for error in the response
+    if (data.error) {
+      console.error("API returned an error:", data.error);
       return {
-        title: "Product Not Found",
-        description: "The requested product could not be found",
+        metafields: {},
+        metafieldsList: [],
+        _debug: { error: data.error },
       };
     }
 
+    // The metafields API returns either a metafields object grouped by namespace
+    // or a flat array in metafieldsList - handle both formats
+    const metafieldsArr = data.metafieldsList || [];
+    const metafieldsObj = data.metafields || {};
+
+    // Convert object structure to array if needed
+    let flatMetafields = metafieldsArr.length > 0 ? metafieldsArr : [];
+
+    // If we have the object structure but no array, flatten it
+    if (flatMetafields.length === 0 && Object.keys(metafieldsObj).length > 0) {
+      Object.entries(metafieldsObj).forEach(
+        ([namespace, fields]: [string, any]) => {
+          Object.entries(fields).forEach(([key, field]: [string, any]) => {
+            flatMetafields.push({
+              namespace,
+              key,
+              ...field,
+            });
+          });
+        }
+      );
+    }
+
+    // Log information about resolved metaobject references
+    const resolvedRefs = flatMetafields.filter(
+      (mf: any) =>
+        (mf.resolvedList && mf.resolvedList.length > 0) ||
+        mf.directlyResolvedReference ||
+        (mf.value &&
+          typeof mf.value === "object" &&
+          !Array.isArray(mf.value) &&
+          mf.value.type)
+    );
+
+    const _debug = data._debug || {
+      timestamp: new Date().toISOString(),
+      apiVersion: "2024-07",
+      resolvedCount: resolvedRefs.length,
+      totalCount: flatMetafields.length,
+    };
+
+    console.log(
+      `Metafields API: Fetched ${flatMetafields.length} metafields with ${resolvedRefs.length} resolved references`
+    );
+
+    // Make sure we always return both formats for compatibility
     return {
-      title: product.title,
-      description: product.description || "Product details",
-      openGraph: {
+      ...data,
+      metafields: data.metafields || {},
+      metafieldsList: flatMetafields,
+      _debug,
+      _resolvedMetaobjects: {
+        count: resolvedRefs.length,
+        total: flatMetafields.length,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching product metafields:", error);
+    return {
+      metafields: {},
+      metafieldsList: [],
+      _debug: {
+        error: String(error),
+        timestamp: new Date().toISOString(),
+      },
+    };
+  }
+}
+
+// Create a human-readable mapping for metafields with references
+function createMetafieldHumanReadable(metafields: any[]) {
+  const humanReadable: Record<string, any> = {};
+
+  for (const mf of metafields) {
+    if (!mf) continue;
+
+    const key = `${mf.namespace}--${mf.key}`;
+
+    // Handle metaobject references
+    if (mf.type?.includes("reference") && mf.reference) {
+      humanReadable[key] = mf.reference;
+      continue;
+    }
+
+    // Store all other values as-is
+    if (mf.value) {
+      try {
+        // Try to parse JSON values
+        if (mf.type?.includes("json")) {
+          humanReadable[key] = JSON.parse(mf.value);
+        } else {
+          humanReadable[key] = mf.value;
+        }
+      } catch (e) {
+        humanReadable[key] = mf.value;
+      }
+    }
+  }
+
+  return humanReadable;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = params;
+  try {
+    // Fetch metadata from our new endpoint
+    const metadata = await fetchProductMetadata(slug);
+    const metadataContent = metadata?.metadata || metadata;
+
+    if (!metadata || !metadataContent) {
+      // Fallback to the existing method if our new endpoint fails
+      const response = await fetch(
+        `${process.env.BASE_URL}/api/fetchProducts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productQuery: productQuery({ handle: slug }),
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const product = data?.product;
+
+      if (!product) {
+        return {
+          title: "Product Not Found",
+          description: "The requested product could not be found",
+        };
+      }
+
+      return {
         title: product.title,
         description: product.description || "Product details",
+        openGraph: {
+          title: product.title,
+          description: product.description || "Product details",
+          images:
+            product.images?.map((image: { src: string; altText: string }) => ({
+              url: image.src,
+              alt: image.altText || product.title,
+            })) || [],
+          type: "website",
+        },
+      };
+    }
+
+    // Get the metafields for SEO data
+    const metafields = metadataContent.metafields || [];
+    const metafieldMap = metadataContent.metafieldMap || {};
+
+    // Extract SEO metadata from metafields if available
+    const seoTitle = getSeoValue(metafields, metafieldMap, "seo", "title");
+    const seoDescription = getSeoValue(
+      metafields,
+      metafieldMap,
+      "seo",
+      "description"
+    );
+    const seoKeywords = getSeoValue(
+      metafields,
+      metafieldMap,
+      "seo",
+      "keywords"
+    );
+
+    // Build structured metadata for better SEO
+    return {
+      title: seoTitle || metadataContent.seo?.title || metadataContent.title,
+      description:
+        seoDescription ||
+        metadataContent.seo?.description ||
+        metadataContent.description ||
+        "Product details",
+      keywords: seoKeywords || metadataContent.tags || metadataContent.keywords,
+      openGraph: {
+        title: seoTitle || metadataContent.seo?.title || metadataContent.title,
+        description:
+          seoDescription ||
+          metadataContent.seo?.description ||
+          metadataContent.description ||
+          "Product details",
         images:
-          product.images?.map((image: { src: string; altText: string }) => ({
-            url: image.src,
-            alt: image.altText || product.title,
-          })) || [],
+          metadataContent.images?.edges?.map((edge: any) => ({
+            url: edge.node.src,
+            alt: edge.node.altText || metadataContent.title,
+          })) ||
+          (metadataContent.featuredImage
+            ? [
+                {
+                  url:
+                    metadataContent.featuredImage.url ||
+                    metadataContent.featuredImage.src,
+                  alt:
+                    metadataContent.featuredImage.altText ||
+                    metadataContent.title,
+                },
+              ]
+            : []),
+        type: "website",
+        locale: "en_US",
+        siteName: "Cypress",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: seoTitle || metadataContent.seo?.title || metadataContent.title,
+        description:
+          seoDescription ||
+          metadataContent.seo?.description ||
+          metadataContent.description ||
+          "Product details",
+        images:
+          metadataContent.images?.edges?.[0]?.node.src ||
+          (metadataContent.featuredImage
+            ? metadataContent.featuredImage.url ||
+              metadataContent.featuredImage.src
+            : undefined),
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+      // Include canonical URL if available
+      ...(metadataContent.onlineStoreUrl && {
+        alternates: {
+          canonical: metadataContent.onlineStoreUrl,
+        },
+      }),
+      // Add structured data for product
+      other: {
+        "og:price:amount":
+          metadataContent.priceRange?.minVariantPrice?.amount || "",
+        "og:price:currency":
+          metadataContent.priceRange?.minVariantPrice?.currencyCode || "USD",
       },
     };
   } catch (error) {
@@ -63,27 +368,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Helper function to fetch metafields
-async function fetchProductMetafields(handle: string) {
-  try {
-    const response = await fetch(
-      `${process.env.BASE_URL}/api/product-metafields?handle=${handle}&resolveReferences=true`
-    );
-    if (!response.ok) {
-      console.error(`Failed to fetch metafields: ${response.status}`);
-      return null;
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching product metafields:", error);
-    return null;
+// Helper function to extract SEO values from metafields
+function getSeoValue(
+  metafields: any[],
+  metafieldMap: any,
+  namespace: string,
+  key: string
+): string | undefined {
+  // Try to find in metafieldMap first (new format)
+  const mapKey = `${namespace}--${key}`;
+  if (metafieldMap[mapKey]) {
+    return metafieldMap[mapKey].value;
   }
+
+  // Then look in metafields array
+  const metafield = metafields.find(
+    (mf: any) => mf && mf.namespace === namespace && mf.key === key
+  );
+
+  return metafield?.value;
 }
 
 export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = params;
   const variantSize = searchParams.variantSize;
-  console.log(variantSize);
+  console.log(`📝 Rendering product page for: ${slug}`);
 
   try {
     // Fetch product data
@@ -115,14 +424,64 @@ export default async function ProductPage({ params, searchParams }: Props) {
       );
     }
 
-    // Fetch metafields using our new API endpoint
-    const metafieldsData = await fetchProductMetafields(slug);
+    // Fetch metafields using our existing API endpoint
+    const metafieldsData = await fetchProductMetafields(product.id);
 
-    // Enhance the product object with the metafields data
+    // Fetch enhanced metadata using our new API endpoint
+    const metadata = await fetchProductMetadata(slug);
+
+    // Log for debugging
+    console.log("product", product);
+
+    // Enhance the product object with both metafields and metadata
     const enhancedProduct = {
       ...product,
+      // Maintain backward compatibility with both names
+      metafields: metafieldsData?.metafieldsList || [],
       adminMetafields: metafieldsData?.metafields || {},
+      metadata: metadata || {},
+      // Add organized metafields for backward compatibility
+      organizedMetafields:
+        metadata?.organizedMetafields ||
+        extractOrganizedMetafields(metafieldsData),
+      // Add resolved references info for debugging
+      _debug: {
+        metafieldsResolved: metafieldsData?._resolvedMetaobjects?.count || 0,
+        metadataResolved: metadata?.metaobjectAccess?.resolvedCount || 0,
+        resolvedMetadataCount: metadata?.metafieldMap
+          ? Object.values(metadata.metafieldMap).filter(
+              (mf: any) =>
+                mf && (mf.resolvedList || mf.directlyResolvedReference)
+            ).length
+          : 0,
+        resolvedMetafieldsCount: (metafieldsData?.metafieldsList || []).filter(
+          (mf: any) =>
+            (mf.resolvedList && mf.resolvedList.length > 0) ||
+            mf.directlyResolvedReference
+        ).length,
+        metadataNamespaces: metadata?.metafields
+          ? Array.from(
+              new Set(
+                metadata.metafields
+                  .filter((m: any) => m)
+                  .map((m: any) => m.namespace)
+              )
+            )
+          : [],
+        metafieldsNamespaces: Array.from(
+          new Set(
+            (metafieldsData?.metafieldsList || []).map((m: any) => m.namespace)
+          )
+        ),
+        apiVersion: "2024-07",
+        timestamp: new Date().toISOString(),
+      },
     };
+
+    console.log(
+      `🔄 Created enhanced product with resolved metaobjects:`,
+      enhancedProduct._debug
+    );
 
     const selectedVariant = product.variants?.find(
       (variant: any) => variant.variantTitle === variantSize
@@ -286,6 +645,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                   </div>
 
                   <div>
+                    {/* Now using the updated Accordions component with product prop */}
                     <Accordions product={enhancedProduct} />
                   </div>
                 </div>
@@ -322,4 +682,75 @@ export default async function ProductPage({ params, searchParams }: Props) {
       </div>
     );
   }
+}
+
+// Helper function to extract organized metafields
+function extractOrganizedMetafields(metafieldsData: any) {
+  const organizedMetafields: any = {
+    fabric: null,
+    color: null,
+    colorPattern: null,
+    size: null,
+    fit: null,
+    targetGender: null,
+    ageGroup: null,
+    sleeveLength: null,
+    topLength: null,
+    neckline: null,
+    pantsLength: null,
+    accessorySize: null,
+    topLengthType: null,
+  };
+
+  // Multiple possible sources for metafield data
+  const metafieldsObj = metafieldsData?.metafields || {};
+  const metafieldsList = metafieldsData?.metafieldsList || [];
+  const metafieldMap = metafieldsData?.metafieldMap || {};
+
+  // Function to find a metafield by namespace and key
+  const findMetafield = (namespace: string, key: string) => {
+    // First try from the new metafieldMap format (from product-metadata API)
+    if (metafieldMap[`${namespace}--${key}`]) {
+      return metafieldMap[`${namespace}--${key}`];
+    }
+
+    // Then try from the object structure
+    if (metafieldsObj[namespace] && metafieldsObj[namespace][key]) {
+      return metafieldsObj[namespace][key];
+    }
+
+    // Then try from the array
+    return metafieldsList.find(
+      (mf: any) => mf && mf.namespace === namespace && mf.key === key
+    );
+  };
+
+  // Map common metafields
+  organizedMetafields.fabric = findMetafield("shopify", "fabric");
+  organizedMetafields.color = findMetafield("shopify", "color");
+  organizedMetafields.colorPattern = findMetafield("shopify", "color-pattern");
+  organizedMetafields.size = findMetafield("shopify", "size");
+  organizedMetafields.fit = findMetafield("shopify", "fit");
+  organizedMetafields.targetGender = findMetafield("shopify", "target-gender");
+  organizedMetafields.ageGroup = findMetafield("shopify", "age-group");
+  organizedMetafields.sleeveLength = findMetafield(
+    "shopify",
+    "sleeve-length-type"
+  );
+  organizedMetafields.topLength = findMetafield("shopify", "top-length-type");
+  organizedMetafields.topLengthType = findMetafield(
+    "shopify",
+    "top-length-type"
+  );
+  organizedMetafields.neckline = findMetafield("shopify", "neckline");
+  organizedMetafields.pantsLength = findMetafield(
+    "shopify",
+    "pants-length-type"
+  );
+  organizedMetafields.accessorySize = findMetafield(
+    "shopify",
+    "accessory-size"
+  );
+
+  return organizedMetafields;
 }

@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const { query, variables } = await req.json();
 
     const response = await fetch(
-      `${process.env.SHOPIFY_STOREFRONT_API_URL}/api/2023-07/graphql.json`,
+      `${process.env.SHOPIFY_STOREFRONT_API_URL}/api/2024-07/graphql.json`,
       {
         method: "POST",
         headers: {
