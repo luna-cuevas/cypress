@@ -563,7 +563,7 @@ export default function ProfileForm({ user }: Props) {
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Protect your account with a strong, unique password that you
-                  don't use for other websites.
+                  do not use for other websites.
                 </p>
                 <button
                   type="button"
