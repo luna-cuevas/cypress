@@ -2,15 +2,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-// Add a middleware to log all requests
-export async function middleware(req: NextRequest) {
-  console.log("Middleware for updateCartLines called", {
-    url: req.url,
-    method: req.method,
-  });
-  return NextResponse.next();
-}
-
 export async function POST(req: NextRequest) {
   try {
     console.log("updateCartLines POST handler called", {
