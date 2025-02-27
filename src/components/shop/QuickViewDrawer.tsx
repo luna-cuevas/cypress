@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Drawer } from "@material-tailwind/react";
 import { ThemeProvider } from "@material-tailwind/react";
 import Carousel from "./Carousel";
@@ -7,6 +7,8 @@ import { Radio, RadioGroup } from "@headlessui/react";
 import AddToCartButton from "./AddToCartButton";
 import Link from "next/link";
 import FavoriteButton from "./FavoriteButton";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 
 type Props = {
   product: {
@@ -70,16 +72,16 @@ export function QuickViewDrawer(props: Props) {
   const theme = {
     drawer: {
       defaultProps: {
-        size: 475,
+        size: 550,
         overlay: true,
-        placement: "left",
+        placement: "right",
         overlayProps: undefined,
         className: "",
         dismiss: undefined,
         onClose: undefined,
         transition: {
           type: "tween",
-          duration: 0.3,
+          duration: 0.5,
         },
       },
       styles: {
@@ -101,7 +103,7 @@ export function QuickViewDrawer(props: Props) {
             pointerEvents: "pointer-events-auto",
             zIndex: "z-[9999]",
             backgroundColor: "bg-black",
-            backgroundOpacity: "bg-opacity-60",
+            backgroundOpacity: "bg-opacity-70",
             backdropBlur: "backdrop-blur-sm",
           },
         },
@@ -110,6 +112,16 @@ export function QuickViewDrawer(props: Props) {
   };
 
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      const timer = setTimeout(() => setLoaded(true), 100);
+      return () => clearTimeout(timer);
+    } else {
+      setLoaded(false);
+    }
+  }, [selectedProduct]);
 
   return (
     <ThemeProvider value={theme}>
@@ -117,49 +129,66 @@ export function QuickViewDrawer(props: Props) {
         open={selectedProduct ? true : false}
         onClose={closeBox}
         placement="right"
-        className="pt-2 px-8 dark:bg-black">
-        <div className="w-full h-full flex flex-col ">
+        className="pt-0 px-0 dark:bg-black border-l border-gray-100 dark:border-gray-800">
+        <div className="w-full h-full flex flex-col">
           <button
             onClick={closeBox}
-            className="w-fit mb-2 ml-auto text-xl shadow-md rounded-full px-2 text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300">
-            x
+            className="absolute right-5 top-5 z-10 p-2 rounded-full bg-white/80 dark:bg-black/80 backdrop-blur-sm hover:bg-white dark:hover:bg-black transition-all duration-300 text-gray-800 dark:text-white">
+            <XMarkIcon className="h-5 w-5" />
           </button>
-          <div className="h-[450px]">
-            <Carousel slides={selectedProduct?.images} />
-          </div>
 
-          <div className="flex overflow-y-scroll flex-col gap-2 my-2">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.6 }}
+            className="h-[800px] w-full relative">
+            <Carousel slides={selectedProduct?.images} />
+          </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: loaded ? 0 : 20, opacity: loaded ? 1 : 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col px-10 py-8 gap-2 h-full overflow-y-auto scrollbar-hide">
+            <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 font-light">
+              {selectedProduct?.productType || ""}
+            </p>
+
+            <h2 className="text-2xl font-light tracking-wide text-gray-900 dark:text-white">
               {selectedProduct?.title}
             </h2>
 
-            <p className="text-gray-900 dark:text-white">
+            <p className="text-lg font-light text-gray-900 dark:text-white mb-2">
               ${selectedProduct?.variants[0].variantPrice}0
             </p>
-            <div className="mt-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+
+            <div className="w-full h-px bg-gray-200 dark:bg-gray-800 my-2"></div>
+
+            <div className="my-4">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm tracking-wide font-light text-gray-600 dark:text-gray-300">
                   {selectedVariant?.variantTitle ? (
-                    <span className="gap-1 flex">
-                      Size
-                      <span className="text-black dark:text-white">
+                    <span className="flex gap-2 items-center">
+                      SIZE:
+                      <span className="text-black dark:text-white font-normal">
                         {selectedVariant.variantTitle}
                       </span>
                     </span>
                   ) : (
-                    "Select Size"
+                    "SELECT SIZE"
                   )}
                 </h3>
                 <Link
                   href="#"
-                  className="text-sm underline font-medium text-gray-800 hover:text-cypress-green dark:text-gray-300 dark:hover:text-cypress-green-light">
+                  className="text-xs uppercase tracking-wider font-light text-gray-800 hover:text-black dark:text-gray-300 dark:hover:text-white">
                   Size guide
                 </Link>
               </div>
-              <fieldset aria-label="Choose a size" className="mt-4">
+
+              <fieldset aria-label="Choose a size">
                 <RadioGroup
                   value={selectedVariant?.variantTitle}
-                  className="grid grid-cols-3 gap-2">
+                  className="grid grid-cols-4 gap-3">
                   {product?.variants.map(
                     (
                       variant: {
@@ -177,12 +206,10 @@ export function QuickViewDrawer(props: Props) {
                         className={({ focus }) =>
                           classNames(
                             variant.variantQuantityAvailable
-                              ? "cursor-pointer bg-white dark:bg-black text-gray-900 dark:text-white shadow-sm"
+                              ? "cursor-pointer bg-transparent text-gray-900 dark:text-white"
                               : "cursor-not-allowed bg-gray-50 dark:bg-gray-900 text-gray-200 dark:text-gray-700",
-                            focus
-                              ? "ring-2 ring-cypress-green dark:ring-cypress-green-light"
-                              : "",
-                            "group relative flex items-center justify-center border dark:border-gray-700 py-3 text-sm font-medium uppercase hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
+                            focus ? "ring-1 ring-black dark:ring-white" : "",
+                            "group relative flex items-center justify-center border dark:border-gray-700 py-3 text-xs font-light tracking-wide uppercase hover:border-black dark:hover:border-white focus:outline-none transition-all duration-200"
                           )
                         }>
                         {({ checked, focus }) => (
@@ -193,17 +220,17 @@ export function QuickViewDrawer(props: Props) {
                                 className={classNames(
                                   selectedVariant?.variantTitle ==
                                     variant.variantTitle
-                                    ? "border-cypress-green dark:border-cypress-green-light"
+                                    ? "border-black dark:border-white"
                                     : "border-transparent",
                                   focus ? "border" : "border-2",
-                                  "pointer-events-none absolute -inset-px dark:ring-offset-2"
+                                  "pointer-events-none absolute -inset-px"
                                 )}
                                 aria-hidden="true"
                               />
                             ) : (
                               <span
                                 aria-hidden="true"
-                                className="pointer-events-none absolute -inset-px border-2 border-gray-200 dark:border-gray-700">
+                                className="pointer-events-none absolute -inset-px border border-gray-200 dark:border-gray-700">
                                 <svg
                                   className="absolute inset-0 h-full w-full stroke-2 text-gray-200 dark:text-gray-700"
                                   viewBox="0 0 100 100"
@@ -227,29 +254,32 @@ export function QuickViewDrawer(props: Props) {
                 </RadioGroup>
               </fieldset>
             </div>
-          </div>
 
-          <div className="h-full flex-1 justify-end gap-4 mb-6 flex flex-col">
-            <div className="flex gap-2 items-center">
-              <AddToCartButton
-                closeBox={closeBox}
-                product={product}
-                selectedVariant={selectedVariant}
-              />
-              <FavoriteButton
-                productId={selectedProduct?.id}
-                productTitle={selectedProduct?.title}
-                productImage={selectedProduct?.images[0]?.src || ""}
-                productPrice={selectedProduct?.variants[0]?.variantPrice || 0}
-                productHandle={selectedProduct?.handle}
-              />
+            <div className="w-full h-px bg-gray-200 dark:bg-gray-800 my-2"></div>
+
+            <div className="mt-auto ">
+              <div className="flex items-center gap-3">
+                <AddToCartButton
+                  closeBox={closeBox}
+                  product={product}
+                  selectedVariant={selectedVariant}
+                />
+                <FavoriteButton
+                  productId={selectedProduct?.id}
+                  productTitle={selectedProduct?.title}
+                  productImage={selectedProduct?.images[0]?.src || ""}
+                  productPrice={selectedProduct?.variants[0]?.variantPrice || 0}
+                  productHandle={selectedProduct?.handle}
+                />
+              </div>
+
+              <Link
+                className="block text-xs tracking-wider uppercase mt-8 text-center font-light text-gray-800 hover:text-black dark:text-gray-300 dark:hover:text-white transition-colors duration-200"
+                href={`shop/${selectedProduct?.productType}/${selectedProduct?.handle}`}>
+                View product details
+              </Link>
             </div>
-            <Link
-              className="text-sm underline mx-auto font-medium text-gray-800 hover:text-cypress-green dark:text-gray-300 dark:hover:text-cypress-green-light"
-              href={`shop/${selectedProduct?.productType}/${selectedProduct?.handle}`}>
-              View product details
-            </Link>
-          </div>
+          </motion.div>
         </div>
       </Drawer>
     </ThemeProvider>

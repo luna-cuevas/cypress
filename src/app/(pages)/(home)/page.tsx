@@ -181,8 +181,29 @@ export default function Home() {
     };
   }, []);
 
+  // Add this useEffect to set the --vh CSS variable
+  useEffect(() => {
+    // First we get the viewport height and we multiply it by 1% to get a value for a vh unit
+    const vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+
+    // We listen to the resize event
+    const handleResize = () => {
+      // We execute the same script as before
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <main className="w-screen justify-start flex h-[calc(100vh-50px)] lg:h-screen overflow-hidden relative bg-white dark:bg-black">
+    <main className="w-screen justify-start flex h-[calc(100vh-50px)] lg:h-screen mobile-full-height prevent-scroll relative bg-white dark:bg-black">
       <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-gray-900 dark:text-white">
         <NavList />
       </div>
@@ -249,7 +270,7 @@ export default function Home() {
           </div>
         </Link>
       </div>
-      <div className="absolute bottom-0 left-0 w-full h-fit z-50">
+      <div className="absolute bottom-0 left-0 w-full h-fit z-50 pb-2">
         <p className="text-center text-gray-900 dark:text-white text-sm">
           Scroll down to animate
         </p>

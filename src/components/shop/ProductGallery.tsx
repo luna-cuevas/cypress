@@ -114,7 +114,7 @@ const ProductGallery = (props: Props) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative overflow-hidden group/image group dark:hover:bg-white/20 hover:bg-gray-200 flex flex-col bg-gray-50 border dark:border-gray-700 box-border border-gray-200 dark:bg-white/10">
+                className="relative overflow-hidden group/image group dark:hover:bg-white/20 hover:bg-gray-200 flex flex-col bg-gray-50 dark:border dark:border-gray-700 box-border border-gray-200 dark:bg-white/10">
                 <Link
                   prefetch={true}
                   tabIndex={1}

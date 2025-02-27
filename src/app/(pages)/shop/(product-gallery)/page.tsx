@@ -315,8 +315,6 @@ const page = async ({
   const productCount = filteredProducts.length;
   const availableVendors = await fetchVendors();
 
-  console.log("filteredProducts", filteredProducts);
-
   return (
     <div className="z-0 relative min-h-[calc(100vh-70px)]">
       <ProductFilters

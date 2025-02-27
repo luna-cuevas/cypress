@@ -4,7 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { cartId, lineIds } = await req.json();
+    let { cartId, lineIds } = await req.json();
+
+    // Don't strip query parameters - they're needed for Shopify
+    // if (cartId && cartId.includes("?")) {
+    //   cartId = cartId.split("?")[0];
+    //   console.log("Normalized cart ID for removal:", cartId);
+    // }
+
+    // Ensure cart ID has the proper Shopify format
+    if (cartId && !cartId.startsWith("gid://shopify/Cart/")) {
+      cartId = `gid://shopify/Cart/${cartId}`;
+      console.log("Formatted cart ID for Shopify:", cartId);
+    }
+
+    console.log("Removing lines from cart:", { cartId, lineIds });
 
     const mutation = `
       mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -35,7 +49,6 @@ export async function POST(req: NextRequest) {
                         currencyCode
                       }
                       product {
-                        id
                         title
                         handle
                         vendor
@@ -61,6 +74,17 @@ export async function POST(req: NextRequest) {
         }
       }
     `;
+
+    // Also properly format the lineIds - remove the cart parameter if present
+    if (lineIds && lineIds.length > 0) {
+      lineIds = lineIds.map((lineId: string) => {
+        // If lineId contains a cart parameter, remove it
+        if (lineId.includes("?cart=")) {
+          return lineId.split("?cart=")[0];
+        }
+        return lineId;
+      });
+    }
 
     const variables = {
       cartId,
@@ -88,20 +112,48 @@ export async function POST(req: NextRequest) {
     });
 
     const responseData = await response.json();
+    console.log("Remove cart lines response:", responseData);
 
-    if (responseData.data && responseData.data.cartLinesRemove.cart) {
+    // Extract user errors if they exist
+    const userErrors = responseData.data?.cartLinesRemove?.userErrors || [];
+
+    // Check if any errors are about cart not existing
+    const cartNotFound = userErrors.some((err: { message: string }) =>
+      err.message.includes("cart does not exist")
+    );
+
+    if (
+      responseData.data &&
+      responseData.data.cartLinesRemove &&
+      responseData.data.cartLinesRemove.cart
+    ) {
       return NextResponse.json({
         cart: responseData.data.cartLinesRemove.cart,
+        userErrors: userErrors,
       });
+    } else if (cartNotFound) {
+      // Cart not found case, return 404
+      return NextResponse.json(
+        {
+          error: "Cart not found",
+          details: responseData,
+          userErrors: userErrors,
+        },
+        { status: 404 }
+      );
     } else {
       return NextResponse.json(
-        { error: "Failed to remove items from cart", details: responseData },
+        {
+          error: "Failed to remove lines from cart",
+          details: responseData,
+          userErrors: userErrors,
+        },
         { status: 500 }
       );
     }
   } catch (error: any) {
     return NextResponse.json(
-      { error: "Failed to remove items from cart", details: error.message },
+      { error: "Failed to remove lines from cart", details: error.message },
       { status: 500 }
     );
   }

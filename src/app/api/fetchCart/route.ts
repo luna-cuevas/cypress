@@ -2,7 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { cartId } = await req.json();
+    let { cartId } = await req.json();
+
+    // Don't strip query parameters - they're needed for Shopify
+    // if (cartId && cartId.includes("?")) {
+    //   cartId = cartId.split("?")[0];
+    //   console.log("Normalized cart ID for fetch:", cartId);
+    // }
+
+    // Ensure cart ID has the proper Shopify format
+    if (cartId && !cartId.startsWith("gid://shopify/Cart/")) {
+      cartId = `gid://shopify/Cart/${cartId}`;
+      console.log("Formatted cart ID for Shopify:", cartId);
+    }
+
+    console.log("Fetching cart with ID:", cartId);
 
     const query = `
       query getCart($cartId: ID!) {
@@ -78,6 +92,7 @@ export async function POST(req: NextRequest) {
     });
 
     const responseData = await response.json();
+    console.log("Fetch cart response:", responseData);
 
     if (responseData.data && responseData.data.cart) {
       return NextResponse.json({
@@ -85,6 +100,17 @@ export async function POST(req: NextRequest) {
       });
     } else {
       console.error("Failed to fetch cart:", responseData);
+
+      // Check if this is a "cart not found" case (which is normal and should not be treated as a server error)
+      // Shopify returns null for cart when the ID doesn't exist
+      if (responseData.data && responseData.data.cart === null) {
+        return NextResponse.json(
+          { status: "cart_not_found", message: "Cart not found" },
+          { status: 404 }
+        );
+      }
+
+      // For actual errors (not just missing cart)
       return NextResponse.json(
         { error: "Failed to fetch cart", details: responseData },
         { status: 500 }

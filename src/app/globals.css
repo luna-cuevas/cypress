@@ -608,3 +608,25 @@ button.peer.w-full.h-full.bg-transparent.text-blue-gray-700.font-sans.font-norma
     @apply bg-black border-white/10;
   }
 }
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix for mobile viewport height issues */
+.mobile-full-height {
+  height: 100vh; /* Fallback */
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+.prevent-scroll {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}

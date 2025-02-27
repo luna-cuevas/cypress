@@ -2,9 +2,38 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+// Add a middleware to log all requests
+export async function middleware(req: NextRequest) {
+  console.log("Middleware for updateCartLines called", {
+    url: req.url,
+    method: req.method,
+  });
+  return NextResponse.next();
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { cartId, lines } = await req.json();
+    console.log("updateCartLines POST handler called", {
+      url: req.url,
+      method: req.method,
+    });
+
+    const body = await req.json();
+    console.log("updateCartLines API received request:", body);
+
+    let { cartId, lines } = body;
+
+    // Don't strip query parameters - they're needed for Shopify
+    // if (cartId && cartId.includes("?")) {
+    //   cartId = cartId.split("?")[0];
+    //   console.log("Normalized cart ID:", cartId);
+    // }
+
+    // Ensure cart ID has the proper Shopify format
+    if (cartId && !cartId.startsWith("gid://shopify/Cart/")) {
+      cartId = `gid://shopify/Cart/${cartId}`;
+      console.log("Formatted cart ID for Shopify:", cartId);
+    }
 
     const mutation = `
       mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
@@ -89,13 +118,43 @@ export async function POST(req: NextRequest) {
 
     const responseData = await response.json();
 
-    if (responseData.data && responseData.data.cartLinesUpdate.cart) {
+    // Extract user errors if they exist
+    const userErrors = responseData.data?.cartLinesUpdate?.userErrors || [];
+
+    // Check if any errors are about cart not existing
+    const cartNotFound = userErrors.some((err: { message: string }) =>
+      err.message.includes("cart does not exist")
+    );
+
+    if (
+      responseData.data &&
+      responseData.data.cartLinesUpdate &&
+      responseData.data.cartLinesUpdate.cart
+    ) {
+      console.log("Successfully updated cart lines");
+      // Include userErrors in the response even when successful
       return NextResponse.json({
         cart: responseData.data.cartLinesUpdate.cart,
+        userErrors: userErrors,
       });
-    } else {
+    } else if (cartNotFound) {
+      // Cart not found case, return 404
       return NextResponse.json(
-        { error: "Failed to update cart lines", details: responseData },
+        {
+          error: "Cart not found",
+          details: responseData,
+          userErrors: userErrors,
+        },
+        { status: 404 }
+      );
+    } else {
+      console.error("Failed to update cart lines:", responseData);
+      return NextResponse.json(
+        {
+          error: "Failed to update cart lines",
+          details: responseData,
+          userErrors: userErrors,
+        },
         { status: 500 }
       );
     }
