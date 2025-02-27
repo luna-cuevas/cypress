@@ -182,7 +182,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="w-screen justify-start flex h-screen overflow-hidden relative bg-white dark:bg-black">
+    <main className="w-screen justify-start flex h-[calc(100vh-50px)] lg:h-screen overflow-hidden relative bg-white dark:bg-black">
       <div className="right-[4%] bottom-[10%] my-auto hidden w-fit h-fit absolute lg:flex items-center justify-between text-gray-900 dark:text-white">
         <NavList />
       </div>
