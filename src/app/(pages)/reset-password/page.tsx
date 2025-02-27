@@ -7,26 +7,25 @@ import { useRouter } from "next/navigation";
 import AuthCarousel from "@/components/common/AuthCarousel";
 import { motion } from "framer-motion";
 
-export default function SignUpPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
 
   // Form fields
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otp, setOtp] = useState("");
 
   // UI states
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState<"details" | "verification">(
-    "details"
+  const [currentStep, setCurrentStep] = useState<"email" | "verification">(
+    "email"
   );
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Auth methods
-  const { sendOtp, verifyOtpAndSetPassword } = useAuth();
+  const { sendResetOtp, verifyResetOtpAndSetPassword } = useAuth();
 
   // Carousel images
   const carouselImages = [
@@ -36,13 +35,14 @@ export default function SignUpPage() {
     "/hero-images/hero-img-4.webp",
   ];
 
-  const handleSendOtp = async (e: React.FormEvent) => {
+  const handleSendResetOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccessMessage("");
 
     // Basic validation
-    if (!email || !firstName || !lastName) {
-      setError("All fields are required");
+    if (!email) {
+      setError("Email is required");
       return;
     }
 
@@ -56,8 +56,15 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      await sendOtp(email, firstName, lastName);
-      setCurrentStep("verification");
+      const result = await sendResetOtp(email);
+      if (result.success) {
+        setCurrentStep("verification");
+        setSuccessMessage(
+          result.message || "Verification code sent successfully"
+        );
+      } else {
+        setError(result.error || "Failed to send verification code");
+      }
     } catch (error: any) {
       setError(error.message || "Failed to send verification code");
     } finally {
@@ -65,9 +72,10 @@ export default function SignUpPage() {
     }
   };
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccessMessage("");
 
     // Validation
     if (!otp) {
@@ -89,15 +97,18 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      const result = await verifyOtpAndSetPassword(email, otp, password);
-      // Use the redirectUrl if available, otherwise default to /account
-      if (result.redirectUrl) {
-        router.push(result.redirectUrl);
+      const result = await verifyResetOtpAndSetPassword(email, otp, password);
+      if (result.success) {
+        setSuccessMessage(result.message || "Password reset successfully");
+        // Redirect after a short delay to show the success message
+        setTimeout(() => {
+          router.push(result.redirectUrl || "/login");
+        }, 2000);
       } else {
-        router.push("/account");
+        setError(result.error || "Failed to reset password");
       }
     } catch (error: any) {
-      setError(error.message || "Failed to verify email or set password");
+      setError(error.message || "Failed to reset password");
     } finally {
       setLoading(false);
     }
@@ -105,11 +116,18 @@ export default function SignUpPage() {
 
   const handleResendOtp = async () => {
     setError("");
+    setSuccessMessage("");
     setLoading(true);
 
     try {
-      await sendOtp(email, firstName, lastName);
-      setError("");
+      const result = await sendResetOtp(email);
+      if (result.success) {
+        setSuccessMessage(
+          result.message || "Verification code resent successfully"
+        );
+      } else {
+        setError(result.error || "Failed to resend verification code");
+      }
     } catch (error: any) {
       setError(error.message || "Failed to resend verification code");
     } finally {
@@ -117,9 +135,10 @@ export default function SignUpPage() {
     }
   };
 
-  const goBackToDetails = () => {
-    setCurrentStep("details");
+  const goBackToEmail = () => {
+    setCurrentStep("email");
     setError("");
+    setSuccessMessage("");
   };
 
   // Animation variants
@@ -164,7 +183,7 @@ export default function SignUpPage() {
               src="/cypress-logo.svg"
               alt="Cypress Logo"
               fill
-              className="opacity-90 object-contain dark:invert "
+              className="opacity-90 object-contain dark:invert"
             />
           </div>
 
@@ -172,23 +191,30 @@ export default function SignUpPage() {
             <motion.h2
               className="text-2xl font-extralight uppercase tracking-[0.25em] text-gray-900 dark:text-white"
               variants={itemVariants}>
-              {currentStep === "details"
-                ? "Become a Member"
-                : "Verify Your Email"}
+              {currentStep === "email" ? "Reset Password" : "Verify Your Email"}
             </motion.h2>
             <div className="mt-3 mx-auto h-px w-12 bg-cypress-green/30"></div>
             <motion.p
               className="mt-4 text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed"
               variants={itemVariants}>
-              {currentStep === "details"
-                ? "Join our exclusive collection to access curated fashion selections and personalized style recommendations"
+              {currentStep === "email"
+                ? "Enter your email address and we'll send you a verification code to reset your password"
                 : `We've sent a verification code to ${email}. Please check your inbox for the code.`}
             </motion.p>
           </div>
 
-          {currentStep === "details" ? (
-            // Step 1: User details form - elegantly styled
-            <form className="space-y-7" onSubmit={handleSendOtp}>
+          {successMessage && (
+            <motion.div
+              className="mb-6 text-green-600 text-center text-sm px-4 py-3 border border-green-200 dark:border-green-900/30 bg-green-50 dark:bg-green-900/10 rounded-sm"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}>
+              {successMessage}
+            </motion.div>
+          )}
+
+          {currentStep === "email" ? (
+            // Step 1: Enter email form
+            <form className="space-y-7" onSubmit={handleSendResetOtp}>
               {error && (
                 <motion.div
                   className="text-red-500 text-center text-sm px-4 py-3 border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 rounded-sm"
@@ -198,83 +224,24 @@ export default function SignUpPage() {
                 </motion.div>
               )}
 
-              <div className=" grid grid-cols-2 gap-4">
-                {/* First Name Field */}
-                <motion.div className="group relative" variants={itemVariants}>
-                  <input
-                    id="first-name"
-                    name="firstName"
-                    type="text"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="peer w-full flex-1 px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
-                    placeholder="First Name"
-                  />
-                  <label
-                    htmlFor="first-name"
-                    className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
-                    First Name
-                  </label>
-                </motion.div>
-
-                {/* Last Name Field */}
-                <motion.div className="group relative" variants={itemVariants}>
-                  <input
-                    id="last-name"
-                    name="lastName"
-                    type="text"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="peer w-full px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
-                    placeholder="Last Name"
-                  />
-                  <label
-                    htmlFor="last-name"
-                    className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
-                    Last Name
-                  </label>
-                </motion.div>
-
-                {/* Email Field */}
-                <motion.div
-                  className="group relative col-span-2"
-                  variants={itemVariants}>
-                  <input
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="peer w-full  px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
-                    placeholder="Email address"
-                  />
-                  <label
-                    htmlFor="email-address"
-                    className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
-                    Email Address
-                  </label>
-                </motion.div>
-              </div>
-
-              <motion.div
-                className="text-xs text-gray-500 dark:text-gray-400 text-center"
-                variants={itemVariants}>
-                By creating an account, you agree to our{" "}
-                <Link
-                  href="/terms-of-service"
-                  className="text-gray-600 dark:text-gray-300 hover:text-cypress-green dark:hover:text-cypress-green-light underline">
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy-policy"
-                  className="text-gray-600 dark:text-gray-300 hover:text-cypress-green dark:hover:text-cypress-green-light underline">
-                  Privacy Policy
-                </Link>
+              {/* Email Field */}
+              <motion.div className="group relative" variants={itemVariants}>
+                <input
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="peer w-full px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
+                  placeholder="Email address"
+                />
+                <label
+                  htmlFor="email-address"
+                  className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
+                  Email Address
+                </label>
               </motion.div>
 
               <motion.div variants={itemVariants}>
@@ -306,7 +273,7 @@ export default function SignUpPage() {
                       <span>Processing</span>
                     </div>
                   ) : (
-                    "Continue"
+                    "Send Verification Code"
                   )}
                 </motion.button>
               </motion.div>
@@ -317,13 +284,13 @@ export default function SignUpPage() {
                 <Link
                   href="/login"
                   className="font-light text-gray-500 hover:text-cypress-green dark:text-gray-400 dark:hover:text-cypress-green-light transition-colors">
-                  Already have an account? Sign in
+                  Remember your password? Sign in
                 </Link>
               </motion.div>
             </form>
           ) : (
-            // Step 2: Verification and password setup - elegantly styled
-            <form className="space-y-7" onSubmit={handleVerifyOtp}>
+            // Step 2: Verification and password reset form
+            <form className="space-y-7" onSubmit={handleResetPassword}>
               {error && (
                 <motion.div
                   className="text-red-500 text-center text-sm px-4 py-3 border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/10 rounded-sm"
@@ -362,7 +329,7 @@ export default function SignUpPage() {
                   </p>
                 </motion.div>
 
-                {/* Password Field */}
+                {/* New Password Field */}
                 <motion.div className="group relative" variants={itemVariants}>
                   <input
                     id="password"
@@ -373,12 +340,12 @@ export default function SignUpPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="peer w-full px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
-                    placeholder="Password"
+                    placeholder="New Password"
                   />
                   <label
                     htmlFor="password"
                     className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
-                    Password
+                    New Password
                   </label>
                 </motion.div>
 
@@ -393,12 +360,12 @@ export default function SignUpPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="peer w-full px-0 py-2 border-0 border-b focus:border-0 focus:border-b bg-transparent border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-0 focus:border-cypress-green placeholder-transparent text-base"
-                    placeholder="Confirm Password"
+                    placeholder="Confirm New Password"
                   />
                   <label
                     htmlFor="confirmPassword"
                     className="absolute left-0 -top-3.5 text-gray-600 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:dark:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:dark:text-gray-300 peer-focus:text-xs tracking-wide">
-                    Confirm Password
+                    Confirm New Password
                   </label>
                 </motion.div>
               </div>
@@ -430,16 +397,16 @@ export default function SignUpPage() {
                           fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      <span>Verifying</span>
+                      <span>Resetting Password</span>
                     </div>
                   ) : (
-                    "Complete Registration"
+                    "Reset Password"
                   )}
                 </motion.button>
 
                 <motion.button
                   type="button"
-                  onClick={goBackToDetails}
+                  onClick={goBackToEmail}
                   className="text-xs text-gray-500 hover:text-cypress-green dark:text-gray-400 dark:hover:text-cypress-green-light transition-colors py-1"
                   variants={itemVariants}>
                   Use a different email address
@@ -455,8 +422,8 @@ export default function SignUpPage() {
         <div className="h-full w-full relative">
           <AuthCarousel
             images={carouselImages}
-            title="Crafted for Distinction"
-            subtitle="Become part of an exclusive world where timeless elegance meets bold expression. Your personal collection awaits."
+            title="Welcome Back"
+            subtitle="Reset your password to regain access to your account and continue your journey with us."
             animationType="crossfade"
           />
         </div>

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { globalStateAtom } from "@/context/atoms";
-import { useSupabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import {
   Input,
@@ -13,22 +12,42 @@ import {
   Popover,
   PopoverHandler,
   PopoverContent,
+  Spinner,
 } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { toast } from "react-toastify";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
+
+// Define proper types for profile data
+type ProfileData = {
+  user: User;
+  profile: {
+    id: string;
+    gender?: string;
+    birth_date?: string | null;
+    location?: {
+      address1?: string;
+      address2?: string;
+      city?: string;
+      state?: string;
+      zip_code?: string;
+    };
+    phone_number?: string;
+  };
+};
 
 type Props = {
-  initialProfile: any;
   user: User;
 };
 
-export default function ProfileForm({ initialProfile, user }: Props) {
+export default function ProfileForm({ user }: Props) {
   const [state, setState] = useAtom(globalStateAtom);
-  const supabase = useSupabase();
-  const [date, setDate] = useState<Date | undefined>(
-    initialProfile?.birth_date ? new Date(initialProfile.birth_date) : undefined
-  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -37,13 +56,70 @@ export default function ProfileForm({ initialProfile, user }: Props) {
   });
 
   const [formData, setFormData] = useState({
-    firstName: user?.user_metadata?.first_name || "",
-    lastName: user?.user_metadata?.last_name || "",
-    gender: initialProfile?.gender || "",
-    birthDate: initialProfile?.birth_date || null,
-    location: initialProfile?.location || "",
-    phoneNumber: initialProfile?.phone_number || "",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    birthDate: null as string | null,
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    phoneNumber: "",
   });
+
+  // Fetch profile data when component mounts
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(
+          `/api/account/get-profile?userId=${user.id}`
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch profile data");
+        }
+
+        const data = await response.json();
+        setProfileData(data);
+
+        // Update form data with fetched profile
+        setFormData({
+          firstName: data.user.user_metadata?.first_name || "",
+          lastName: data.user.user_metadata?.last_name || "",
+          gender: data.profile?.gender || "",
+          birthDate: data.profile?.birth_date || null,
+          address1: data.profile?.location?.address1 || "",
+          address2: data.profile?.location?.address2 || "",
+          city: data.profile?.location?.city || "",
+          state: data.profile?.location?.state || "",
+          zipCode: data.profile?.location?.zip_code || "",
+          phoneNumber: data.profile?.phone_number || "",
+        });
+
+        // Set date for date picker if birth_date exists
+        if (data.profile?.birth_date) {
+          setDate(new Date(data.profile.birth_date));
+        }
+      } catch (error: any) {
+        console.error("Error fetching profile:", error);
+        setError(error.message || "Failed to load profile data");
+        toast.error(
+          error.message ||
+            "Failed to load profile data. Please refresh the page."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user?.id) {
+      fetchProfileData();
+    }
+  }, [user?.id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -67,7 +143,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
     } else {
       setFormData({
         ...formData,
-        birthDate: "",
+        birthDate: null,
       });
     }
   };
@@ -80,11 +156,22 @@ export default function ProfileForm({ initialProfile, user }: Props) {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: passwordData.newPassword,
+      const response = await fetch("/api/account/update-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          newPassword: passwordData.newPassword,
+          userId: user.id,
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update password");
+      }
 
       toast.success("Password updated successfully!");
       setPasswordData({
@@ -103,27 +190,33 @@ export default function ProfileForm({ initialProfile, user }: Props) {
     e.preventDefault();
 
     try {
-      // Update user metadata
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+      const response = await fetch("/api/account/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          userId: user.id,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          gender: formData.gender,
+          birthDate: formData.birthDate,
+          location: {
+            address1: formData.address1,
+            address2: formData.address2,
+            city: formData.city,
+            state: formData.state,
+            zipCode: formData.zipCode,
+          },
+          phoneNumber: formData.phoneNumber,
+        }),
       });
 
-      if (updateError) throw updateError;
+      const data = await response.json();
 
-      // Update profile in profiles table
-      const { error: profileError } = await supabase.from("profiles").upsert({
-        id: user.id,
-        gender: formData.gender,
-        birth_date: formData.birthDate || null,
-        location: formData.location,
-        phone_number: formData.phoneNumber,
-        updated_at: new Date().toISOString(),
-      });
-
-      if (profileError) throw profileError;
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update profile");
+      }
 
       // Update global state
       setState((prev) => ({
@@ -152,21 +245,42 @@ export default function ProfileForm({ initialProfile, user }: Props) {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[500px]">
+        <Spinner className="h-12 w-12 text-cypress-green" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-[500px]">
+        <p className="text-red-500 mb-6">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-cypress-green hover:bg-cypress-green-dark text-white font-medium rounded-md transition-colors duration-200">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-8">
+    <div className="max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-12">
         {/* Personal Information Section */}
-        <div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-6">
+        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 sm:p-8">
+          <h3 className="text-lg font-light tracking-wide text-gray-900 dark:text-white uppercase mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">
             Personal Information
           </h3>
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Name Fields */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
                   First Name
                 </Typography>
                 <Input
@@ -176,14 +290,14 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                   value={formData.firstName}
                   onChange={handleChange}
                   labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
                   crossOrigin={undefined}
                 />
               </div>
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
                   Last Name
                 </Typography>
                 <Input
@@ -193,7 +307,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                   value={formData.lastName}
                   onChange={handleChange}
                   labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
                   crossOrigin={undefined}
                 />
               </div>
@@ -204,7 +318,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
                   Gender
                 </Typography>
                 <Select
@@ -214,7 +328,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                     handleChange({ target: { name: "gender", value } } as any)
                   }
                   labelProps={{ className: "hidden" }}
-                  className="!border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white">
+                  className="!border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light">
                   <Option value="">Select Gender</Option>
                   <Option value="male">Male</Option>
                   <Option value="female">Female</Option>
@@ -226,7 +340,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
                   Birth Date
                 </Typography>
                 <Popover placement="bottom">
@@ -238,7 +352,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                       value={date ? format(date, "PP") : ""}
                       onChange={() => {}}
                       labelProps={{ className: "hidden" }}
-                      className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white cursor-pointer !appearance-none "
+                      className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white cursor-pointer !appearance-none font-light"
                       crossOrigin={undefined}
                     />
                   </PopoverHandler>
@@ -252,7 +366,7 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                       captionLayout="dropdown"
                       defaultMonth={date || new Date(2000, 0)}
                       footer={false}
-                      className="border-0 "
+                      className="border-0"
                       classNames={{
                         caption:
                           "flex justify-center py-2 relative items-center",
@@ -291,46 +405,137 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                 </Popover>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Contact Information */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
+        {/* Address Section */}
+        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 sm:p-8">
+          <h3 className="text-lg font-light tracking-wide text-gray-900 dark:text-white uppercase mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">
+            Shipping Address
+          </h3>
+
+          <div className="grid grid-cols-1 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="sm:col-span-2">
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
-                  Location
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                  Address Line 1
                 </Typography>
                 <Input
-                  name="location"
+                  name="address1"
                   size="lg"
-                  placeholder="Location"
-                  value={formData.location}
+                  placeholder="Address Line 1"
+                  value={formData.address1}
                   onChange={handleChange}
                   labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
                   crossOrigin={undefined}
                 />
               </div>
+
+              <div className="sm:col-span-2">
+                <Typography
+                  variant="small"
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                  Address Line 2 (Optional)
+                </Typography>
+                <Input
+                  name="address2"
+                  size="lg"
+                  placeholder="Apartment, suite, etc."
+                  value={formData.address2}
+                  onChange={handleChange}
+                  labelProps={{ className: "hidden" }}
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                  crossOrigin={undefined}
+                />
+              </div>
+
               <div>
                 <Typography
                   variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                  City
+                </Typography>
+                <Input
+                  name="city"
+                  size="lg"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={handleChange}
+                  labelProps={{ className: "hidden" }}
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                  crossOrigin={undefined}
+                />
+              </div>
+
+              <div>
+                <Typography
+                  variant="small"
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                  State
+                </Typography>
+                <Input
+                  name="state"
+                  size="lg"
+                  placeholder="State"
+                  value={formData.state}
+                  onChange={handleChange}
+                  labelProps={{ className: "hidden" }}
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                  crossOrigin={undefined}
+                />
+              </div>
+
+              <div>
+                <Typography
+                  variant="small"
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                  ZIP Code
+                </Typography>
+                <Input
+                  name="zipCode"
+                  size="lg"
+                  placeholder="ZIP"
+                  value={formData.zipCode}
+                  onChange={handleChange}
+                  labelProps={{ className: "hidden" }}
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                  crossOrigin={undefined}
+                />
+              </div>
+
+              <div>
+                <Typography
+                  variant="small"
+                  className="mb-2 font-medium text-gray-700 dark:text-gray-300">
                   Phone Number
                 </Typography>
                 <Input
                   name="phoneNumber"
-                  size="lg"
                   type="tel"
                   id="phoneNumber"
-                  pattern="\([0-9]{3}\) [0-9]{3}-[0-9]{4}"
                   placeholder="Phone Number"
                   value={formData.phoneNumber}
                   onChange={(e) => {
-                    const phoneNumber = e.target.value;
-                    const formattedPhoneNumber = phoneNumber.replace(
-                      /(\d{3})(\d{3})(\d{4})/,
-                      "($1) $2-$3"
-                    );
+                    const phoneNumber = e.target.value.replace(/\D/g, "");
+                    const formattedPhoneNumber =
+                      phoneNumber.length > 0
+                        ? phoneNumber
+                            .replace(
+                              /(\d{0,3})(\d{0,3})(\d{0,4})/,
+                              (_, p1, p2, p3) => {
+                                let parts = [];
+                                if (p1) parts.push(`(${p1}`);
+                                if (p2) parts.push(`) ${p2}`);
+                                if (p3) parts.push(`-${p3}`);
+                                return parts.join("");
+                              }
+                            )
+                            .trim()
+                        : "";
+
                     handleChange({
                       target: {
                         name: "phoneNumber",
@@ -338,8 +543,8 @@ export default function ProfileForm({ initialProfile, user }: Props) {
                       },
                     } as any);
                   }}
+                  className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
                   labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
                   crossOrigin={undefined}
                 />
               </div>
@@ -348,60 +553,100 @@ export default function ProfileForm({ initialProfile, user }: Props) {
         </div>
 
         {/* Security Section */}
-        <div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-6">
-            Security
+        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 sm:p-8">
+          <h3 className="text-lg font-light tracking-wide text-gray-900 dark:text-white uppercase flex items-center mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">
+            <LockClosedIcon className="w-5 h-5 mr-2 inline" />
+            Account Security
           </h3>
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {!isUpdatingPassword ? (
               <div>
-                <Typography
-                  variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
-                  New Password
-                </Typography>
-                <Input
-                  type="password"
-                  name="newPassword"
-                  size="lg"
-                  placeholder="Enter new password"
-                  value={passwordData.newPassword}
-                  onChange={handlePasswordChange}
-                  labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
-                  crossOrigin={undefined}
-                />
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Protect your account with a strong, unique password that you
+                  don't use for other websites.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsUpdatingPassword(true)}
+                  className="px-6 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-md text-gray-800 dark:text-white font-medium transition-colors duration-200">
+                  Change Password
+                </button>
               </div>
-              <div>
-                <Typography
-                  variant="small"
-                  className="mb-2 font-medium text-gray-900 dark:text-white">
-                  Confirm New Password
-                </Typography>
-                <Input
-                  type="password"
-                  name="confirmNewPassword"
-                  size="lg"
-                  placeholder="Confirm new password"
-                  value={passwordData.confirmNewPassword}
-                  onChange={handlePasswordChange}
-                  labelProps={{ className: "hidden" }}
-                  className="w-full !border-gray-300 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white"
-                  crossOrigin={undefined}
-                />
+            ) : (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
+                    <Typography
+                      variant="small"
+                      className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                      New Password
+                    </Typography>
+                    <Input
+                      type="password"
+                      name="newPassword"
+                      size="lg"
+                      placeholder="Enter new password"
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                      labelProps={{ className: "hidden" }}
+                      className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                      crossOrigin={undefined}
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Typography
+                      variant="small"
+                      className="mb-2 font-medium text-gray-700 dark:text-gray-300">
+                      Confirm New Password
+                    </Typography>
+                    <Input
+                      type="password"
+                      name="confirmNewPassword"
+                      size="lg"
+                      placeholder="Confirm new password"
+                      value={passwordData.confirmNewPassword}
+                      onChange={handlePasswordChange}
+                      labelProps={{ className: "hidden" }}
+                      className="w-full !border-gray-200 dark:!border-gray-700 focus:!border-cypress-green dark:focus:!border-cypress-green bg-transparent text-gray-900 dark:text-white font-light"
+                      crossOrigin={undefined}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-4 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsUpdatingPassword(false);
+                      setPasswordData({
+                        currentPassword: "",
+                        newPassword: "",
+                        confirmNewPassword: "",
+                      });
+                    }}
+                    className="px-6 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-md text-gray-800 dark:text-white font-medium transition-colors duration-200">
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => handlePasswordSubmit(e as any)}
+                    className="px-6 py-2.5 bg-cypress-green hover:bg-cypress-green-light text-white font-medium rounded-md transition-colors duration-200">
+                    Update Password
+                  </button>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+                  Your password should be at least 8 characters and include a
+                  combination of numbers, letters, and special characters.
+                </p>
               </div>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Leave password fields empty if you do not want to change it.
-            </p>
+            )}
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="pt-6 w-fit mx-auto">
+        <div className="flex justify-center pt-4">
           <button
             type="submit"
-            className="w-fit sm:w-auto px-8 py-3 bg-cypress-green hover:bg-cypress-green-dark text-white font-medium rounded transition-colors duration-200">
+            className="w-fit px-10 py-3 bg-cypress-green hover:bg-cypress-green-light text-white font-medium rounded-md transition-colors duration-200">
             Save Changes
           </button>
         </div>

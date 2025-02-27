@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { useAuth } from "@/context/AuthContext";
-import { useSupabase } from "@/lib/supabase";
 
 interface FavoriteButtonProps {
   productId: string;
@@ -24,7 +23,6 @@ export default function FavoriteButton({
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
-  const supabase = useSupabase();
 
   // Convert price to number and handle empty or invalid values
   const normalizedPrice =
@@ -33,24 +31,23 @@ export default function FavoriteButton({
       : productPrice || 0;
 
   useEffect(() => {
-    const checkFavoriteStatus = async () => {
+    const fetchFavoriteStatus = async () => {
       if (!user) {
         setIsLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .from("favorites")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("product_id", productId);
+        const response = await fetch(
+          `/api/shop/favorites?userId=${user.id}&productId=${productId}`
+        );
 
-        if (error) {
-          console.error("Error checking favorite status:", error);
+        if (!response.ok) {
+          throw new Error("Failed to fetch favorite status");
         }
 
-        setIsFavorite(data && data.length > 0);
+        const data = await response.json();
+        setIsFavorite(data.isFavorite);
       } catch (err) {
         console.error("Error checking favorite status:", err);
       } finally {
@@ -58,8 +55,8 @@ export default function FavoriteButton({
       }
     };
 
-    checkFavoriteStatus();
-  }, [user, productId, supabase]);
+    fetchFavoriteStatus();
+  }, [user, productId]);
 
   const toggleFavorite = async () => {
     if (!user) {
@@ -71,26 +68,39 @@ export default function FavoriteButton({
     try {
       if (isFavorite) {
         // Remove from favorites
-        const { error } = await supabase
-          .from("favorites")
-          .delete()
-          .eq("user_id", user.id)
-          .eq("product_id", productId);
+        const response = await fetch(
+          `/api/shop/favorites?userId=${user.id}&productId=${productId}`,
+          {
+            method: "DELETE",
+          }
+        );
 
-        if (error) throw error;
+        if (!response.ok) {
+          throw new Error("Failed to remove from favorites");
+        }
+
         setIsFavorite(false);
       } else {
         // Add to favorites
-        const { error } = await supabase.from("favorites").insert({
-          user_id: user.id,
-          product_id: productId,
-          product_title: productTitle,
-          product_image: productImage,
-          product_price: normalizedPrice,
-          product_handle: productHandle,
+        const response = await fetch("/api/shop/favorites", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            productId,
+            productTitle,
+            productImage,
+            productPrice: normalizedPrice,
+            productHandle,
+          }),
         });
 
-        if (error) throw error;
+        if (!response.ok) {
+          throw new Error("Failed to add to favorites");
+        }
+
         setIsFavorite(true);
       }
     } catch (err) {

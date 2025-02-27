@@ -55,7 +55,7 @@ export default function ProfileMenu() {
   if (loading) return null;
 
   const hoverBackground =
-    "hover:text-black focus:text-black active:text-black dark:hover:text-white/80 dark:focus:text-white/80";
+    "hover:text-black focus:text-black active:text-black dark:text-white dark:hover:text-white/80 dark:focus:text-white/80";
 
   const renderMenuItems = () => (
     <>
@@ -123,8 +123,7 @@ export default function ProfileMenu() {
           className={`hover:bg-transparent focus:bg-transparent active:bg-transparent flex px-2 lg:py-[0.35rem] rounded-none justify-start lg:justify-end items-center ${hoverBackground} transition-all duration-200`}>
           <ListItem
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className={`${"text-black dark:text-white"} ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
-            {" "}
+            className={`text-black dark:text-white ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
             <ListItemPrefix>
               <UserCircleIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -145,9 +144,10 @@ export default function ProfileMenu() {
       <div className="hidden lg:block">
         <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
           <MenuHandler>
-            <MenuItem className="flex  border-b px-2 lg:py-[0.35rem] group rounded-none justify-end items-center hover:bg-transparent focus:bg-transparent active:bg-transparent">
+            <MenuItem
+              className={`hover:bg-transparent focus:bg-transparent active:bg-transparent flex px-2 lg:py-[0.35rem] rounded-none justify-start lg:justify-end items-center ${hoverBackground} transition-all duration-200`}>
               <ListItem
-                className={`dark:focus:text-white dark:text-white relative justify-center group-hover:text-black dark:group-hover:text-white flex gap-2 uppercase text-sm box-content underline-animation hover:bg-transparent focus:bg-transparent active:bg-transparent w-fit lg:p-0`}>
+                className={`${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
                 Account
               </ListItem>
             </MenuItem>

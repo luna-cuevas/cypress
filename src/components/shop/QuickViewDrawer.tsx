@@ -236,13 +236,13 @@ export function QuickViewDrawer(props: Props) {
                 product={product}
                 selectedVariant={selectedVariant}
               />
-              {/* <FavoriteButton
+              <FavoriteButton
                 productId={selectedProduct?.id}
                 productTitle={selectedProduct?.title}
                 productImage={selectedProduct?.images[0]?.src || ""}
                 productPrice={selectedProduct?.variants[0]?.variantPrice || 0}
                 productHandle={selectedProduct?.handle}
-              /> */}
+              />
             </div>
             <Link
               className="text-sm underline mx-auto font-medium text-gray-800 hover:text-cypress-green dark:text-gray-300 dark:hover:text-cypress-green-light"

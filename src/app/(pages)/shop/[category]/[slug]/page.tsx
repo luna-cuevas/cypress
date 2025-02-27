@@ -11,6 +11,7 @@ import { Motion } from "@/utils/Motion";
 import { Metadata } from "next";
 import NewsletterForm from "@/components/shop/NewsletterForm";
 import DesktopGalleryWithLightbox from "@/components/shop/DesktopGalleryWithLightbox";
+import FavoriteButton from "@/components/shop/FavoriteButton";
 
 type Props = {
   params: { category: string; slug: string };
@@ -720,7 +721,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                           product={product}
                           selectedVariant={selectedVariant}
                         />
-                        {/* <FavoriteButton
+                        <FavoriteButton
                           productId={product.id}
                           productTitle={product.title}
                           productImage={product.images[0]?.src || ""}
@@ -729,7 +730,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                             product.variants[0].variantPrice
                           }
                           productHandle={product.handle}
-                        /> */}
+                        />
                       </div>
                     </div>
                   </div>
