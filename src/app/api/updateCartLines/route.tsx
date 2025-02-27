@@ -23,17 +23,8 @@ export async function POST(req: NextRequest) {
 
     let { cartId, lines } = body;
 
-    // Don't strip query parameters - they're needed for Shopify
-    // if (cartId && cartId.includes("?")) {
-    //   cartId = cartId.split("?")[0];
-    //   console.log("Normalized cart ID:", cartId);
-    // }
-
-    // Ensure cart ID has the proper Shopify format
-    if (cartId && !cartId.startsWith("gid://shopify/Cart/")) {
-      cartId = `gid://shopify/Cart/${cartId}`;
-      console.log("Formatted cart ID for Shopify:", cartId);
-    }
+    console.log("updateCartLines cartId", cartId);
+    console.log("updateCartLines lines", lines);
 
     const mutation = `
       mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {

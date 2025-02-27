@@ -206,20 +206,6 @@ export default function Cart() {
       return;
     }
 
-    console.log("Updating cart line quantity:", lineId, quantity);
-
-    // Try to extract the cart ID from the line ID, if available
-    // Sometimes lineId includes cartId (lineID?cart=cartId)
-    const cartMatch = lineId.match(/cart=([^&]+)/);
-
-    // Use the cart ID from the line if available, otherwise use the one from state
-    // Don't strip query parameters - they're needed for Shopify
-    let cartIdToUse = state.cartId;
-    if (cartMatch && cartMatch[1]) {
-      console.log("Found cart reference in line ID, using:", cartMatch[1]);
-      cartIdToUse = cartMatch[1];
-    }
-
     // Prepare the lines for the update
     const lines = [
       {
@@ -233,7 +219,7 @@ export default function Cart() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ cartId: cartIdToUse, lines }),
+      body: JSON.stringify({ cartId: state.cartId, lines }),
     });
 
     console.log("Response status:", response.status);
@@ -253,26 +239,6 @@ export default function Cart() {
           "Cart ID mismatch detected. Will attempt to refresh cart with current ID."
         );
         toast.error("Unable to update cart. Refreshing cart data...");
-
-        // Try both cart IDs to recover the cart
-        if (cartIdToUse && cartIdToUse !== state.cartId) {
-          // First try with the extracted cart ID
-          try {
-            const extractedCartId = cartIdToUse;
-            await fetchCart(extractedCartId);
-
-            // If we still have cart items, the recovery worked
-            if (state.cartItems && state.cartItems.length > 0) {
-              console.log(
-                "Successfully recovered cart using extracted ID:",
-                extractedCartId
-              );
-              return;
-            }
-          } catch (err) {
-            console.error("Failed to recover with extracted cart ID:", err);
-          }
-        }
 
         // If above failed or wasn't attempted, try with state.cartId
         if (state.cartId) {
@@ -364,19 +330,7 @@ export default function Cart() {
       }
     }
 
-    // Try to extract the cart ID from the line ID, if available
-    const removeCartMatch = lineId.match(/cart=([^&]+)/);
-
-    // Use the cart ID from the line if available, otherwise use the one from state
-    // Don't strip query parameters - they're needed for Shopify
     let cartIdToUse = state.cartId;
-    if (removeCartMatch && removeCartMatch[1]) {
-      console.log(
-        "Found cart reference in line ID for removal, using:",
-        removeCartMatch[1]
-      );
-      cartIdToUse = removeCartMatch[1];
-    }
 
     const response = await fetch("/api/removeCartLines", {
       method: "POST",

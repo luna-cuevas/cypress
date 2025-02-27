@@ -6,17 +6,8 @@ export async function POST(req: NextRequest) {
   try {
     let { cartId, lineItems } = await req.json();
 
-    // Don't strip query parameters - they're needed for Shopify
-    // if (cartId && cartId.includes("?")) {
-    //   cartId = cartId.split("?")[0];
-    //   console.log("Normalized cart ID for adding lines:", cartId);
-    // }
-
-    // Ensure cart ID has the proper Shopify format
-    if (cartId && !cartId.startsWith("gid://shopify/Cart/")) {
-      cartId = `gid://shopify/Cart/${cartId}`;
-      console.log("Formatted cart ID for Shopify:", cartId);
-    }
+    console.log("addCartLines cartId", cartId);
+    console.log("addCartLines lineItems", lineItems);
 
     console.log("Adding lines to cart:", cartId);
 
