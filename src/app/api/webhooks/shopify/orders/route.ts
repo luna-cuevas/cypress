@@ -104,8 +104,6 @@ export async function POST(req: Request) {
       quantity: item.quantity,
       price: item.price,
       currency_code: orderData.currency,
-      image_url: item.image?.src,
-      image_alt: item.image?.alt,
     }));
 
     const { error: itemsError } = await supabase
