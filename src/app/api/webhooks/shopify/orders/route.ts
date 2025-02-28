@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
-        user_id: userData?.id,
+        user_id: userData?.user_id,
         shopify_order_id: orderData.id,
         order_number: orderData.order_number,
         email: orderData.email, // Store email even if user not found
