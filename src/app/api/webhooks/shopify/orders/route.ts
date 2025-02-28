@@ -37,6 +37,26 @@ export async function POST(req: Request) {
     // Parse the order data
     const orderData = JSON.parse(body);
 
+    // Check if order already exists in the database
+    const { data: existingOrder, error: checkError } = await supabase
+      .from("orders")
+      .select("id")
+      .eq("shopify_order_id", orderData.id)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error("Error checking existing order:", checkError);
+      return NextResponse.json(
+        { error: "Failed to check for existing order" },
+        { status: 500 }
+      );
+    }
+
+    // If order already exists, return early
+    if (existingOrder) {
+      return NextResponse.json({ message: "order already in table" });
+    }
+
     // Get user_id from customer email using Supabase auth
     const { data: userData, error: userError } = await supabase
       .from("profiles") // Make sure this matches your table name

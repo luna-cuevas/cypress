@@ -60,7 +60,6 @@ const Gallery: React.FC<Props> = ({ products }) => {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 40 }}
-              viewport={{ once: false, amount: 0.15 }}
               transition={{
                 duration: 1,
                 delay: index * 0.08,

@@ -140,10 +140,6 @@ export default function Cart() {
       // Handle various response status codes
       if (response.ok) {
         if (responseData.cart) {
-          console.log(
-            "Successfully fetched cart with ID:",
-            responseData.cart.id
-          );
           setState((prevState) => ({
             // Use function form to avoid stale state
             ...prevState,
@@ -195,9 +191,7 @@ export default function Cart() {
   }, [state.cartId]);
 
   // Debug log when cart items change
-  useEffect(() => {
-    console.log("Cart items updated:", state.cartItems);
-  }, [state.cartItems]);
+  useEffect(() => {}, [state.cartItems]);
 
   // Function to update cart line quantity
   const updateCartLineQuantity = async (lineId: string, quantity: number) => {
@@ -222,10 +216,7 @@ export default function Cart() {
       body: JSON.stringify({ cartId: state.cartId, lines }),
     });
 
-    console.log("Response status:", response.status);
-
     const data = await response.json();
-    console.log("Response data:", data);
 
     // Check for user errors directly in the response
     if (data.userErrors && data.userErrors.length > 0) {
@@ -291,8 +282,6 @@ export default function Cart() {
     }
 
     if (data.cart) {
-      console.log("Updated cart:", data.cart);
-
       // Make a copy of cartItems to ensure state update triggers a re-render
       const updatedCartItems = data.cart.lines.edges.map(mapCartLine);
 

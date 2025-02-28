@@ -88,7 +88,7 @@ export default function OrderHistory() {
     };
 
     fetchOrders();
-  }, [user]);
+  }, []);
 
   if (loading) {
     return (

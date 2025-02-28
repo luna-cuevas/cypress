@@ -20,7 +20,6 @@ type Props = {
 
 // Helper function to fetch product metadata
 async function fetchProductMetadata(handle: string) {
-  console.log(`Fetching product metadata for product handle: ${handle}`);
   try {
     // Use both handle and product params for compatibility with API
     const res = await fetch(
@@ -66,10 +65,6 @@ async function fetchProductMetadata(handle: string) {
       });
     }
 
-    console.log(
-      `Metadata API: Fetched product metadata with ${metaobjectCount} metaobject references, ${resolvedCount} resolved`
-    );
-
     return data;
   } catch (error) {
     console.error("Error fetching product metadata:", error);
@@ -79,7 +74,6 @@ async function fetchProductMetadata(handle: string) {
 
 // Helper function to fetch metafields
 async function fetchProductMetafields(id: string) {
-  console.log(`Fetching product metafields for product ID: ${id}`);
   try {
     // Use both product and id params for compatibility
     const res = await fetch(
@@ -160,10 +154,6 @@ async function fetchProductMetafields(id: string) {
       resolvedCount: resolvedRefs.length,
       totalCount: flatMetafields.length,
     };
-
-    console.log(
-      `Metafields API: Fetched ${flatMetafields.length} metafields with ${resolvedRefs.length} resolved references`
-    );
 
     // Make sure we always return both formats for compatibility
     return {
@@ -484,7 +474,6 @@ export default async function ProductPage({ params, searchParams }: Props) {
   const { slug } = params;
   const variantSize = searchParams.variantSize;
   const selectedTab = searchParams.tab || "description"; // Default to description if no tab is specified
-  console.log(`📝 Rendering product page for: ${slug}`);
 
   try {
     // Fetch product data
@@ -521,9 +510,6 @@ export default async function ProductPage({ params, searchParams }: Props) {
 
     // Fetch enhanced metadata using our new API endpoint
     const metadata = await fetchProductMetadata(slug);
-
-    // Log for debugging
-    console.log("product", product);
 
     // Enhance the product object with both metafields and metadata
     const enhancedProduct = {
@@ -570,11 +556,6 @@ export default async function ProductPage({ params, searchParams }: Props) {
       },
     };
 
-    console.log(
-      `🔄 Created enhanced product with resolved metaobjects:`,
-      enhancedProduct._debug
-    );
-
     const selectedVariant = product.variants?.find(
       (variant: any) => variant.variantTitle === variantSize
     );
@@ -589,7 +570,6 @@ export default async function ProductPage({ params, searchParams }: Props) {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            viewport={{ once: false, amount: 0.15 }}
             transition={{
               duration: 0.5,
               delay: 0.1,
@@ -655,7 +635,6 @@ export default async function ProductPage({ params, searchParams }: Props) {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
-                viewport={{ once: false, amount: 0.15 }}
                 transition={{
                   duration: 0.5,
                   delay: 0.5,

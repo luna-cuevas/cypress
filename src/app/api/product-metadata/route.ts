@@ -9,8 +9,6 @@ const createClient = () => {
   // Format domain - remove http/https if present as the client will add it
   const formattedDomain = storeDomain.replace(/^https?:\/\//, "");
 
-  console.log(`Creating Storefront API client for domain: ${formattedDomain}`);
-
   return createStorefrontApiClient({
     storeDomain: formattedDomain,
     apiVersion: "2024-07", // Updated to use the latest regular release version
@@ -44,17 +42,6 @@ export async function GET(req: Request) {
       { status: 400 }
     );
   }
-
-  console.log(`📝 Processing product-metadata request for handle: ${handle}`);
-  console.log(
-    `📝 Storefront API Token available: ${!!process.env
-      .SHOPIFY_STOREFRONT_API_TOKEN}`
-  );
-  console.log(
-    `📝 Store Domain: ${
-      process.env.SHOPIFY_STORE_DOMAIN || "cypress-storefront.myshopify.com"
-    }`
-  );
 
   try {
     // Parse metafield selectors if provided
@@ -216,120 +203,6 @@ const DEFAULT_METAFIELD_SELECTORS: MetafieldSelector[] = [
   { namespace: "shopify", key: "accessory-size" },
 ];
 
-// Test Shopify API connectivity with a simple query
-async function testStorefrontApiConnection(client: any) {
-  try {
-    const testQuery = `
-      query {
-        shop {
-          name
-        }
-      }
-    `;
-
-    console.log("🧪 Testing Storefront API connection with simple query");
-    const result = await client.request(testQuery);
-    console.log(
-      `✅ Storefront API test successful: ${
-        result?.data?.shop?.name || "No shop name returned"
-      }`
-    );
-    return true;
-  } catch (error) {
-    console.error("❌ Storefront API test failed:", error);
-    return false;
-  }
-}
-
-/**
- * Function to check if the Storefront API access token has the proper scopes
- * for accessing metaobject references
- */
-async function checkStorefrontAccessScopes(client: any) {
-  try {
-    console.log("🔑 Checking Storefront API access scopes");
-
-    // Updated test query for API version 2024-04
-    const testQuery = `
-      query {
-        metaobjects(type: "color", first: 5) {
-          nodes {
-            id
-            handle
-            type
-            fields {
-              key
-              value
-            }
-          }
-        }
-        metaobjectDefinitions(first: 10) {
-          nodes {
-            name
-            type
-            fieldDefinitions {
-              name
-              key
-            }
-          }
-        }
-      }
-    `;
-
-    const result = await client.request(testQuery);
-    console.log(
-      "📊 Available metaobject types:",
-      result?.data?.metaobjectDefinitions?.nodes?.map(
-        (node: any) => `${node.name} (${node.type})`
-      ) || []
-    );
-
-    // Show sample metaobjects if available
-    if (result?.data?.metaobjects?.nodes?.length > 0) {
-      console.log(
-        "📊 Sample metaobjects:",
-        result.data.metaobjects.nodes.map(
-          (node: any) => `${node.type}/${node.handle || node.id}`
-        )
-      );
-    } else {
-      console.log("⚠️ No metaobjects found in sample query");
-    }
-
-    if (result?.data?.metaobjectDefinitions || result?.data?.metaobjects) {
-      console.log("✅ Storefront API has access to metaobjects");
-      return true;
-    } else {
-      console.log("⚠️ Couldn't verify metaobjects access");
-      return false;
-    }
-  } catch (error: any) {
-    const errorMessage = error?.message || JSON.stringify(error);
-
-    if (
-      errorMessage.includes("access") ||
-      errorMessage.includes("scope") ||
-      errorMessage.includes("permission")
-    ) {
-      console.error(
-        `❌ Storefront API lacks necessary access scopes: ${errorMessage}`
-      );
-      console.error(`
-🔐 Required Scopes for Metaobjects:
-- unauthenticated_read_metaobjects
-- unauthenticated_read_product_metafields
-- unauthenticated_read_content
-
-Please check your Shopify Admin > Apps > Develop apps > Your App > API credentials
-and ensure these scopes are enabled for your Storefront API.
-      `);
-    } else {
-      console.error("❌ Error checking Storefront API scopes:", errorMessage);
-    }
-    return false;
-  }
-}
-
 /**
  * Parse metaobject reference values to extract human-readable values
  */
@@ -472,14 +345,6 @@ async function fetchProductMetadata(
   // Initialize the Shopify Storefront API client
   const client = createClient();
 
-  // Test the API connection first
-  const connectionOk = await testStorefrontApiConnection(client);
-
-  // Check access scopes if connection is ok
-  if (connectionOk) {
-    await checkStorefrontAccessScopes(client);
-  }
-
   // Use provided metafield selectors or fall back to defaults
   const selectorsToUse =
     metafieldSelectors.length > 0
@@ -607,19 +472,6 @@ async function fetchProductMetadata(
       variables: { handle },
     });
 
-    // Log the full response for debugging
-    console.log(
-      "Storefront API response:",
-      JSON.stringify(
-        {
-          data: data ? "Data present" : "No data",
-          errors: errors || "No errors",
-        },
-        null,
-        2
-      )
-    );
-
     // Handle GraphQL errors if present
     if (errors && Array.isArray(errors) && errors.length > 0) {
       throw new Error(`GraphQL errors: ${JSON.stringify(errors)}`);
@@ -653,11 +505,6 @@ async function fetchProductMetadata(
           (edge: any) => edge.node
         );
       }
-
-      console.log(
-        "Metafields response:",
-        JSON.stringify(metafieldsArray, null, 2)
-      );
 
       // If we have any metaobject reference fields with null references, try to fetch those metaobjects directly
       const metaobjectGids: string[] = [];
@@ -693,10 +540,6 @@ async function fetchProductMetadata(
                 metaobjectGidToKeyMap[gid].push(fullKey);
               }
             });
-
-            console.log(
-              `🔍 Identified ${gids.length} metaobject GIDs in ${node.namespace}--${node.key}`
-            );
           } catch (error) {
             console.error(
               `Error parsing metaobject references for ${node.namespace}--${node.key}:`,
@@ -734,10 +577,6 @@ async function fetchProductMetadata(
               // Store the reference object for easier access
               metafieldMap[fullKey].reference = node.reference;
 
-              console.log(
-                `✅ Successfully resolved metaobject reference for ${fullKey}`
-              );
-
               // If you need to extract specific values from the metaobject
               if (node.reference && node.reference.fields) {
                 const displayValue = node.reference.fields.find(
@@ -749,9 +588,6 @@ async function fetchProductMetadata(
 
                 if (displayValue) {
                   metafieldMap[fullKey].displayValue = displayValue.value;
-                  console.log(
-                    `📋 Found display value for ${fullKey}: ${displayValue.value}`
-                  );
                 }
               }
             } catch (error) {
@@ -775,9 +611,6 @@ async function fetchProductMetadata(
 
               if (displayValue) {
                 metafieldMap[fullKey].displayValue = displayValue.value;
-                console.log(
-                  `📋 Found display value for ${fullKey}: ${displayValue.value}`
-                );
               }
             }
           }
@@ -786,19 +619,11 @@ async function fetchProductMetadata(
           node.type &&
           node.type.includes("metaobject_reference")
         ) {
-          // Log when reference is null but we expected a metaobject
-          console.log(
-            `⚠️ No reference data available for ${fullKey} (${node.type})`
-          );
-
           // Try to parse the metaobject GIDs from the value
           if (node.value) {
             try {
               const gids = JSON.parse(node.value);
               if (Array.isArray(gids)) {
-                console.log(
-                  `📋 Metaobject GIDs for ${fullKey}: ${gids.join(", ")}`
-                );
                 metafieldMap[fullKey].metaobjectGids = gids;
               }
             } catch (error) {
@@ -810,10 +635,6 @@ async function fetchProductMetadata(
 
       // After all the normal processing, try to directly fetch metaobjects for the missing references
       if (metaobjectGids.length > 0) {
-        console.log(
-          `🔄 Attempting to fetch ${metaobjectGids.length} metaobjects for missing references using direct queries`
-        );
-
         try {
           // For each metaobject GID, execute a direct query to fetch its details
           const metaobjectBatches = [];
@@ -821,10 +642,6 @@ async function fetchProductMetadata(
             // Create batches of up to 10 GIDs at a time
             metaobjectBatches.push(metaobjectGids.slice(i, i + 10));
           }
-
-          console.log(
-            `🔄 Created ${metaobjectBatches.length} batches of metaobject queries`
-          );
 
           // Process each batch
           for (const batch of metaobjectBatches) {
@@ -850,10 +667,6 @@ async function fetchProductMetadata(
               }
             `;
 
-            console.log(
-              `🔄 Executing batch query for ${batch.length} metaobjects`
-            );
-
             const batchResult = await client.request(batchQuery);
 
             // Process the results
@@ -861,12 +674,6 @@ async function fetchProductMetadata(
               batch.forEach((gid, index) => {
                 const metaobject = batchResult.data[`metaobject${index}`];
                 if (metaobject) {
-                  console.log(
-                    `✅ Successfully fetched metaobject: ${metaobject.type}/${
-                      metaobject.handle || metaobject.id
-                    }`
-                  );
-
                   // Update all metafields that use this GID
                   const affectedKeys = metaobjectGidToKeyMap[gid] || [];
                   affectedKeys.forEach((fullKey) => {
@@ -875,10 +682,6 @@ async function fetchProductMetadata(
                       metafieldMap[fullKey] &&
                       !metafieldMap[fullKey].reference
                     ) {
-                      console.log(
-                        `📋 Updating metafield ${fullKey} with direct metaobject data`
-                      );
-
                       // Store the resolved reference
                       metafieldMap[fullKey].directlyResolvedReference =
                         metaobject;
@@ -990,51 +793,6 @@ async function fetchProductMetadata(
       });
 
       product.organizedMetafields = organizedMetafields;
-    }
-
-    // Add summary of what was resolved
-    console.log("📊 Metafield resolution summary:");
-    if (product.metafieldHumanReadable) {
-      Object.entries(product.metafieldHumanReadable).forEach(([key, value]) => {
-        if (value && typeof value === "object") {
-          // Use type assertion to help TypeScript understand our structure
-          const typedValue = value as any;
-
-          if (typedValue.isResolvedReference === true) {
-            console.log(
-              `✅ ${key}: Resolved to '${
-                typedValue.displayName || typedValue.handle
-              }'`
-            );
-          } else if (Array.isArray(value)) {
-            const resolvedCount = value.filter(
-              (v: any) => v?.isResolvedReference === true
-            ).length;
-            console.log(
-              `✅ ${key}: Resolved ${resolvedCount}/${value.length} references`
-            );
-            value.forEach((item: any, index: number) => {
-              if (item?.isResolvedReference) {
-                console.log(
-                  `  ↳ Item ${index}: ${item.displayName || item.handle}`
-                );
-              }
-            });
-          } else if (typedValue.directlyResolvedReference) {
-            console.log(`✅ ${key}: Directly resolved using node query`);
-          } else if (typedValue.raw) {
-            console.log(
-              `❌ ${key}: Unresolved (has raw GIDs but no display values)`
-            );
-          } else {
-            console.log(
-              `❓ ${key}: ${JSON.stringify(value).substring(0, 50)}...`
-            );
-          }
-        } else {
-          console.log(`ℹ️ ${key}: Simple value (${value})`);
-        }
-      });
     }
 
     return product;

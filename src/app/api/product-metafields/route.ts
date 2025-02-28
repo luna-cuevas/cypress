@@ -13,17 +13,6 @@ export async function GET(req: NextRequest) {
   const productId = searchParams.get("id");
   const resolveReferences = searchParams.get("resolveReferences") !== "false"; // Default to true
 
-  console.log("🔍 API Request for metafields:", {
-    handle,
-    productId,
-    resolveReferences,
-  });
-  console.log("🔐 Using Shopify hostname:", process.env.SHOPIFY_HOSTNAME);
-  console.log(
-    "🔑 Admin API token available:",
-    !!process.env.SHOPIFY_ADMIN_API_TOKEN
-  );
-
   // Require either handle or productId
   if (!handle && !productId) {
     return NextResponse.json(
@@ -37,16 +26,10 @@ export async function GET(req: NextRequest) {
     let targetProductId = productId;
 
     if (handle && !productId) {
-      console.log("🔄 Converting handle to product ID:", handle);
       targetProductId = await getProductIdFromHandle(handle);
-      console.log("📊 Resolved product ID:", targetProductId);
 
       if (!targetProductId) {
-        console.warn(`⚠️ Could not resolve product ID for handle: ${handle}`);
         // Try using REST API as fallback
-        console.log(
-          "🔄 Attempting to use REST API as fallback for handle lookup"
-        );
         targetProductId = await getProductIdFromHandleREST(handle);
 
         if (!targetProductId) {
@@ -70,22 +53,13 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch the metafields using the Admin API
-    console.log("🔄 Fetching metafields for product ID:", targetProductId);
     const metafields = await fetchProductMetafields(targetProductId as string);
-    console.log(`📊 Found ${metafields.length} metafields`);
-
-    if (metafields.length > 0) {
-      console.log("📊 Sample metafield:", metafields[0]);
-    } else {
-      console.log("⚠️ No metafields found for this product");
-    }
 
     // Format the response
     let formattedResponse = formatMetafieldsResponse(metafields);
 
     // Resolve metaobject references if needed
     if (resolveReferences) {
-      console.log("🔄 Resolving metaobject references");
       formattedResponse = await resolveMetaobjectReferences(formattedResponse);
     }
 
@@ -126,7 +100,6 @@ export async function GET(req: NextRequest) {
 async function getProductIdFromHandle(handle: string): Promise<string | null> {
   try {
     const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/graphql.json`;
-    console.log("🌐 Admin GraphQL request to:", url);
 
     const query = `
       query {
@@ -135,8 +108,6 @@ async function getProductIdFromHandle(handle: string): Promise<string | null> {
         }
       }
     `;
-
-    console.log("📝 GraphQL query:", query);
 
     const response = await fetch(url, {
       method: "POST",
@@ -154,7 +125,6 @@ async function getProductIdFromHandle(handle: string): Promise<string | null> {
     }
 
     const data = await response.json();
-    console.log("📊 Admin GraphQL API response:", JSON.stringify(data));
 
     if (data.errors) {
       console.error("❌ GraphQL errors:", data.errors);
@@ -181,7 +151,6 @@ async function getProductIdFromHandleREST(
 ): Promise<string | null> {
   try {
     const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/products.json?handle=${handle}`;
-    console.log("🌐 Admin REST request to:", url);
 
     const response = await fetch(url, {
       headers: {
@@ -196,12 +165,6 @@ async function getProductIdFromHandleREST(
     }
 
     const data = await response.json();
-    console.log(
-      "📊 Admin REST API response:",
-      data.products
-        ? `Found ${data.products.length} products`
-        : "No products found"
-    );
 
     if (!data.products || data.products.length === 0) {
       console.warn(`⚠️ No products found with handle: ${handle} via REST API`);
@@ -209,7 +172,6 @@ async function getProductIdFromHandleREST(
     }
 
     const productId = data.products[0].id.toString();
-    console.log(`✅ Found product ID via REST: ${productId}`);
     return productId;
   } catch (error: any) {
     console.error("❌ Error getting product ID from handle via REST:", error);
@@ -227,10 +189,8 @@ async function fetchProductMetafields(productId: string): Promise<any[]> {
 
     if (productId.includes("/")) {
       numericId = productId.split("/").pop();
-      console.log("🔢 Extracted numeric ID from GraphQL ID:", numericId);
     } else {
       numericId = productId;
-      console.log("🔢 Using provided numeric ID:", numericId);
     }
 
     if (!numericId) {
@@ -238,7 +198,6 @@ async function fetchProductMetafields(productId: string): Promise<any[]> {
     }
 
     const url = `https://${process.env.SHOPIFY_HOSTNAME}/admin/api/2024-07/products/${numericId}/metafields.json`;
-    console.log("🌐 Fetching metafields from:", url);
 
     const response = await fetch(url, {
       headers: {
@@ -255,14 +214,6 @@ async function fetchProductMetafields(productId: string): Promise<any[]> {
     }
 
     const data = await response.json();
-
-    // Safely log the response without causing too much console spam
-    if (data.metafields && data.metafields.length > 0) {
-      console.log(`📊 Found ${data.metafields.length} metafields in response`);
-      console.log("📊 First metafield sample:", data.metafields[0]);
-    } else {
-      console.log("📊 Raw metafields response:", JSON.stringify(data));
-    }
 
     if (!data.metafields) {
       console.warn("⚠️ No metafields property in response:", data);
@@ -284,11 +235,8 @@ function formatMetafieldsResponse(metafields: any[]) {
   // Group metafields by namespace for easier access
   const groupedMetafields: Record<string, Record<string, any>> = {};
 
-  console.log(`🔄 Formatting ${metafields.length} metafields`);
-
   metafields.forEach((metafield) => {
     const { namespace, key, value, type } = metafield;
-    console.log(`📋 Processing metafield: ${namespace}.${key}, type: ${type}`);
 
     if (!groupedMetafields[namespace]) {
       groupedMetafields[namespace] = {};
@@ -304,21 +252,9 @@ function formatMetafieldsResponse(metafields: any[]) {
         (value.startsWith("[") || value.startsWith("{"))
       ) {
         parsedValue = JSON.parse(value);
-        console.log(`📋 Parsed JSON value for ${namespace}.${key}`);
 
         // Enhanced handling for arrays
         if (Array.isArray(parsedValue)) {
-          // Check if this is a multi-value reference to metaobjects (common pattern)
-          if (
-            parsedValue.length > 0 &&
-            typeof parsedValue[0] === "string" &&
-            parsedValue[0].includes("gid://shopify/")
-          ) {
-            console.log(
-              `📋 Detected array of references in ${namespace}.${key} (${parsedValue.length} items)`
-            );
-          }
-
           // Make sure all array items are properly formatted if they're JSON strings themselves
           parsedValue = parsedValue.map((item) => {
             if (
@@ -351,32 +287,6 @@ function formatMetafieldsResponse(metafields: any[]) {
       // Add the count of items if it's an array
       itemCount: Array.isArray(parsedValue) ? parsedValue.length : undefined,
     };
-  });
-
-  // Log a summary of what we found
-  const namespaces = Object.keys(groupedMetafields);
-  console.log(
-    `📊 Found ${namespaces.length} metafield namespaces:`,
-    namespaces
-  );
-
-  namespaces.forEach((namespace) => {
-    const keys = Object.keys(groupedMetafields[namespace]);
-    console.log(`📊 Namespace '${namespace}' has ${keys.length} keys:`, keys);
-
-    // Log multi-value fields
-    const multiValueFields = keys.filter(
-      (key) => groupedMetafields[namespace][key].isMultiValue
-    );
-
-    if (multiValueFields.length > 0) {
-      console.log(
-        `📊 Found ${multiValueFields.length} multi-value fields in namespace '${namespace}':`,
-        multiValueFields.map(
-          (key) => `${key}(${groupedMetafields[namespace][key].itemCount})`
-        )
-      );
-    }
   });
 
   return {
@@ -412,9 +322,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
         value[0].includes("gid://shopify/Metaobject/")
       ) {
         value.forEach((id: string) => metaobjectIds.add(id));
-        console.log(
-          `🔍 Found metaobject reference in ${namespace}.${key}: ${value[0]}`
-        );
       }
 
       // Check if this is a single metaobject reference
@@ -423,21 +330,13 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
         value.includes("gid://shopify/Metaobject/")
       ) {
         metaobjectIds.add(value);
-        console.log(
-          `🔍 Found metaobject reference in ${namespace}.${key}: ${value}`
-        );
       }
     });
   });
 
   if (metaobjectIds.size === 0) {
-    console.log("📊 No metaobject references found to resolve");
     return formattedResponse;
   }
-
-  console.log(
-    `🔄 Found ${metaobjectIds.size} metaobject references to resolve`
-  );
 
   // Resolve metaobjects in batches to avoid hitting API limits
   const resolvedMetaobjects = new Map<string, any>();
@@ -456,7 +355,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
 
   // Resolve each batch
   for (const batch of idBatches) {
-    console.log(`🔄 Resolving batch of ${batch.length} metaobjects`);
     try {
       const batchResults = await fetchMetaobjects(batch);
       batchResults.forEach((metaobject: any) => {
@@ -468,10 +366,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
       console.error("❌ Error resolving metaobject batch:", error);
     }
   }
-
-  console.log(
-    `📊 Resolved ${resolvedMetaobjects.size} of ${metaobjectIds.size} metaobjects`
-  );
 
   // Second pass: Replace metaobject references with the resolved objects
   Object.keys(metafields).forEach((namespace) => {
@@ -506,7 +400,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
         });
         metafield.originalValue = value;
         metafield.value = resolvedValues;
-        console.log(`🔄 Resolved array of metaobjects for ${namespace}.${key}`);
       }
 
       // Handle single metaobject reference
@@ -518,7 +411,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
         if (resolved) {
           metafield.originalValue = value;
           metafield.value = resolved;
-          console.log(`🔄 Resolved single metaobject for ${namespace}.${key}`);
         } else {
           // Create a fallback with some basic info extracted from the ID
           const type = getMetaobjectTypeFromId(value);
@@ -530,9 +422,6 @@ async function resolveMetaobjectReferences(formattedResponse: any) {
             // Add fallback displayable values based on the type and key
             fields: createFallbackFields(type, key, namespace, productId),
           };
-          console.log(
-            `⚠️ Created fallback for unresolved metaobject for ${namespace}.${key}`
-          );
         }
       }
     });
@@ -556,10 +445,6 @@ async function fetchMetaobjects(ids: string[]): Promise<any[]> {
       return [];
     }
 
-    console.log(
-      `🔄 Fetching ${ids.length} metaobjects by IDs using Storefront API`
-    );
-
     // Create a Storefront API client
     const client = createStorefrontApiClient({
       storeDomain:
@@ -576,7 +461,6 @@ async function fetchMetaobjects(ids: string[]): Promise<any[]> {
     // Process batches of IDs to avoid query complexity limits
     for (let i = 0; i < ids.length; i += batchSize) {
       const batchIds = ids.slice(i, i + batchSize);
-      console.log(`🔄 Processing batch of ${batchIds.length} metaobject IDs`);
 
       try {
         // Build a query that fetches each metaobject by ID
@@ -614,12 +498,6 @@ async function fetchMetaobjects(ids: string[]): Promise<any[]> {
           batchIds.forEach((id, index) => {
             const metaobject = data[`metaobject${index}`];
             if (metaobject) {
-              console.log(
-                `✅ Successfully fetched metaobject: ${metaobject.type}/${
-                  metaobject.handle || id
-                }`
-              );
-
               // Convert fields array to an object
               const fieldsObj: Record<string, string> = {};
               if (metaobject.fields) {
@@ -645,9 +523,6 @@ async function fetchMetaobjects(ids: string[]): Promise<any[]> {
       }
     }
 
-    console.log(
-      `📊 Fetched ${results.length} of ${ids.length} metaobjects successfully`
-    );
     return results;
   } catch (error) {
     console.error("❌ Error in fetchMetaobjects:", error);

@@ -15,8 +15,6 @@ export const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
 
     const responseJson = await response.json();
 
-    console.log("Response JSON:", responseJson);
-
     if (
       responseJson.error == "" ||
       responseJson.message == "Subscription successful!"

@@ -12,9 +12,17 @@ import IntroAnimation from "@/components/common/IntroAnimation";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageTransition from "@/components/common/PageTransition";
+import type { Viewport } from "next";
 
 // Define structured data types
 type StructuredData = Record<string, unknown>;
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   // Base URL for the site
@@ -147,12 +155,7 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       ],
     },
-    viewport: {
-      width: "device-width",
-      initialScale: 1,
-      maximumScale: 5,
-      userScalable: true,
-    },
+
     authors: [{ name: "Cypress Clothiers" }],
     creator: "Cypress Clothiers",
     publisher: "Cypress Clothiers",

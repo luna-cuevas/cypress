@@ -75,21 +75,6 @@ const atomWithLocalStorage = (key: string, initialValue: any) => {
         try {
           const parsedValue = JSON.parse(item);
 
-          // Don't normalize the cartId - we need to keep the query parameters
-          // if (
-          //   parsedValue &&
-          //   parsedValue.cartId &&
-          //   parsedValue.cartId.includes("?")
-          // ) {
-          //   console.log("Normalizing cartId in localStorage");
-          //   // We'll keep the key parameter for compatibility but strip others
-          //   const keyMatch = parsedValue.cartId.match(/\?key=([^&]+)/);
-          //   const baseCartId = parsedValue.cartId.split("?")[0];
-          //   parsedValue.cartId = keyMatch
-          //     ? `${baseCartId}?key=${keyMatch[1]}`
-          //     : baseCartId;
-          // }
-
           return parsedValue;
         } catch {
           console.error("Could not parse the stored value in localStorage.");

@@ -11,30 +11,23 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
   }
 
+  console.log("userId", userId);
+
   try {
     // Create a Supabase client with admin privileges for the server
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-      process.env.SUPABASE_SERVICE_ROLE_KEY as string, // Use service role key for admin operations
-      {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: false,
-        },
-      }
+      process.env.SUPABASE_SERVICE_ROLE_KEY as string // Use service role key for admin operations
     );
 
     // Fetch the user's orders
     const { data: orders, error } = await supabase
       .from("orders")
-      .select(
-        `
-        *,
-        order_items (*)
-      `
-      )
+      .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
+
+    console.log("orders", orders);
 
     if (error) {
       console.error("Error fetching orders:", error);

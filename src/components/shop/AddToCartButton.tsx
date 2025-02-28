@@ -82,7 +82,6 @@ const AddToCartButton = (props: Props) => {
 
       // Check if we have a cart ID
       if (state.cartId) {
-        console.log("Attempting to add to existing cart first");
         // Try to add to the existing cart
         success = await addToExistingCart(lineItems);
       }
@@ -111,8 +110,6 @@ const AddToCartButton = (props: Props) => {
     // const cleanCartId = state.cartId ? state.cartId.split("?")[0] : null;
     const cartIdToUse = state.cartId;
 
-    console.log("Adding to existing cart:", cartIdToUse, lineItems);
-
     const response = await fetch("/api/addCartLines", {
       method: "POST",
       headers: {
@@ -125,7 +122,6 @@ const AddToCartButton = (props: Props) => {
     const data = await response.json();
 
     // Log the full response for debugging
-    console.log("Add to cart response:", response.status, data);
 
     // Special check for the case where Shopify returns a 200 with both a new cart AND cart not found errors
     // This is an unusual edge case but appears to happen in the Shopify API
@@ -159,7 +155,6 @@ const AddToCartButton = (props: Props) => {
     // Normal success case - no user errors
     if (response.ok && data.cart && !data.userErrors?.length) {
       // Success - update state with updated cartItems
-      console.log("Successfully added to existing cart");
 
       setState({
         ...state,
@@ -168,7 +163,6 @@ const AddToCartButton = (props: Props) => {
         cartCost: data.cart.cost,
         cartOpen: true,
       });
-      console.log("Updated cart ID to:", data.cart.id);
       toast.success("Added to cart");
       return true;
     } else if (!response.ok || response.status === 404) {
@@ -224,8 +218,6 @@ const AddToCartButton = (props: Props) => {
 
   // Function to create a new cart
   const createNewCart = async (lineItems: any[]) => {
-    console.log("Creating new cart with items:", lineItems);
-
     const response = await fetch("/api/createCart", {
       method: "POST",
       headers: {
@@ -235,11 +227,9 @@ const AddToCartButton = (props: Props) => {
     });
 
     const data = await response.json();
-    console.log("Create cart response:", response.status, data);
 
     if (response.ok && data.cart) {
       // Update state with new cartId and cartItems
-      console.log("New cart created with ID:", data.cart.id);
 
       // Check for user errors that might have been returned
       if (data.userErrors && data.userErrors.length > 0) {
@@ -259,7 +249,6 @@ const AddToCartButton = (props: Props) => {
         checkoutUrl: data.cart.checkoutUrl,
         cartOpen: true,
       });
-      console.log("Set new cart ID:", data.cart.id);
       toast.success("Added to cart");
       return true;
     } else {

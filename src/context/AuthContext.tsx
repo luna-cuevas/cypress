@@ -175,8 +175,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(verifyData.error || "Failed to verify email");
       }
 
-      console.log("verifyData", verifyData);
-
       // If OTP verification is successful, set the password
       const setPasswordResponse = await fetch("/api/auth/setPassword", {
         method: "POST",

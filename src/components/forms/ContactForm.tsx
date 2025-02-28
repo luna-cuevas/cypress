@@ -28,12 +28,6 @@ const ContactForm = (props: Props) => {
     const typeOfSupport =
       (e.currentTarget.typeOfSupport as HTMLInputElement).value ||
       selectedSupport;
-    console.log({
-      name,
-      email,
-      message,
-      typeOfSupport,
-    });
 
     if (!name || !email || !message || !typeOfSupport) {
       setMessageSent({
