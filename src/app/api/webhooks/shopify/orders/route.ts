@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     // Get user_id from customer email using Supabase auth
     const { data: userData, error: userError } = await supabase
       .from("profiles") // Make sure this matches your table name
-      .select("id")
+      .select("user_id")
       .eq("email", orderData.email)
       .maybeSingle();
 
