@@ -18,7 +18,6 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, metadata: any) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   sendOtp: (
@@ -29,7 +28,9 @@ type AuthContextType = {
   verifyOtpAndSetPassword: (
     email: string,
     otp: string,
-    password: string
+    password: string,
+    firstName: string,
+    lastName: string
   ) => Promise<OtpResponse>;
   sendResetOtp: (email: string) => Promise<OtpResponse>;
   verifyResetOtpAndSetPassword: (
@@ -117,36 +118,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, metadata: any) => {
-    try {
-      // Use the secure backend API endpoint instead of direct Supabase call
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          first_name: metadata.first_name,
-          last_name: metadata.last_name,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to sign up");
-      }
-
-      // After successful signup, we need to sign in the user
-      await signIn(email, password);
-    } catch (error) {
-      console.error("Error signing up:", error);
-      throw error;
-    }
-  };
-
   const sendOtp = async (
     email: string,
     firstName: string,
@@ -181,7 +152,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const verifyOtpAndSetPassword = async (
     email: string,
     otp: string,
-    password: string
+    password: string,
+    firstName: string,
+    lastName: string
   ) => {
     try {
       // First verify the OTP
@@ -202,6 +175,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(verifyData.error || "Failed to verify email");
       }
 
+      console.log("verifyData", verifyData);
+
       // If OTP verification is successful, set the password
       const setPasswordResponse = await fetch("/api/auth/setPassword", {
         method: "POST",
@@ -211,7 +186,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({
           email,
           password,
-          session_token: verifyData.session,
+          firstName,
+          lastName,
+          session: verifyData.session,
+          user: verifyData.user,
         }),
       });
 
@@ -324,7 +302,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user: state.user as User | null,
     loading,
     signIn,
-    signUp,
     signOut,
     resetPassword,
     sendOtp,

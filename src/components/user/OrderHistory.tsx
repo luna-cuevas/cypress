@@ -4,7 +4,6 @@ import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import Link from "next/link";
 import { format } from "date-fns";
-import { useSupabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
 import { Motion } from "@/utils/Motion";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -64,26 +63,23 @@ export default function OrderHistory() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const supabase = useSupabase();
 
   useEffect(() => {
     const fetchOrders = async () => {
       if (!user) return;
 
       try {
-        const { data: orders, error } = await supabase
-          .from("orders")
-          .select<"orders", Order>(
-            `
-            *,
-            order_items (*)
-          `
-          )
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false });
+        const response = await fetch(
+          `/api/account/get-order-history?userId=${user.id}`
+        );
 
-        if (error) throw error;
-        setOrders(orders || []);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch orders");
+        }
+
+        const data = await response.json();
+        setOrders(data.orders || []);
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {

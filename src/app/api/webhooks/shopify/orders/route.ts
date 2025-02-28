@@ -2,7 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { getDefaultStore } from "jotai";
-import { clearCartAction } from "@/context/atoms";
 
 const SHOPIFY_WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET;
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -99,13 +98,6 @@ export async function POST(req: Request) {
         { error: "Failed to create order items" },
         { status: 500 }
       );
-    }
-
-    // Clear the cart after successful order processing
-    if (orderData.financial_status === "paid") {
-      const store = getDefaultStore();
-      store.set(clearCartAction);
-      console.log("Cart cleared for order:", orderData.order_number);
     }
 
     return NextResponse.json({ success: true });

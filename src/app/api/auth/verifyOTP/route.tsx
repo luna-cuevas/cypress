@@ -40,12 +40,8 @@ export async function POST(request: Request) {
     // Return the complete session object including access and refresh tokens
     return NextResponse.json({
       success: true,
-      session: {
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
-        expires_at: data.session.expires_at,
-        user: data.user,
-      },
+      session: data.session,
+      user: data.user,
     });
   } catch (error: any) {
     console.error("Error in verifyOTP:", error);

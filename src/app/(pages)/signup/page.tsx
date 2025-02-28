@@ -26,7 +26,7 @@ export default function SignUpPage() {
   );
 
   // Auth methods
-  const { sendOtp, verifyOtpAndSetPassword } = useAuth();
+  const { sendOtp, verifyOtpAndSetPassword, signIn } = useAuth();
 
   // Carousel images
   const carouselImages = [
@@ -89,7 +89,18 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      const result = await verifyOtpAndSetPassword(email, otp, password);
+      // Verify OTP and set password
+      const result = await verifyOtpAndSetPassword(
+        email,
+        otp,
+        password,
+        firstName,
+        lastName
+      );
+
+      // After password is set, explicitly sign in the user
+      await signIn(email, password);
+
       // Use the redirectUrl if available, otherwise default to /account
       if (result.redirectUrl) {
         router.push(result.redirectUrl);
