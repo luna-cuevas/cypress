@@ -34,4 +34,11 @@ export const subCategories = [
     image:
       "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/2VZ_Dttn.jpg?v=1721431612",
   },
+  {
+    name: "Denim",
+    href: "/shop/denim",
+    breadcrumb: "denim",
+    image:
+      "https://cdn.shopify.com/s/files/1/0693/0749/8727/files/denim-category.jpg?v=1722564158",
+  },
 ];

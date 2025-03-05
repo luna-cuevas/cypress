@@ -77,7 +77,7 @@ export default function SizeSelection({
                   focus
                     ? "ring-2 ring-cypress-green dark:ring-cypress-green-light"
                     : "",
-                  "group relative flex items-center justify-center border dark:border-gray-700 p-2 text-sm font-medium uppercase hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
+                  "group relative flex items-center justify-center border dark:border-gray-700 p-2 text-sm font-medium  hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none sm:flex-1"
                 )
               }>
               {({ checked, focus }) => (

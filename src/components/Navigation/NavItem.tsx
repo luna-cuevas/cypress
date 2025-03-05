@@ -93,7 +93,7 @@ const NavItem = ({
         }}
         className="flex px-2 lg:py-[0.35rem] rounded-none group/menuItem hover:bg-transparent  focus:bg-transparent active:bg-transparent justify-start lg:justify-end items-center gap-2 transition-all duration-200 !text-black dark:!text-white">
         <ListItem
-          className={`${"text-black dark:text-white hover:text-black dark:hover:text-white"} underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent dark:active:text-white dark:focus:text-white  focus:bg-transparent focus:outline-none uppercase text-sm box-content `}>
+          className={`${"text-black dark:text-white hover:text-black dark:hover:text-white"} underline-animation w-fit justify-start lg:justify-end lg:gap-1 lg:p-0 relative flex hover:bg-transparent dark:active:text-white dark:focus:text-white  focus:bg-transparent focus:outline-none  text-sm box-content `}>
           <ListItemPrefix className="lg:hidden">
             <ShoppingBagIcon className="h-5 w-5" />
           </ListItemPrefix>
@@ -117,7 +117,7 @@ const NavItem = ({
         <MenuHandler className="hidden lg:inline-block px-2 lg:py-[0.35rem] rounded-none hover:bg-opacity-60 hover:bg-cypress-green-light transition-all duration-200 focus:outline-none">
           <MenuItem className="flex px-2 !lg:pb-[0.35rem] rounded-none justify-start lg:justify-center items-center gap-2 hover:bg-transparent focus:bg-transparent active:bg-transparent transition-all duration-200">
             <li
-              className={`${"text-black dark:text-white"}  relative justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2  uppercase text-sm box-content`}>
+              className={`${"text-black dark:text-white"}  relative justify-center group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex gap-2   text-sm box-content`}>
               {label}
             </li>
           </MenuItem>
@@ -129,7 +129,7 @@ const NavItem = ({
                 <Link href={url} key={title}>
                   <MenuItem className="flex px-2 rounded-none hover:bg-opacity-60 justify-left items-center hover:bg-transparent focus:bg-transparent active:bg-transparent transition-all duration-200">
                     <li
-                      className={`!font-['trajan'] hover:bg-transparent focus:bg-transparent active:bg-transparent text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                      className={`!font-['trajan'] hover:bg-transparent focus:bg-transparent active:bg-transparent text-black underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex  text-sm box-content`}>
                       {title}
                     </li>
                   </MenuItem>
@@ -150,7 +150,7 @@ const NavItem = ({
             className="hover:bg-opacity-60 focus:bg-transparent hover:bg-cypress-green-light mx-auto w-full py-[0.35rem] lg:hidden flex justify-start lg:justify-center flex-grow px-2  border-none"
             onClick={() => setIsShopMenuOpen(!isShopMenuOpen)}>
             <ListItem
-              className={`${"text-black dark:text-white"}  relative w-full hover:bg-transparent focus:bg-transparent group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex   uppercase text-sm box-content`}>
+              className={`${"text-black dark:text-white"}  relative w-full hover:bg-transparent focus:bg-transparent group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex    text-sm box-content`}>
               <ListItemPrefix>
                 <ShoppingBagIcon className="h-5 w-5" />
               </ListItemPrefix>
@@ -175,7 +175,7 @@ const NavItem = ({
                     className="flex px-2 rounded-none hover:bg-opacity-60  hover:bg-cypress-green-light justify-left items-center hover:bg-transparent focus:bg-transparent active:bg-transparent transition-all duration-200">
                     <Link href={url}>
                       <li
-                        className={`${"text-black dark:text-white"} !font-['trajan'] hover:bg-transparent focus:bg-transparent active:bg-transparent underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex uppercase text-sm box-content`}>
+                        className={`${"text-black dark:text-white"} !font-['trajan'] hover:bg-transparent focus:bg-transparent active:bg-transparent underline-animation relative group-hover:text-black dark:group-hover:text-white dark:text-gray-200 flex  text-sm box-content`}>
                         {title}
                       </li>
                     </Link>
@@ -197,7 +197,7 @@ const NavItem = ({
           onClick={() => {
             setState({ ...state, showMobileMenu: false });
           }}
-          className={`${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
+          className={`${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex  text-sm box-content transition-all duration-200`}>
           <ListItemPrefix className="lg:hidden underline-animation">
             {icon}
           </ListItemPrefix>

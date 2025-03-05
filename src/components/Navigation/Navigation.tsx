@@ -33,6 +33,7 @@ export const Navigation = (props: Props) => {
         initial={{ x: -50, opacity: 0 }}
         whileInView={{ x: 0, opacity: 1 }}
         exit={{ x: -50, opacity: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.5 }}
         className={`${
           pathName == "/" ? "" : "lg:ml-0"

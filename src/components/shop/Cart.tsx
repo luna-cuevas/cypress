@@ -426,7 +426,7 @@ export default function Cart() {
                   <div className="flex-1 overflow-y-auto py-0">
                     <div className="px-4 sm:px-6 py-8 sm:py-10">
                       <div className="flex items-start justify-between pb-6">
-                        <DialogTitle className="text-xl sm:text-2xl font-extralight tracking-wide text-gray-900 dark:text-white uppercase">
+                        <DialogTitle className="text-xl sm:text-2xl font-extralight tracking-wide text-gray-900 dark:text-white ">
                           Your Selections
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
@@ -480,7 +480,7 @@ export default function Cart() {
                                     <div className="ml-4 sm:ml-6 flex flex-1 flex-col">
                                       <div>
                                         <div className="flex justify-between items-start">
-                                          <h3 className="text-sm font-light uppercase tracking-wider text-gray-900 dark:text-white max-w-[160px] sm:max-w-[200px]">
+                                          <h3 className="text-sm font-light  tracking-wider text-gray-900 dark:text-white max-w-[160px] sm:max-w-[200px]">
                                             <Link
                                               href={`/shop/${product.handle}`}
                                               className="hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-300 truncate block">
@@ -497,7 +497,7 @@ export default function Cart() {
                                             ).toFixed(2)}
                                           </p>
                                         </div>
-                                        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-widest truncate">
+                                        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400  tracking-widest truncate">
                                           {product.vendor}{" "}
                                           {variant.variantTitle !==
                                             "Default Title" && (
@@ -545,7 +545,7 @@ export default function Cart() {
                                         <button
                                           type="button"
                                           onClick={() => removeFromCart(lineId)}
-                                          className="text-xs uppercase tracking-wide font-light text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-all duration-300 focus:outline-none">
+                                          className="text-xs  tracking-wide font-light text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-all duration-300 focus:outline-none">
                                           Remove
                                         </button>
                                       </div>
@@ -556,7 +556,7 @@ export default function Cart() {
                             </ul>
                           ) : (
                             <div className="flex flex-col items-center justify-center py-20">
-                              <h2 className="text-xl font-light text-gray-900 dark:text-white uppercase tracking-widest">
+                              <h2 className="text-xl font-light text-gray-900 dark:text-white  tracking-widest">
                                 Your cart is empty
                               </h2>
                               <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400 max-w-xs">
@@ -566,7 +566,7 @@ export default function Cart() {
                               </p>
                               <button
                                 type="button"
-                                className="mt-8 text-sm font-light tracking-wide uppercase text-cypress-green hover:text-cypress-green-light transition-all duration-300 focus:outline-none border-b border-transparent hover:border-cypress-green-light pb-1"
+                                className="mt-8 text-sm font-light tracking-wide  text-cypress-green hover:text-cypress-green-light transition-all duration-300 focus:outline-none border-b border-transparent hover:border-cypress-green-light pb-1"
                                 onClick={() =>
                                   setState({ ...state, cartOpen: false })
                                 }>
@@ -581,7 +581,7 @@ export default function Cart() {
 
                   {state.cartItems.length > 0 && (
                     <div className="border-t border-gray-100 dark:border-gray-800 px-4 sm:px-6 py-6 sm:py-8">
-                      <div className="flex justify-between text-sm font-light uppercase tracking-widest text-gray-900 dark:text-white">
+                      <div className="flex justify-between text-sm font-light  tracking-widest text-gray-900 dark:text-white">
                         <p>Subtotal</p>
                         <p>
                           $
@@ -598,13 +598,13 @@ export default function Cart() {
                         <button
                           type="button"
                           onClick={createCheckout}
-                          className="w-full py-3 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-sm font-light uppercase tracking-widest transition-all duration-300 focus:outline-none">
+                          className="w-full py-3 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-sm font-light  tracking-widest transition-all duration-300 focus:outline-none">
                           Proceed to Checkout
                         </button>
 
                         <button
                           type="button"
-                          className="w-full text-center text-sm font-light uppercase tracking-widest text-gray-900 dark:text-white hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-300 focus:outline-none"
+                          className="w-full text-center text-sm font-light  tracking-widest text-gray-900 dark:text-white hover:text-cypress-green dark:hover:text-cypress-green-light transition-all duration-300 focus:outline-none"
                           onClick={() =>
                             setState({ ...state, cartOpen: false })
                           }>

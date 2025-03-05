@@ -143,7 +143,7 @@ const ContactForm = (props: Props) => {
               <div>
                 <Typography
                   variant="small"
-                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
+                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest ">
                   First Name
                 </Typography>
                 <Input
@@ -163,7 +163,7 @@ const ContactForm = (props: Props) => {
               <div>
                 <Typography
                   variant="small"
-                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
+                  className="mb-3 text-left !font-['arpona'] text-sm tracking-widest ">
                   Last Name
                 </Typography>
                 <Input
@@ -184,7 +184,7 @@ const ContactForm = (props: Props) => {
             <div>
               <Typography
                 variant="small"
-                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
+                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest ">
                 Your Email
               </Typography>
               <Input
@@ -204,7 +204,7 @@ const ContactForm = (props: Props) => {
             <div>
               <Typography
                 variant="small"
-                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest uppercase">
+                className="mb-3 text-left !font-['arpona'] text-sm tracking-widest ">
                 Your Message
               </Typography>
               <Textarea
@@ -223,7 +223,7 @@ const ContactForm = (props: Props) => {
             <Button
               type="submit"
               disabled={messageSent.loading}
-              className="!font-['arpona'] text-base tracking-widest uppercase w-full md:w-1/3 m-auto bg-white text-black hover:bg-white/90 transition-all duration-500 rounded-none py-4">
+              className="!font-['arpona'] text-base tracking-widest  w-full md:w-1/3 m-auto bg-white text-black hover:bg-white/90 transition-all duration-500 rounded-none py-4">
               {messageSent.loading ? (
                 <div
                   role="status"

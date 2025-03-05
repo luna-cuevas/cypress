@@ -1,7 +1,4 @@
 "use client";
-import { globalStateAtom } from "@/context/atoms";
-import { motion } from "framer-motion";
-import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -76,8 +73,6 @@ const ProductGallery = (props: Props) => {
     null
   );
 
-  const [state, setState] = useAtom(globalStateAtom);
-
   const open = (product: any) => {
     setSelectedProduct(product);
     setSelectedVariant(product.variants[0]); // Set the first variant as default
@@ -107,13 +102,8 @@ const ProductGallery = (props: Props) => {
           className={`grid gap-2 sm:gap-3.5 lg:gap-4 ${getGridColumns()} p-1 sm:p-6`}>
           {products &&
             products.map((product: any, index) => (
-              <motion.div
+              <div
                 key={product.id}
-                // animate in and out
-                initial={{ opacity: 0, y: 100 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -100 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative overflow-hidden group/image group dark:hover:bg-white/20 hover:bg-gray-200 flex flex-col bg-gray-50 dark:border dark:border-gray-700 box-border border-gray-200 dark:bg-white/10">
                 <Link
                   prefetch={true}
@@ -121,14 +111,7 @@ const ProductGallery = (props: Props) => {
                   href={`/shop/${product.productType}/${product.handle}`}
                   className="cursor-pointer relative">
                   <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6 overflow-hidden">
-                    <motion.div
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.43, 0.13, 0.23, 0.96],
-                      }}
-                      className="h-full w-full">
+                    <div className="h-full w-full">
                       <Image
                         fill
                         priority
@@ -151,29 +134,22 @@ const ProductGallery = (props: Props) => {
                         alt={product.images[0].altText}
                         className="h-full w-full object-cover object-center opacity-0 group-hover/image:opacity-100 transition-opacity duration-500"
                       />
-                    </motion.div>
+                    </div>
                   </div>
                 </Link>
 
-                {/* <motion.div
-                  tabIndex={0}
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  className="absolute cursor-pointer inset-0 dark:group-hover:bg-white/10 bg-black/5 group-hover:bg-black/10 transition-colors duration-300"
-                /> */}
-
-                <motion.div className="absolute hidden lg:group-hover:flex bottom-1/4 xl:bottom-[25%] left-0 right-0 z-10 w-fit mx-auto text-white bg-black transition-colors duration-200 backdrop-blur-sm py-2 px-3 rounded-full">
+                <div className="absolute hidden lg:group-hover:flex bottom-1/4 xl:bottom-[25%] left-0 right-0 z-10 w-fit mx-auto text-white bg-black transition-colors duration-200 backdrop-blur-sm py-2 px-3 rounded-full">
                   <button
                     type="button"
                     className="text-[10px]  w-fit mx-auto "
                     onClick={() => open(product)}>
                     Quick View
                   </button>
-                </motion.div>
+                </div>
 
                 <div className="flex h-full flex-col py-4 px-2">
                   <div className="flex flex-col space-y-1.5 w-full">
-                    <p className="text-xs tracking-wide text-gray-500 dark:text-gray-400 font-medium uppercase">
+                    <p className="text-xs tracking-wide text-gray-500 dark:text-gray-400 font-medium">
                       {product.vendor}
                     </p>
                     <h2 className="font-medium text-sm text-gray-800 dark:text-gray-200 truncate">
@@ -188,7 +164,7 @@ const ProductGallery = (props: Props) => {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
         </div>
       </div>

@@ -49,16 +49,7 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
 
   return (
     <div className="w-full h-full min-h-[80vh] flex">
-      <Motion
-        type="div"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 50 }}
-        transition={{
-          duration: 0.5,
-          delay: 0.1,
-        }}
-        className="w-[70px] pt-4 sticky top-0 h-fit gap-3 flex-col hidden lg:flex">
+      <div className="w-[70px] pt-4 sticky top-0 h-fit gap-3 flex-col hidden lg:flex">
         {images.map((image, idx) => (
           <Link href={`#image-${idx}`} key={idx} className="w-full h-full">
             <div
@@ -86,17 +77,9 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
             </div>
           </Link>
         ))}
-      </Motion>
+      </div>
 
-      <Motion
-        type="div"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 50 }}
-        transition={{
-          duration: 0.5,
-          delay: 0.25,
-        }}
+      <div
         className={`
         ${images.length > 1 ? "grid lg:grid-cols-2 grid-cols-1" : "flex"}
         pt-4 w-full h-[calc(100vh-120px)] gap-4 pl-4`}>
@@ -114,7 +97,7 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
               placeholder="blur"
               src={image.src}
               alt={image.altText}
-              className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              className="h-full w-full object-cover object-center transition-transform duration-700 ease-out "
               style={{ height: "100%" }}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/20 to-transparent h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center">
@@ -124,7 +107,7 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
             </div>
           </div>
         ))}
-      </Motion>
+      </div>
 
       {/* Lightbox with enhanced zoom and transitions */}
       <Lightbox

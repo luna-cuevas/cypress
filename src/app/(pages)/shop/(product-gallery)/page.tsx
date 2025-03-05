@@ -18,10 +18,11 @@ export async function generateMetadata({
     sort?: string;
     view?: string;
     vendors?: string;
+    price?: string;
   };
 }): Promise<Metadata> {
   // Extract search parameters
-  const { sizes, vendors: vendorParam, sort } = searchParams;
+  const { sizes, vendors: vendorParam, sort, price } = searchParams;
 
   // Create title components
   let titlePrefix = "Premium Men's Collection";
@@ -38,6 +39,22 @@ export async function generateMetadata({
   if (sizes) {
     const sizeNames = sizes.split(",").join(", ");
     titleSuffix = `${titleSuffix} | ${sizeNames}`;
+  }
+
+  // Add price range information if available
+  if (price) {
+    let priceDesc = "";
+    if (price === "0-300") {
+      priceDesc = "Under $300";
+    } else if (price === "300-600") {
+      priceDesc = "$300-$600";
+    } else if (price === "600+") {
+      priceDesc = "Over $600";
+    }
+
+    if (priceDesc) {
+      titleSuffix = `${titleSuffix} | ${priceDesc}`;
+    }
   }
 
   // Add sort information for more specific titles
@@ -216,6 +233,7 @@ const page = async ({
     sort?: Sort;
     view?: string;
     vendors?: string;
+    price?: string;
   };
 }) => {
   const {
@@ -223,20 +241,24 @@ const page = async ({
     sort,
     view,
     vendors: vendorParam,
+    price = "",
   }: {
     sizes?: string;
     sort?: Sort;
     view?: string;
     vendors?: string;
+    price?: string;
   } = searchParams;
 
   const sizesArray = sizes ? sizes.split(",") : [];
   const vendorArray = vendorParam ? vendorParam.split(",") : [];
+  const priceRanges = price ? price.split(",") : [];
 
   const query = productQuery({
     sizes: sizesArray,
     vendors: vendorArray,
     sort: sort || undefined,
+    priceRanges: priceRanges,
   });
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {

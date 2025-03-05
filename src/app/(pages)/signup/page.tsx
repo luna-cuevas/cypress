@@ -181,7 +181,7 @@ export default function SignUpPage() {
 
           <div className="text-center mb-8">
             <motion.h2
-              className="text-2xl font-extralight uppercase tracking-[0.25em] text-gray-900 dark:text-white"
+              className="text-2xl font-extralight tracking-[0.25em] text-gray-900 dark:text-white"
               variants={itemVariants}>
               {currentStep === "details"
                 ? "Become a Member"
@@ -292,7 +292,7 @@ export default function SignUpPage() {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 border border-transparent text-sm font-medium tracking-widest uppercase text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
+                  className="w-full py-3 border border-transparent text-sm font-medium tracking-widest text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}>
                   {loading ? (
@@ -418,7 +418,7 @@ export default function SignUpPage() {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 border border-transparent text-sm font-medium tracking-widest uppercase text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
+                  className="w-full py-3 border border-transparent text-sm font-medium tracking-widest text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   variants={itemVariants}>

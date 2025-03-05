@@ -7,7 +7,6 @@ import AddToCartButton from "@/components/shop/AddToCartButton";
 import SizeSelection from "@/components/shop/SizeSelection";
 import TabContent from "@/components/shop/TabContent";
 import RelatedProducts from "@/components/shop/RelatedProducts";
-import { Motion } from "@/utils/Motion";
 import { Metadata } from "next";
 import NewsletterForm from "@/components/shop/NewsletterForm";
 import DesktopGalleryWithLightbox from "@/components/shop/DesktopGalleryWithLightbox";
@@ -565,16 +564,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
     return (
       <div className="z-0 relative min-h-[calc(100vh-70px)] bg-white dark:bg-black">
         <div className="">
-          <Motion
-            type="div"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{
-              duration: 0.5,
-              delay: 0.1,
-            }}
-            className=" ">
+          <div>
             <nav
               aria-label="Breadcrumb"
               className="md:pt-4 md:pb-0 py-2 pl-2 lg:w-full ">
@@ -630,16 +620,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                 <Carousel slides={product.images} />
               </div>
 
-              <Motion
-                type="div"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.5,
-                }}
-                className="relative block h-auto md:w-[50%] lg:w-[45%] pl-4 pr-4 bg-white dark:bg-black">
+              <div className="relative block h-auto md:w-[50%] lg:w-[45%] pl-4 pr-4 bg-white dark:bg-black">
                 {/* Product info */}
                 <div className="m-auto md:sticky right-0 top-0 pt-4 left-0 max-w-2xl   ">
                   <div className="lg:col-span-2 mb-2 lg:pr-8">
@@ -723,7 +704,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
                     />
                   </div>
                 </div>
-              </Motion>
+              </div>
             </div>
 
             {/* Related Products */}
@@ -740,7 +721,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
             <div className="my-12 py-8  relative border-t border-gray-200 dark:border-gray-800">
               <NewsletterForm />
             </div>
-          </Motion>
+          </div>
         </div>
       </div>
     );

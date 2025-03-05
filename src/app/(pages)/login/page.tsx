@@ -74,7 +74,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center pb-4">
-            <h2 className="text-2xl font-extralight uppercase tracking-[0.25em] text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-extralight tracking-[0.25em] text-gray-900 dark:text-white">
               Sign In
             </h2>
             <div className="mt-3 mx-auto h-px w-12 bg-cypress-green/30"></div>
@@ -136,7 +136,7 @@ export default function LoginPage() {
               <motion.button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-3 border border-transparent text-sm font-medium tracking-widest uppercase text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
+                className="group relative w-full flex justify-center py-3 border border-transparent text-sm font-medium tracking-widest text-white bg-cypress-green shadow-sm hover:bg-cypress-green-light focus:outline-none focus:ring-1 focus:ring-cypress-green dark:focus:ring-offset-gray-900 transition-all duration-300"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}>
                 {loading ? (

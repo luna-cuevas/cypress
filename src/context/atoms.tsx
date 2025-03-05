@@ -105,7 +105,7 @@ const initialState: State = {
   user: null,
   customer: null,
   showMobileMenu: false,
-  darkMode: true,
+  darkMode: false,
   firstVisit: true,
   cartOpen: false,
   cartId: null,

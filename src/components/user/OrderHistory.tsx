@@ -191,7 +191,7 @@ export default function OrderHistory() {
   return (
     <div className="space-y-8 py-2">
       <div className="mb-8">
-        <h2 className="text-2xl font-light text-gray-900 dark:text-white tracking-wider uppercase mb-1">
+        <h2 className="text-2xl font-light text-gray-900 dark:text-white tracking-wider  mb-1">
           My Orders
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -226,7 +226,7 @@ export default function OrderHistory() {
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                <p className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                   Order
                 </p>
                 <h3 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide">
@@ -235,7 +235,7 @@ export default function OrderHistory() {
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                <p className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                   Date
                 </p>
                 <p className="text-sm text-gray-900 dark:text-white">
@@ -244,7 +244,7 @@ export default function OrderHistory() {
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                <p className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                   Total
                 </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -296,7 +296,7 @@ export default function OrderHistory() {
           {expandedOrder === order.id && (
             <div className="border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/20 p-6 sm:p-8 transition-all duration-300">
               <div className="space-y-6">
-                <h4 className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+                <h4 className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                   Items
                 </h4>
                 <div className="grid gap-6">
@@ -338,7 +338,7 @@ export default function OrderHistory() {
 
               <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+                  <h4 className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                     Shipping Information
                   </h4>
                   {order.shipping_address ? (
@@ -362,7 +362,7 @@ export default function OrderHistory() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+                  <h4 className="text-xs  tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                     Order Summary
                   </h4>
                   <div className="space-y-2 text-sm">
@@ -404,7 +404,7 @@ export default function OrderHistory() {
                         href={order.status_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center py-2.5 px-4 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-xs tracking-wider uppercase font-light transition-all duration-300 focus:outline-none">
+                        className="inline-flex items-center py-2.5 px-4 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-xs tracking-wider  font-light transition-all duration-300 focus:outline-none">
                         <span>Track Order</span>
                         <ArrowUpRightIcon className="ml-2 w-3.5 h-3.5" />
                       </Link>

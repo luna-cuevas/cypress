@@ -182,7 +182,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className="w-screen overflow-x-hidden relative">
         <JotaiProvider>
           <AuthProvider>
@@ -207,7 +207,7 @@ export default function RootLayout({
           pauseOnFocusLoss={true}
           draggable={true}
           pauseOnHover={true}
-          theme="dark"
+          theme="light"
         />
       </body>
     </html>

@@ -15,17 +15,44 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: { category: string };
-  searchParams: { sizes?: string; view?: string };
+  searchParams: {
+    sizes?: string;
+    view?: string;
+    price?: string;
+  };
 }): Promise<Metadata> {
   const category = params.category;
-  const { sizes } = searchParams;
+  const { sizes, view, price } = searchParams;
 
   // Format category for display
   const capitalized = category.charAt(0).toUpperCase() + category.slice(1);
   const formattedCategory = capitalized.replace(/-/g, " ");
 
   // Create title components
-  const title = `${formattedCategory} Collection | Premium Men's Fashion`;
+  let title = `${formattedCategory} Collection | Premium Men's Fashion`;
+  let titleSuffix = title;
+
+  // Add size information if available
+  if (sizes) {
+    const sizeNames = sizes.split(",").join(", ");
+    titleSuffix = `${titleSuffix} | ${sizeNames}`;
+  }
+
+  // Add price range information if available
+  if (price) {
+    let priceDesc = "";
+    if (price === "0-300") {
+      priceDesc = "Under $300";
+    } else if (price === "300-600") {
+      priceDesc = "$300-$600";
+    } else if (price === "600+") {
+      priceDesc = "Over $600";
+    }
+
+    if (priceDesc) {
+      titleSuffix = `${titleSuffix} | ${priceDesc}`;
+    }
+  }
 
   // Prepare description with category and size information
   let description = `Explore our curated selection of high-end men's ${formattedCategory.toLowerCase()}. Minimalist designs crafted with precision and quality.`;
@@ -119,11 +146,11 @@ export async function generateMetadata({
 
   // Return the metadata object
   return {
-    title: title,
+    title: titleSuffix,
     description: description,
     keywords: `premium men's ${formattedCategory.toLowerCase()}, designer ${formattedCategory.toLowerCase()}, minimalist fashion, high-end apparel, exclusive brands`,
     openGraph: {
-      title: title,
+      title: titleSuffix,
       description: description,
       type: "website",
       locale: "en_US",
@@ -138,7 +165,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: title,
+      title: titleSuffix,
       description: description,
       images: ["/images/og-category.jpg"],
     },
@@ -187,11 +214,16 @@ const page = async ({
   params: {
     category: string;
   };
-  searchParams: { sizes?: string; view?: string };
+  searchParams: {
+    sizes?: string;
+    view?: string;
+    price?: string;
+  };
 }) => {
   const category = params.category;
-  const { sizes } = searchParams;
+  const { sizes, view, price } = searchParams;
   const sizesArray = sizes ? sizes.split(",") : [];
+  const priceRanges = price ? price.split(",") : [];
   const capitalized = category.charAt(0).toUpperCase() + category.slice(1);
 
   const response = await fetch(`${process.env.BASE_URL}/api/fetchProducts`, {
@@ -201,7 +233,11 @@ const page = async ({
       "Cache-Control": "no-store",
     },
     body: JSON.stringify({
-      productQuery: productQuery({ category: capitalized, sizes: sizesArray }),
+      productQuery: productQuery({
+        category: capitalized,
+        sizes: sizesArray,
+        priceRanges: priceRanges,
+      }),
     }),
   });
 

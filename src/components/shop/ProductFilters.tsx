@@ -4,13 +4,7 @@ import {
   Dialog as HeadlessDialog,
   Disclosure as HeadlessDisclosure,
 } from "@headlessui/react";
-import type {
-  Menu as MT_Menu,
-  MenuHandler as MT_MenuHandler,
-  MenuItem as MT_MenuItem,
-  MenuList as MT_MenuList,
-  Typography as MT_Typography,
-} from "@material-tailwind/react";
+
 import {
   Menu,
   MenuHandler,
@@ -59,6 +53,7 @@ const filters = [
       { value: "XXL", label: "XXL", checked: false, width: "w-14" },
     ],
   },
+
   {
     id: "vendor",
     name: "Brand",
@@ -66,6 +61,18 @@ const filters = [
       "flex w-full items-center !justify-between py-3 lg:py-1 h-full items-center text-sm text-gray-400 hover:text-gray-500",
     bodyStyles: "pt-4",
     options: [],
+  },
+  {
+    id: "price",
+    name: "Price",
+    buttonStyles:
+      "flex w-full items-center !justify-between py-3 lg:py-1 h-full items-center text-sm text-gray-400 hover:text-gray-500",
+    bodyStyles: "pt-4",
+    options: [
+      { value: "0-300", label: "$0 - $300", checked: false, width: "w-24" },
+      { value: "300-600", label: "$300 - $600", checked: false, width: "w-24" },
+      { value: "600+", label: "$600+", checked: false, width: "w-16" },
+    ],
   },
 ];
 
@@ -95,17 +102,13 @@ export default function ProductFilters({
 }: Props) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [gridSize, setGridSize] = useState(4);
-  const [sortKey, setSortKey] = useState("");
-  const [checked, setChecked] = useState<{ [key: string]: boolean }>({});
   const searchParams = useSearchParams();
-  const view = searchParams.get("view");
   const sortFilter = searchParams.get("sort");
-  const sizes = Array.from(selectedSizes).join(",");
   const router = useRouter();
   const pathName = usePathname();
   let pathSegments = pathName.split("/").filter(Boolean);
-  const [value, setValue] = useState("relevance");
   const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
 
   if (sortFilter) {
@@ -127,6 +130,22 @@ export default function ProductFilters({
     router.push(`${pathName}?${params.toString()}`);
   };
 
+  const handlePriceChange = (priceRange: string) => {
+    const newPriceRanges = selectedPriceRanges.includes(priceRange)
+      ? selectedPriceRanges.filter((p) => p !== priceRange)
+      : [priceRange]; // Only allow one price range at a time
+
+    setSelectedPriceRanges(newPriceRanges);
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (newPriceRanges.length > 0) {
+      params.set("price", newPriceRanges.join(","));
+    } else {
+      params.delete("price");
+    }
+    router.push(`${pathName}?${params.toString()}`);
+  };
+
   const handleGridSizeChange = (newSize: number) => {
     setGridSize(newSize);
     const params = new URLSearchParams(searchParams.toString());
@@ -135,9 +154,8 @@ export default function ProductFilters({
   };
 
   const handleVendorChange = (vendor: string) => {
-    const newVendors = selectedVendors.includes(vendor)
-      ? selectedVendors.filter((v) => v !== vendor)
-      : [...selectedVendors, vendor];
+    const newVendors = selectedVendors.includes(vendor) ? [] : [vendor];
+
     setSelectedVendors(newVendors);
 
     const params = new URLSearchParams(searchParams.toString());
@@ -160,6 +178,20 @@ export default function ProductFilters({
     const vendorsParam = searchParams.get("vendors");
     if (vendorsParam) {
       setSelectedVendors(vendorsParam.split(","));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const sizesParam = searchParams.get("sizes");
+    if (sizesParam) {
+      setSelectedSizes(sizesParam.split(","));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const priceParam = searchParams.get("price");
+    if (priceParam) {
+      setSelectedPriceRanges(priceParam.split(","));
     }
   }, [searchParams]);
 
@@ -404,14 +436,51 @@ export default function ProductFilters({
                       </h3>
                       <HeadlessDisclosure.Panel className="pt-6">
                         <div className="space-y-4">
-                          {subCategories.map((category) => (
-                            <Link
-                              key={category.name}
-                              href={category.href}
-                              className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                              {category.name}
-                            </Link>
-                          ))}
+                          {subCategories.map((category) => {
+                            // Check if this is a special category with query params
+                            const isSpecialCategory =
+                              category.href.includes("?sort=");
+                            const sortParam = isSpecialCategory
+                              ? category.href.split("?sort=")[1]
+                              : null;
+
+                            // Check if any sort parameter is active
+                            const hasSortParam =
+                              searchParams.get("sort") !== null;
+
+                            let isActive = false;
+
+                            if (isSpecialCategory) {
+                              // For special categories like "Best Sellers" and "New Arrivals"
+                              isActive =
+                                pathName === "/shop" &&
+                                searchParams.get("sort") === sortParam;
+                            } else if (category.href === "/shop") {
+                              // For the "All" category, only highlight if no sort parameter is present
+                              isActive = pathName === "/shop" && !hasSortParam;
+                            } else {
+                              // For regular categories like "Trousers", "Shirts", "Denim"
+                              isActive =
+                                pathName === category.href ||
+                                (category.href.includes("/shop/") &&
+                                  pathName.includes(
+                                    category.href.split("?")[0]
+                                  ));
+                            }
+
+                            return (
+                              <Link
+                                key={category.name}
+                                href={category.href}
+                                className={`flex items-center text-sm ${
+                                  isActive
+                                    ? "text-black dark:text-white font-medium"
+                                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                                }`}>
+                                {category.name}
+                              </Link>
+                            );
+                          })}
                         </div>
                       </HeadlessDisclosure.Panel>
                     </>
@@ -527,6 +596,32 @@ export default function ProductFilters({
                                 </div>
                               ))}
                             </div>
+                          ) : section.id === "price" ? (
+                            <div className="flex flex-wrap gap-3">
+                              {section.options.map((option) => (
+                                <div
+                                  key={option.value}
+                                  className={`flex items-center justify-center ${
+                                    option.width
+                                  } h-8 rounded-md border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200 cursor-pointer ${
+                                    selectedPriceRanges.includes(option.value)
+                                      ? "bg-black dark:bg-white border-black dark:border-white"
+                                      : ""
+                                  }`}
+                                  onClick={() =>
+                                    handlePriceChange(option.value)
+                                  }>
+                                  <span
+                                    className={`text-sm font-medium ${
+                                      selectedPriceRanges.includes(option.value)
+                                        ? "text-white dark:text-black"
+                                        : "text-gray-600 dark:text-gray-400"
+                                    }`}>
+                                    {option.label}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
                           ) : (
                             <div className="space-y-2">
                               {vendors.map((vendor) => (
@@ -629,16 +724,51 @@ export default function ProductFilters({
                     </h3>
                     <HeadlessDisclosure.Panel className="pt-6">
                       <div className="space-y-2">
-                        {subCategories.map((category) => (
-                          <Link
-                            key={category.name}
-                            href={category.href}
-                            className="flex items-center px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
-                            <span className="text-sm font-medium">
-                              {category.name}
-                            </span>
-                          </Link>
-                        ))}
+                        {subCategories.map((category) => {
+                          // Check if this is a special category with query params
+                          const isSpecialCategory =
+                            category.href.includes("?sort=");
+                          const sortParam = isSpecialCategory
+                            ? category.href.split("?sort=")[1]
+                            : null;
+
+                          // Check if any sort parameter is active
+                          const hasSortParam =
+                            searchParams.get("sort") !== null;
+
+                          let isActive = false;
+
+                          if (isSpecialCategory) {
+                            // For special categories like "Best Sellers" and "New Arrivals"
+                            isActive =
+                              pathName === "/shop" &&
+                              searchParams.get("sort") === sortParam;
+                          } else if (category.href === "/shop") {
+                            // For the "All" category, only highlight if no sort parameter is present
+                            isActive = pathName === "/shop" && !hasSortParam;
+                          } else {
+                            // For regular categories like "Trousers", "Shirts", "Denim"
+                            isActive =
+                              pathName === category.href ||
+                              (category.href.includes("/shop/") &&
+                                pathName.includes(category.href.split("?")[0]));
+                          }
+
+                          return (
+                            <Link
+                              key={category.name}
+                              href={category.href}
+                              className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition-colors duration-200 ${
+                                isActive
+                                  ? "bg-black dark:bg-white text-white dark:text-black"
+                                  : "text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                              }`}>
+                              <span className="text-sm font-medium">
+                                {category.name}
+                              </span>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </HeadlessDisclosure.Panel>
                   </>
@@ -689,6 +819,30 @@ export default function ProductFilters({
                                 <span
                                   className={`text-sm font-medium ${
                                     selectedSizes.includes(option.value)
+                                      ? "text-white dark:text-black"
+                                      : "text-gray-600 dark:text-gray-400"
+                                  }`}>
+                                  {option.label}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : section.id === "price" ? (
+                          <div className="flex flex-wrap gap-3">
+                            {section.options.map((option) => (
+                              <div
+                                key={option.value}
+                                className={`flex items-center justify-center ${
+                                  option.width
+                                } h-8 rounded-md border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200 cursor-pointer ${
+                                  selectedPriceRanges.includes(option.value)
+                                    ? "bg-black dark:bg-white border-black dark:border-white"
+                                    : ""
+                                }`}
+                                onClick={() => handlePriceChange(option.value)}>
+                                <span
+                                  className={`text-sm font-medium ${
+                                    selectedPriceRanges.includes(option.value)
                                       ? "text-white dark:text-black"
                                       : "text-gray-600 dark:text-gray-400"
                                   }`}>

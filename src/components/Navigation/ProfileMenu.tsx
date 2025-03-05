@@ -83,7 +83,7 @@ export default function ProfileMenu() {
                 <Typography
                   as="span"
                   variant="small"
-                  className="font-normal uppercase text-gray-900 dark:text-white">
+                  className="font-normal  text-gray-900 dark:text-white">
                   {label}
                 </Typography>
               </MenuItem>
@@ -96,7 +96,7 @@ export default function ProfileMenu() {
             <MenuItem className="flex items-center gap-2 hover:bg-cypress-green-light/10 focus:bg-cypress-green-light/10 active:bg-cypress-green-light/10">
               <Typography
                 variant="small"
-                className="font-normal uppercase text-gray-900 dark:text-white">
+                className="font-normal  text-gray-900 dark:text-white">
                 Login
               </Typography>
             </MenuItem>
@@ -105,7 +105,7 @@ export default function ProfileMenu() {
             <MenuItem className="flex items-center gap-2 hover:bg-cypress-green-light/10 focus:bg-cypress-green-light/10 active:bg-cypress-green-light/10">
               <Typography
                 variant="small"
-                className="font-normal uppercase text-gray-900 dark:text-white">
+                className="font-normal  text-gray-900 dark:text-white">
                 Sign Up
               </Typography>
             </MenuItem>
@@ -123,7 +123,7 @@ export default function ProfileMenu() {
           className={`hover:bg-transparent focus:bg-transparent active:bg-transparent flex px-2 lg:py-[0.35rem] rounded-none justify-start lg:justify-end items-center ${hoverBackground} transition-all duration-200`}>
           <ListItem
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className={`text-black dark:text-white ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
+            className={`text-black dark:text-white ${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex  text-sm box-content transition-all duration-200`}>
             <ListItemPrefix>
               <UserCircleIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -147,7 +147,7 @@ export default function ProfileMenu() {
             <MenuItem
               className={`hover:bg-transparent focus:bg-transparent active:bg-transparent flex px-2 lg:py-[0.35rem] rounded-none justify-start lg:justify-end items-center ${hoverBackground} transition-all duration-200`}>
               <ListItem
-                className={`${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex uppercase text-sm box-content transition-all duration-200`}>
+                className={`${hoverBackground} hover:bg-transparent focus:bg-transparent active:bg-transparent focus:outline-none underline-animation w-fit lg:p-0 relative flex  text-sm box-content transition-all duration-200`}>
                 Account
               </ListItem>
             </MenuItem>

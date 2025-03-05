@@ -4,12 +4,14 @@ export const productQuery = ({
   vendors = [],
   handle,
   category,
+  priceRanges = [],
 }: {
   sizes?: string[];
   sort?: string;
   vendors?: string[];
   handle?: string;
   category?: string;
+  priceRanges?: string[];
 }) => {
   // If handle is provided, return single product query
   if (handle) {
@@ -96,6 +98,25 @@ export const productQuery = ({
       .map((vendor) => `(vendor:${vendor})`)
       .join(" OR ");
     conditions.push(`(${vendorFilter})`);
+  }
+
+  // Add price range filtering
+  if (priceRanges.length > 0) {
+    const priceFilters: string[] = [];
+
+    priceRanges.forEach((range) => {
+      if (range === "0-300") {
+        priceFilters.push("(variants.price:<300)");
+      } else if (range === "300-600") {
+        priceFilters.push("(variants.price:>=300 AND variants.price:<=600)");
+      } else if (range === "600+") {
+        priceFilters.push("(variants.price:>600)");
+      }
+    });
+
+    if (priceFilters.length > 0) {
+      conditions.push(`(${priceFilters.join(" OR ")})`);
+    }
   }
 
   const filterCondition = conditions.length > 0 ? conditions.join(" AND ") : "";

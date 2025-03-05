@@ -261,7 +261,7 @@ const AddToCartButton = (props: Props) => {
   return (
     <div className="w-full">
       {showSizeRequired && (
-        <p className="text-red-500 dark:text-red-400 text-xs uppercase tracking-wide mb-3 text-center font-light">
+        <p className="text-red-500 dark:text-red-400 text-xs  tracking-wide mb-3 text-center font-light">
           Please select a size
         </p>
       )}
@@ -291,7 +291,7 @@ const AddToCartButton = (props: Props) => {
             showSizeRequired
               ? "border-red-500 dark:border-red-400"
               : "border-black dark:border-white"
-          } border py-2.5 text-xs tracking-wide font-light uppercase text-white bg-black hover:bg-gray-900 
+          } border py-2.5 text-xs tracking-wide font-light  text-white bg-black hover:bg-gray-900 
           dark:bg-white dark:text-black dark:hover:bg-gray-100 
           focus:outline-none transition-colors duration-200`}>
           Add to cart

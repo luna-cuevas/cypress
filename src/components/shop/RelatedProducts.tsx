@@ -29,6 +29,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
           type="div"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1 }}
           className="mb-12 text-center">
           <h2 className="text-3xl font-light tracking-tight text-gray-900 dark:text-gray-100 mb-2">
@@ -46,6 +47,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
               type="div"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="group relative">
               <Link
@@ -89,6 +91,7 @@ export default function RelatedProducts({ relatedProducts }: RelatedProducts) {
             type="div"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex justify-center mt-16">
             <Link
