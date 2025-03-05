@@ -153,34 +153,14 @@ const Footer = () => {
               <div className="py-8 lg:pl-8">
                 <div className="flex gap-4 justify-center">
                   <Link
-                    href="https://www.instagram.com"
+                    href="https://www.instagram.com/cypress.dtx/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:opacity-70 transition-opacity">
                     <Image
                       className="dark:invert"
                       src="/socials-logos/instagram.svg"
                       alt="Instagram"
-                      width={16}
-                      height={16}
-                    />
-                  </Link>
-                  <Link
-                    href="https://www.facebook.com"
-                    className="hover:opacity-70 transition-opacity">
-                    <Image
-                      className="dark:invert"
-                      src="/socials-logos/facebook.svg"
-                      alt="Facebook"
-                      width={16}
-                      height={16}
-                    />
-                  </Link>
-                  <Link
-                    href="https://www.twitter.com"
-                    className="hover:opacity-70 transition-opacity">
-                    <Image
-                      className="dark:invert"
-                      src="/socials-logos/twitter.svg"
-                      alt="Twitter"
                       width={16}
                       height={16}
                     />
@@ -266,34 +246,12 @@ const Footer = () => {
               {/* Social */}
               <div className="flex gap-4 justify-center">
                 <Link
-                  href="https://www.instagram.com"
+                  href="https://www.instagram.com/cypress.dtx/"
                   className="hover:opacity-70 transition-opacity">
                   <Image
                     className="dark:invert"
                     src="/socials-logos/instagram.svg"
                     alt="Instagram"
-                    width={16}
-                    height={16}
-                  />
-                </Link>
-                <Link
-                  href="https://www.facebook.com"
-                  className="hover:opacity-70 transition-opacity">
-                  <Image
-                    className="dark:invert"
-                    src="/socials-logos/facebook.svg"
-                    alt="Facebook"
-                    width={16}
-                    height={16}
-                  />
-                </Link>
-                <Link
-                  href="https://www.twitter.com"
-                  className="hover:opacity-70 transition-opacity">
-                  <Image
-                    className="dark:invert"
-                    src="/socials-logos/twitter.svg"
-                    alt="Twitter"
                     width={16}
                     height={16}
                   />
