@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { MenuItem, Switch, Typography } from "@material-tailwind/react";
 import {
   SunIcon,
   MoonIcon,
@@ -15,8 +13,6 @@ import { useAtom } from "jotai";
 import { usePathname } from "next/navigation";
 import ProfileMenu from "./ProfileMenu";
 import NavItem from "./NavItem";
-import { Motion } from "../../utils/Motion";
-import { stagger } from "framer-motion";
 
 const shopCategories = [
   {
@@ -125,16 +121,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
     <ul className="relative z-0 border-t border-gray-200 lg:border-t-0 flex justify-between flex-col gap-2 lg:flex-row lg:items-center">
       <li className="w-full">
         <div className="w-full mx-auto mt-auto h-full flex justify-between">
-          <Motion
-            type="div"
-            animate={{
-              opacity: 1,
-              transition: {
-                staggerChildren: 2,
-                delayChildren: 2,
-                staggerDirection: 1,
-              },
-            }}
+          <div
             className={`lg:w-fit items-end py-3 lg:py-0 bg-transparent lg:bg-transparent w-full flex gap-2 ${
               path != "/" && "lg:flex-row"
             } flex-col`}>
@@ -186,7 +173,7 @@ const NavList = ({ homePageNav = false }: { homePageNav?: boolean }) => {
                 )}
               </button>
             </div>
-          </Motion>
+          </div>
         </div>
       </li>
     </ul>

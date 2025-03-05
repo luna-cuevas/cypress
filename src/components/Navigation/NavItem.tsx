@@ -6,25 +6,15 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Typography,
-  Collapse,
   Accordion,
   AccordionHeader,
   AccordionBody,
   ListItem,
   ListItemPrefix,
   ListItemSuffix,
-  Chip,
 } from "@material-tailwind/react";
-import {
-  ChevronDownIcon,
-  ShoppingBagIcon,
-  Square3Stack3DIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useAtom } from "jotai";
-import { globalStateAtom } from "@/context/atoms";
 
 const NavItem = ({
   label,

@@ -1,6 +1,5 @@
 "use client";
 import { handleSubscribe } from "@/utils/handleNewsLetterSignUp";
-import { Motion } from "@/utils/Motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,13 +63,7 @@ const Footer = () => {
 
   return (
     isLoaded && (
-      <Motion
-        type="footer"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 40 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full border-t border-gray-200 dark:border-gray-800">
+      <div className="relative w-full border-t border-gray-200 dark:border-gray-800">
         <div className="mx-auto px-2 sm:px-3 lg:px-4">
           {/* Desktop Layout */}
           <div className="hidden md:block">
@@ -268,7 +261,7 @@ const Footer = () => {
             </p>
           </div>
         </div>
-      </Motion>
+      </div>
     )
   );
 };
