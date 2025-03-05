@@ -567,9 +567,10 @@ export default function Cart() {
                               <button
                                 type="button"
                                 className="mt-8 text-sm font-light tracking-wide  text-cypress-green hover:text-cypress-green-light transition-all duration-300 focus:outline-none border-b border-transparent hover:border-cypress-green-light pb-1"
-                                onClick={() =>
-                                  setState({ ...state, cartOpen: false })
-                                }>
+                                onClick={() => {
+                                  setState({ ...state, cartOpen: false });
+                                  router.push("/shop");
+                                }}>
                                 Explore Collection
                               </button>
                             </div>
