@@ -5,7 +5,7 @@ export const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
   const email = (e.currentTarget.email as HTMLInputElement).value;
 
   try {
-    const response = await fetch("/api/klaviyo/subscribe", {
+    const response = await fetch("/api/mailchimp/subscribe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,17 +15,17 @@ export const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
 
     const responseJson = await response.json();
 
-    if (
-      responseJson.error == "" ||
-      responseJson.message == "Subscription successful!"
-    ) {
+    if (response.ok) {
       return {
-        message: "Subscription successful! Thank you for signing up!",
+        message:
+          responseJson.message ||
+          "Subscription successful! Thank you for signing up!",
         status: "success",
       };
     } else {
       return {
-        message: responseJson.result[0].detail,
+        message:
+          responseJson.error || "Something went wrong. Please try again.",
         status: "error",
       };
     }
