@@ -47,12 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
       height: 512,
       caption: "Cypress Clothiers logo",
     },
-    sameAs: [
-      "https://www.instagram.com/cypress.dtx",
-      "https://twitter.com/cypressclothiers",
-      "https://www.facebook.com/cypressclothiers",
-      "https://www.pinterest.com/cypressclothiers",
-    ],
+    sameAs: ["https://www.instagram.com/cypress.dtx"],
     description:
       "Premium menswear brand offering minimalist, high-quality designs for the modern gentleman.",
     contactPoint: {
@@ -244,7 +239,7 @@ export async function generateMetadata(): Promise<Metadata> {
       creator: "@cypress_dtx",
       images: [
         {
-          url: "/twitter-card.jpg", // Replace with a Twitter-optimized image
+          url: "/cypress-logo.svg", // Replace with a Twitter-optimized image
           alt: "Premium minimalist menswear collection at Cypress Clothiers",
           width: 1200,
           height: 630,
