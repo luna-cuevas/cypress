@@ -599,7 +599,7 @@ export default function Cart() {
                         <button
                           type="button"
                           onClick={createCheckout}
-                          className="w-full py-3 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-sm font-light  tracking-widest transition-all duration-300 focus:outline-none">
+                          className="w-full py-3 border text-black dark:text-white border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-sm font-light  tracking-widest transition-all duration-300 focus:outline-none">
                           Proceed to Checkout
                         </button>
 

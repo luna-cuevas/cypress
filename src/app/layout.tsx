@@ -52,20 +52,11 @@ export async function generateMetadata(): Promise<Metadata> {
       "Premium menswear brand offering minimalist, high-quality designs for the modern gentleman.",
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+1-800-CYPRESS",
       contactType: "customer service",
-      email: "support@cypressclothiers.com",
+      email: "info@cypressclothiers.com",
       availableLanguage: "English",
     },
     foundingDate: "2022",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "3948 Buena Vista St, #102",
-      addressLocality: "Dallas",
-      addressRegion: "TX",
-      postalCode: "75204",
-      addressCountry: "US",
-    },
   };
 
   // Create structured data for website
@@ -91,40 +82,13 @@ export async function generateMetadata(): Promise<Metadata> {
   // Create structured data for the store as a business
   const storeSchema: StructuredData = {
     "@context": "https://schema.org",
-    "@type": "ClothingStore",
+    "@type": "OnlineStore",
     name: "Cypress Clothiers",
     image: logoUrl,
     "@id": `${baseUrl}/#store`,
     url: baseUrl,
-    telephone: "+1-800-CYPRESS",
     priceRange: "$$$",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "3948 Buena Vista St, #102",
-      addressLocality: "Dallas",
-      addressRegion: "TX",
-      postalCode: "75204",
-      addressCountry: "US",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 32.80664,
-      longitude: -96.80338,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "18:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday"],
-        opens: "10:00",
-        closes: "17:00",
-      },
-    ],
+    email: "info@cypressclothiers.com",
     sameAs: ["https://www.instagram.com/cypress.dtx"],
   };
 
@@ -227,8 +191,7 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "en_US",
       siteName: "Cypress Clothiers",
       countryName: "United States",
-      emails: ["contact@cypressclothiers.com"],
-      phoneNumbers: ["+1-800-CYPRESS"],
+      emails: ["info@cypressclothiers.com"],
     },
     twitter: {
       card: "summary_large_image",
