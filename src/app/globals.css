@@ -119,7 +119,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #567256;
+  background-color: #232323;
   border-radius: 50px;
   background-clip: content-box; /* Adjust the padding as needed */
 }
