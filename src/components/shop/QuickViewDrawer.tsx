@@ -178,11 +178,11 @@ export function QuickViewDrawer(props: Props) {
                     "SELECT SIZE"
                   )}
                 </h3>
-                <Link
+                {/* <Link
                   href="#"
                   className="text-xs uppercase tracking-wider font-light text-gray-800 hover:text-black dark:text-gray-300 dark:hover:text-white">
                   Size guide
-                </Link>
+                </Link> */}
               </div>
 
               <fieldset aria-label="Choose a size">

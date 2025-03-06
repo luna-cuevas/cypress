@@ -663,11 +663,11 @@ export default async function ProductPage({ params, searchParams }: Props) {
                               "Select Size"
                             )}
                           </h3>
-                          <Link
+                          {/* <Link
                             href="#"
                             className="text-sm underline font-medium text-gray-800 dark:text-gray-400 hover:text-cypress-green dark:hover:text-cypress-green-light">
                             Size guide
-                          </Link>
+                          </Link> */}
                         </div>
 
                         <SizeSelection
