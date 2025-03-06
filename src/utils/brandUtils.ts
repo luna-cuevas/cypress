@@ -45,10 +45,6 @@ export const findBrandInfo = (
 export const getBrandDisplayName = (brand: Brand): string => {
   if (!brand) return "";
 
-  if (brand.location) {
-    return `${brand.name} (${brand.location})`;
-  }
-
   return brand.name;
 };
 

@@ -227,23 +227,7 @@ export default function TabContent({
           <div className="mt-4 text-gray-700 dark:text-gray-300">
             {brandInfo ? (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">
-                  {getBrandDisplayName(brandInfo)}
-                </h3>
-
-                {brandInfo.foundedYear && (
-                  <p className="text-sm">
-                    <span className="font-medium">Established:</span>{" "}
-                    {brandInfo.foundedYear}
-                  </p>
-                )}
-
-                {brandInfo.location && (
-                  <p className="text-sm">
-                    <span className="font-medium">Origin:</span>{" "}
-                    {brandInfo.location}
-                  </p>
-                )}
+                <h3 className="text-lg font-semibold">{productVendor}</h3>
 
                 <div className="text-sm mt-3 space-y-2">
                   {brandInfo.description.split(".").map((sentence, index) => {
