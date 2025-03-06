@@ -178,39 +178,6 @@ async function fetchProductMetafields(id: string) {
   }
 }
 
-// Create a human-readable mapping for metafields with references
-function createMetafieldHumanReadable(metafields: any[]) {
-  const humanReadable: Record<string, any> = {};
-
-  for (const mf of metafields) {
-    if (!mf) continue;
-
-    const key = `${mf.namespace}--${mf.key}`;
-
-    // Handle metaobject references
-    if (mf.type?.includes("reference") && mf.reference) {
-      humanReadable[key] = mf.reference;
-      continue;
-    }
-
-    // Store all other values as-is
-    if (mf.value) {
-      try {
-        // Try to parse JSON values
-        if (mf.type?.includes("json")) {
-          humanReadable[key] = JSON.parse(mf.value);
-        } else {
-          humanReadable[key] = mf.value;
-        }
-      } catch (e) {
-        humanReadable[key] = mf.value;
-      }
-    }
-  }
-
-  return humanReadable;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, category } = params;
   try {
@@ -253,8 +220,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             product.images?.map((image: { src: string; altText: string }) => ({
               url: image.src,
               alt: image.altText || product.title,
+              width: 1200,
+              height: 630,
             })) || [],
           type: "website",
+          locale: "en_US",
         },
       };
     }
@@ -291,7 +261,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const images =
       metadataContent.images?.edges?.map((edge: any) => ({
         url: edge.node.src,
-        alt: edge.node.altText || metadataContent.title,
+        alt: edge.node.altText || productTitle,
+        width: 1200,
+        height: 630,
       })) ||
       (metadataContent.featuredImage
         ? [
@@ -299,8 +271,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               url:
                 metadataContent.featuredImage.url ||
                 metadataContent.featuredImage.src,
-              alt:
-                metadataContent.featuredImage.altText || metadataContent.title,
+              alt: metadataContent.featuredImage.altText || productTitle,
+              width: 1200,
+              height: 630,
             },
           ]
         : []);
@@ -314,11 +287,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : "https://schema.org/OutOfStock";
     const brand =
       metadataContent.vendor ||
-      getSeoValue(metafields, metafieldMap, "product", "vendor");
+      getSeoValue(metafields, metafieldMap, "product", "vendor") ||
+      "Cypress Clothiers";
+
+    // Get variant information
+    const variants =
+      metadataContent.variants?.edges?.map((edge: any) => edge.node) || [];
+    const hasVariants = variants.length > 0;
+
+    // Extract sizes from variants using Array.from to handle Set iteration
+    const sizes = hasVariants
+      ? Array.from(
+          new Set(
+            variants.map((v: any) => v.title || v.variantTitle).filter(Boolean)
+          )
+        )
+      : [];
 
     // Format category for display
     const formattedCategory =
       category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ");
+
+    // Extract reviews if available
+    const reviews = metadataContent.reviews || [];
+    const hasReviews = reviews.length > 0;
+
+    // Calculate aggregate rating if reviews exist
+    const aggregateRating = hasReviews
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: (
+            reviews.reduce(
+              (acc: number, review: any) => acc + (review.rating || 0),
+              0
+            ) / reviews.length
+          ).toFixed(1),
+          reviewCount: reviews.length,
+          bestRating: "5",
+          worstRating: "1",
+        }
+      : undefined;
 
     // Create structured data for rich results
     const productSchema = {
@@ -326,26 +334,77 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "@type": "Product",
       name: productTitle,
       description: productDescription,
-      image: images.length > 0 ? images[0].url : undefined,
+      image: images.length > 0 ? images.map((img: any) => img.url) : undefined,
+      sku: metadataContent.sku || slug,
+      mpn: metadataContent.sku || slug,
+      gtin:
+        getSeoValue(metafields, metafieldMap, "product", "barcode") ||
+        getSeoValue(metafields, metafieldMap, "shopify", "gtin"),
+      identifier_exists: Boolean(
+        metadataContent.sku ||
+          getSeoValue(metafields, metafieldMap, "product", "barcode")
+      ),
+      brand: {
+        "@type": "Brand",
+        name: brand,
+      },
       offers: {
         "@type": "Offer",
         price: price,
         priceCurrency: currency,
         availability: availability,
         url: `${
-          process.env.BASE_URL || "https://yourwebsite.com"
+          process.env.BASE_URL || "https://cypressclothiers.com"
         }/shop/${category}/${slug}`,
-      },
-      brand: {
-        "@type": "Brand",
-        name: brand || "Premium Menswear",
+        priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0],
+        itemCondition: "https://schema.org/NewCondition",
+        shippingDetails: {
+          "@type": "OfferShippingDetails",
+          shippingRate: {
+            "@type": "MonetaryAmount",
+            value: "0",
+            currency: "USD",
+          },
+          shippingDestination: {
+            "@type": "DefinedRegion",
+            addressCountry: "US",
+          },
+          deliveryTime: {
+            "@type": "ShippingDeliveryTime",
+            handlingTime: {
+              "@type": "QuantitativeValue",
+              minValue: 0,
+              maxValue: 1,
+              unitCode: "DAY",
+            },
+            transitTime: {
+              "@type": "QuantitativeValue",
+              minValue: 1,
+              maxValue: 5,
+              unitCode: "DAY",
+            },
+          },
+        },
       },
       category: `Apparel & Accessories > Clothing > Men's Fashion > ${formattedCategory}`,
-      sku: metadataContent.sku || slug,
       material:
         getSeoValue(metafields, metafieldMap, "shopify", "fabric") ||
         getSeoValue(metafields, metafieldMap, "product", "material"),
       color: getSeoValue(metafields, metafieldMap, "shopify", "color"),
+      ...(aggregateRating && { aggregateRating }),
+      ...(sizes.length > 0 && {
+        size: sizes.join(", "),
+        hasMerchantReturnPolicy: {
+          "@type": "MerchantReturnPolicy",
+          returnPolicyCategory:
+            "https://schema.org/MerchantReturnFiniteReturnWindow",
+          merchantReturnDays: 30,
+          returnMethod: "https://schema.org/ReturnByMail",
+          returnFees: "https://schema.org/FreeReturn",
+        },
+      }),
     };
 
     const breadcrumbSchema = {
@@ -356,20 +415,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: `${process.env.BASE_URL || "https://yourwebsite.com"}`,
+          item: `${process.env.BASE_URL || "https://cypressclothiers.com"}`,
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Shop",
-          item: `${process.env.BASE_URL || "https://yourwebsite.com"}/shop`,
+          item: `${
+            process.env.BASE_URL || "https://cypressclothiers.com"
+          }/shop`,
         },
         {
           "@type": "ListItem",
           position: 3,
           name: formattedCategory,
           item: `${
-            process.env.BASE_URL || "https://yourwebsite.com"
+            process.env.BASE_URL || "https://cypressclothiers.com"
           }/shop/${category}`,
         },
         {
@@ -377,7 +438,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           position: 4,
           name: productTitle,
           item: `${
-            process.env.BASE_URL || "https://yourwebsite.com"
+            process.env.BASE_URL || "https://cypressclothiers.com"
           }/shop/${category}/${slug}`,
         },
       ],
@@ -393,20 +454,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         metadataContent.keywords ||
         `premium menswear, ${
           brand || ""
-        } ${formattedCategory.toLowerCase()}, minimalist fashion, high-end apparel`,
+        } ${formattedCategory.toLowerCase()}, minimalist fashion, high-end apparel, ${
+          getSeoValue(metafields, metafieldMap, "shopify", "color") || ""
+        } ${formattedCategory.toLowerCase()}`,
       openGraph: {
         title: productTitle,
         description: productDescription,
         images: images,
         type: "website",
         locale: "en_US",
-        siteName: "Cypress",
+        siteName: "Cypress Clothiers",
       },
       twitter: {
         card: "summary_large_image",
         title: productTitle,
         description: productDescription,
-        images: images.length > 0 ? [images[0].url] : undefined,
+        images: images.length > 0 ? [images[0]] : undefined,
+        site: "@cypressclothiers",
+        creator: "@cypressclothiers",
       },
       robots: {
         index: true,
@@ -421,7 +486,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       // Include canonical URL if available
       alternates: {
         canonical: `${
-          process.env.BASE_URL || "https://yourwebsite.com"
+          process.env.BASE_URL || "https://cypressclothiers.com"
         }/shop/${category}/${slug}`,
       },
       // Add structured data for product
@@ -432,9 +497,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "product:price:amount": price || "",
         "product:price:currency": currency,
         "product:availability": availability.replace("https://schema.org/", ""),
-        "product:brand": brand || "Premium Menswear",
+        "product:brand": brand,
         "product:category": formattedCategory,
         "product:condition": "new",
+        "product:retailer_item_id": metadataContent.sku || slug,
+        "product:price_type": "regular",
+        "product:color":
+          getSeoValue(metafields, metafieldMap, "shopify", "color") || "",
+        "product:material":
+          getSeoValue(metafields, metafieldMap, "shopify", "fabric") ||
+          getSeoValue(metafields, metafieldMap, "product", "material") ||
+          "",
         "json-ld": JSON.stringify([productSchema, breadcrumbSchema]),
       },
     };

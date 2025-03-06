@@ -1,88 +1,154 @@
 {
-  "name": "Cypress Clothiers",
+  "name": "Cypress Clothiers - Premium Minimalist Menswear",
   "short_name": "Cypress",
-  "description": "Premium Fashion & Lifestyle Store",
+  "description": "Premium menswear featuring minimalist designs, quality materials, and precise tailoring for the modern gentleman.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
   "scope": "/",
-  "id": "cypressclothiers",
+  "id": "com.cypressclothiers.www",
   "icons": [
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-48x48.png",
       "sizes": "48x48",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-72x72.png",
       "sizes": "72x72",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-96x96.png",
       "sizes": "96x96",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-128x128.png",
       "sizes": "128x128",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-192x192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-384x384.png",
       "sizes": "384x384",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/cypress-logo.svg",
+      "src": "/favicon-512x512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Shop",
+      "name": "Shop Collection",
       "url": "/shop",
-      "description": "Browse our collection"
+      "description": "Browse our premium collection",
+      "icons": [
+        {
+          "src": "/icons/shop.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
-      "name": "Account",
+      "name": "New Arrivals",
+      "url": "/collections/new-arrivals",
+      "description": "Discover our latest styles",
+      "icons": [
+        {
+          "src": "/icons/new.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "My Account",
       "url": "/account",
-      "description": "View your account"
+      "description": "View your account details",
+      "icons": [
+        {
+          "src": "/icons/account.png",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
-      "name": "Cart",
+      "name": "Shopping Cart",
       "url": "/cart",
-      "description": "View your shopping cart"
+      "description": "View your shopping cart",
+      "icons": [
+        {
+          "src": "/icons/cart.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ],
-  "categories": ["shopping", "lifestyle", "fashion"],
+  "categories": ["shopping", "lifestyle", "fashion", "clothing", "menswear"],
   "prefer_related_applications": false,
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
   "lang": "en",
   "dir": "ltr",
   "related_applications": [],
   "screenshots": [
     {
-      "src": "/cypress-logo.svg",
+      "src": "/screenshots/home.jpg",
       "sizes": "1280x720",
       "type": "image/jpeg",
       "platform": "wide",
-      "label": "Homepage of Cypress Clothiers"
+      "label": "Homepage of Cypress Clothiers featuring premium menswear"
+    },
+    {
+      "src": "/screenshots/product.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Product page showing detailed view of minimalist menswear"
+    },
+    {
+      "src": "/screenshots/collection.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Collection view of Cypress Clothiers premium garments"
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }
