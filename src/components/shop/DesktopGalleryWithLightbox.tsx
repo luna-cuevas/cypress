@@ -72,7 +72,7 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
                 placeholder="blur"
                 src={image.src}
                 alt={image.altText}
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-contain object-center"
               />
             </div>
           </Link>
@@ -97,7 +97,7 @@ export default function DesktopGalleryWithLightbox({ images }: Props) {
               placeholder="blur"
               src={image.src}
               alt={image.altText}
-              className="h-full w-full object-cover object-center transition-transform duration-700 ease-out "
+              className="h-full w-full object-contain object-center transition-transform duration-700 ease-out "
               style={{ height: "100%" }}
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/20 to-transparent h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center">
