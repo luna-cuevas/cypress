@@ -108,7 +108,9 @@ const ProductGallery = (props: Props) => {
                 <Link
                   prefetch={true}
                   tabIndex={1}
-                  href={`/shop/${product.productType}/${product.handle}`}
+                  href={`/shop/${product.productType.toLowerCase()}/${
+                    product.handle
+                  }`}
                   className="cursor-pointer relative">
                   <div className="relative sm:aspect-h-3 sm:aspect-w-2 aspect-h-6 aspect-w-4 w-full md:aspect-h-8 md:aspect-w-6 lg:aspect-h-7 lg:aspect-w-6 2xl:aspect-h-8 2xl:aspect-w-6 overflow-hidden">
                     <div className="h-full w-full">
