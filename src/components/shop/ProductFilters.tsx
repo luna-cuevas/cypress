@@ -633,7 +633,14 @@ export default function ProductFilters({
                                       : "hover:bg-gray-100 dark:hover:bg-gray-800"
                                   }`}
                                   onClick={() => handleVendorChange(vendor)}>
-                                  <span className="text-sm font-medium">
+                                  <span
+                                    className={`text-sm font-medium
+                                  ${
+                                    selectedVendors.includes(vendor)
+                                      ? "text-white dark:text-black"
+                                      : "text-gray-600 dark:text-gray-400"
+                                  }
+                                  `}>
                                     {vendor}
                                   </span>
                                 </div>
@@ -862,7 +869,14 @@ export default function ProductFilters({
                                     : "hover:bg-gray-100 dark:hover:bg-gray-800"
                                 }`}
                                 onClick={() => handleVendorChange(vendor)}>
-                                <span className="text-sm font-medium">
+                                <span
+                                  className={`text-sm font-medium
+                                ${
+                                  selectedVendors.includes(vendor)
+                                    ? "text-white dark:text-black"
+                                    : "text-gray-600 dark:text-gray-400"
+                                }
+                                  `}>
                                   {vendor}
                                 </span>
                               </div>
