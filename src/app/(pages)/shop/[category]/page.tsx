@@ -78,7 +78,7 @@ export async function generateMetadata({
             process.env.BASE_URL || "https://yourwebsite.com"
           }/shop/${category}`,
           category: `Apparel & Accessories > Clothing > Men's Fashion > ${formattedCategory}`,
-          image: "/images/og-category.jpg",
+          image: "/cypress-logo.svg",
           offers: {
             "@type": "AggregateOffer",
             priceCurrency: "USD",
@@ -156,7 +156,7 @@ export async function generateMetadata({
       locale: "en_US",
       images: [
         {
-          url: "/images/og-category.jpg",
+          url: "/cypress-logo.svg",
           width: 1200,
           height: 630,
           alt: `Premium men's ${formattedCategory.toLowerCase()} collection`,
@@ -167,7 +167,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: titleSuffix,
       description: description,
-      images: ["/images/og-category.jpg"],
+      images: ["/cypress-logo.svg"],
     },
     robots: {
       index: true,
